@@ -1,0 +1,32 @@
+# Environnement virtuel
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Base de données locale (très important pour ne pas écraser la DB des autres)
+*.db
+*.sqlite3
+
+# Variables d'environnement / Secrets
+.env
+auth_key.json
+
+# YOLO & IA
+yolov8n.pt
+runs/
+*.log
+
+# Uploads d'images (pour ne pas versionner les photos des tests)
+uploads/aperos/*
+!uploads/aperos/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+*.swp
