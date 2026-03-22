@@ -7,3 +7,5 @@ psycopg2-binary
 pydantic
 python-dotenv
 python-jose
+ultralytics
+ultralytics-thop
