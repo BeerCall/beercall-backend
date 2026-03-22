@@ -2,6 +2,7 @@ fastapi
 uvicorn[standard]
 sqlalchemy
 passlib
+pillow
 psycopg2-binary
 pydantic
 python-dotenv
