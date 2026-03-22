@@ -2,9 +2,13 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-# Installation des dépendances système nécessaires (ex: pour Pillow/IA si besoin)
+# Installation des dépendances système pour OpenCV et YOLO
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libxcb1 \
+    libx11-6 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
