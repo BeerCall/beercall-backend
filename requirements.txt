@@ -1,7 +1,6 @@
 alembic
 fastapi
-uvicorn[standard]
-sqlalchemy
+firebase-admin
 passlib
 pillow
 psycopg2-binary
@@ -9,5 +8,7 @@ pydantic
 python-dotenv
 python-jose
 python-multipart
+sqlalchemy
 ultralytics
 ultralytics-thop
+uvicorn[standard]
