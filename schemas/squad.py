@@ -42,7 +42,7 @@ class SquadDetailsResponse(BaseModel):
     color: str
     icon: str
     invite_code: str
-    active_beer_call: Optional[BeerCallItem] = None
+    active_beer_call: List[BeerCallItem] = []
     past_beer_calls: List[BeerCallItem] = []
 
 

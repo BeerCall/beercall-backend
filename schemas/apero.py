@@ -26,3 +26,8 @@ class WorldDetails(BaseModel):
 
 class WorldsResponse(BaseModel):
     worlds: Dict[str, WorldDetails]
+
+
+class AperoJoinRequest(BaseModel):
+    lat: float
+    lon: float

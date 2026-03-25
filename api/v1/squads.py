@@ -17,7 +17,7 @@ from schemas.apero import AperoDecline, WorldsResponse
 from schemas.squad import SquadCreate, SquadDetailsResponse
 from schemas.squad import SquadResponse, SquadJoin
 from services.gamification import handle_ia_fraud, award_badge
-from services.photo_validation import is_drink_detected
+from services.photo_validation import is_drink_detected, calculate_geodistance
 from fastapi import BackgroundTasks
 from services.notifications import send_push_notifications
 import os
@@ -75,6 +75,25 @@ async def create_beer_call(
     if current_user not in squad.members:
         raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
 
+    # --- NOUVEAU (1.5) : Vérifier s'il y a déjà un apéro actif à proximité ---
+    now = datetime.now(timezone.utc)
+    active_aperos = db.query(Apero).filter(
+        Apero.squad_id == squad_id,
+        (now - Apero.created_at) < timedelta(hours=4)
+    ).all()
+
+    for existing_apero in active_aperos:
+        distance = calculate_geodistance(
+            latitude, longitude,
+            existing_apero.latitude, existing_apero.longitude
+        )
+        if distance <= 500:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Un Beer Call est déjà en cours tout près ({int(distance)}m) ! Rejoins-le plutôt."
+            )
+    # ------------------------------------------------------------------------
+
     # 2. Lire l'image et l'envoyer à l'IA
     file_bytes = await file.read()
     ia_validation = await is_drink_detected(file_bytes)
@@ -107,7 +126,7 @@ async def create_beer_call(
     db.commit()  # On commit ici pour que new_apero génère son ID
     db.refresh(new_apero)
 
-    # --- NOUVEAU : Ajouter le créateur comme 1er participant validé (au Bar) ---
+    # --- Ajouter le créateur comme 1er participant validé (au Bar) ---
     creator_participant = AperoParticipant(
         apero_id=new_apero.id,
         user_id=current_user.id,
@@ -169,7 +188,7 @@ def get_squad_details(
     # 2. Récupérer tous les Apéros (du plus récent au plus ancien)
     aperos = db.query(Apero).filter(Apero.squad_id == squad_id).order_by(Apero.created_at.desc()).all()
 
-    active_beer_call = None
+    active_beer_call = []
     past_beer_calls = []
 
     now = datetime.now(timezone.utc)
@@ -210,8 +229,8 @@ def get_squad_details(
         }
 
         # 3. Tri : Actif (moins de 4h) vs Historique
-        if (now - created_at) < timedelta(hours=4) and active_beer_call is None:
-            active_beer_call = apero_item
+        if (now - created_at) < timedelta(hours=4):
+            active_beer_call.append(apero_item)
         else:
             past_beer_calls.append(apero_item)
 
@@ -259,19 +278,20 @@ def join_squad(
     return squad
 
 
-# Endpoint 1 : Rejoindre (Le Bar)
 @router.post("/{squad_id}/beer-calls/{apero_id}/join/")
 async def join_beer_call(
         squad_id: int,
         background_tasks: BackgroundTasks,
         apero_id: str,
+        lat: float = Form(...),
+        lon: float = Form(...),
         file: UploadFile = File(...),
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
     actual_apero_id = int(apero_id.replace("bc_", ""))
 
-    # NOUVEAU : Vérifier si l'utilisateur a déjà répondu
+    # 0. Vérifier si l'utilisateur a déjà répondu
     existing_participant = db.query(AperoParticipant).filter(
         AperoParticipant.apero_id == actual_apero_id,
         AperoParticipant.user_id == current_user.id
@@ -279,6 +299,23 @@ async def join_beer_call(
 
     if existing_participant:
         raise HTTPException(status_code=400, detail="Tu as déjà répondu à cet appel de la bière !")
+
+    # --- NOUVEAU : VÉRIFICATION GÉOGRAPHIQUE ---
+    apero_obj = db.query(Apero).filter(Apero.id == actual_apero_id).first()
+    if not apero_obj:
+        raise HTTPException(status_code=404, detail="Apéro introuvable")
+
+    distance = calculate_geodistance(lat, lon, apero_obj.latitude, apero_obj.longitude)
+
+    if distance > 500:
+        # TRICHERIE DISTANCE : On applique le malus IA direct (ia_fraud_count + malus points)
+        handle_ia_fraud(current_user, db)
+        db.commit()
+        raise HTTPException(
+            status_code=403,
+            detail=f"Triche détectée ! Tu es à {int(distance)}m. Malus appliqué. 📉"
+        )
+    # --------------------------------------------
 
     # 1. Validation IA de la photo
     file_bytes = await file.read()
@@ -300,39 +337,31 @@ async def join_beer_call(
         photo_path=file_path
     )
 
-    apero_obj = db.query(Apero).filter(Apero.id == actual_apero_id).first()
-
-    # --- LA CORRECTION EST ICI : On redonne le fuseau UTC à la date ---
+    # --- Gestion des dates et fuseaux ---
     apero_created_at = apero_obj.created_at
     if apero_created_at.tzinfo is None:
         apero_created_at = apero_created_at.replace(tzinfo=timezone.utc)
-    # ------------------------------------------------------------------
 
     time_diff = datetime.now(timezone.utc) - apero_created_at
     diff_seconds = time_diff.total_seconds()
 
-    bonus_flash = 0
-    if diff_seconds <= 120:  # < 2 mins
-        bonus_flash = 15
+    # --- Calcul des Bonus & Badges (ton code conservé à 100%) ---
+    bonus_flash = 15 if diff_seconds <= 120 else 0
 
     if diff_seconds <= 30:
         award_badge(current_user, "LUCKY_LUKE", db)
     elif diff_seconds <= 180:
         award_badge(current_user, "INCRUSTE", db)
 
-    # 3. Streak Bonus (Assiduité)
     current_user.consecutive_joins += 1
     bonus_streak = 30 if current_user.consecutive_joins >= 3 else 0
 
-    # 4. Badges de Piliers
     join_count = db.query(AperoParticipant).filter(
         AperoParticipant.user_id == current_user.id,
         AperoParticipant.status == ParticipationStatus.JOINED
     ).count()
 
-    # On ajoute +1 pour prendre en compte la participation en cours !
     total_joins = join_count + 1
-
     if total_joins == 1:
         award_badge(current_user, "BAPTEME", db)
     elif total_joins == 10:
@@ -340,17 +369,16 @@ async def join_beer_call(
     elif total_joins == 50:
         award_badge(current_user, "PILIER", db)
 
-    # On réinitialise les malus
     current_user.consecutive_declines = 0
     current_user.consecutive_piscine = 0
 
-    # Total des récompenses
     total_gained = 30 + bonus_flash + bonus_streak
     current_user.capsules += total_gained
 
     db.add(participant)
     db.commit()
 
+    # --- Notifications (ton code conservé à 100%) ---
     squad = db.query(Squad).filter(Squad.id == squad_id).first()
     declined_participants = db.query(AperoParticipant).filter(
         AperoParticipant.apero_id == actual_apero_id,
@@ -370,7 +398,7 @@ async def join_beer_call(
         body=f"{current_user.username} a rejoint l'apéro de la squad {squad.name}"
     )
 
-    return {"message": "Tu es au Bar ! 🍻", "bonus": 30}
+    return {"message": "Tu es au Bar ! 🍻", "bonus": total_gained}
 
 
 # Endpoint 2 : Décliner (La Piscine)

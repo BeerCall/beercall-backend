@@ -1,4 +1,6 @@
 import io
+import math
+
 from PIL import Image
 from ultralytics import YOLO
 
@@ -36,3 +38,13 @@ async def is_drink_detected(file_bytes: bytes) -> bool:
         print(f"Erreur lors de l'analyse d'image : {e}")
         # En cas d'erreur technique, on peut choisir de valider par défaut pour ne pas bloquer l'user
         return False
+
+
+def calculate_geodistance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    R = 6371000.0  # Rayon de la Terre en mètres
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+    a = math.sin(dphi / 2.0) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2.0) ** 2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return R * c

@@ -77,3 +77,4 @@ def get_optional_current_user(
 
     # On cherche l'utilisateur en base
     return db.query(User).filter(User.username == username).first()
+
