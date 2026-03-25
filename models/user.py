@@ -19,6 +19,8 @@ class User(Base):
     squads = relationship("Squad", secondary=squad_members, back_populates="members")
 
     ia_fraud_count = Column(Integer, default=0)
-    consecutive_joins = Column(Integer, default=0) # Pour le bonus Streak
-    consecutive_declines = Column(Integer, default=0) # Pour le badge Casanier
-    consecutive_piscine = Column(Integer, default=0) # Pour le badge Nageur
+    consecutive_joins = Column(Integer, default=0)  # Pour le bonus Streak
+    consecutive_declines = Column(Integer, default=0)  # Pour le badge Casanier
+    consecutive_piscine = Column(Integer, default=0)  # Pour le badge Nageur
+
+    # push_token = Column(String, nullable=True)

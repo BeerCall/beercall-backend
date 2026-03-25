@@ -86,3 +86,6 @@ class ConnectionItem(BaseModel):
     caps: int
     title: str
     avatar: dict
+
+class PushTokenUpdate(BaseModel):
+    token: str

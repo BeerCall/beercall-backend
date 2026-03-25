@@ -18,6 +18,9 @@ from schemas.squad import SquadCreate, SquadDetailsResponse
 from schemas.squad import SquadResponse, SquadJoin
 from services.gamification import handle_ia_fraud, award_badge
 from services.photo_validation import is_drink_detected
+from fastapi import BackgroundTasks
+from services.notifications import send_push_notifications
+import os
 
 router = APIRouter()
 
@@ -56,6 +59,7 @@ def get_my_squads(current_user: User = Depends(get_current_user)):
 @router.post("/{squad_id}/beer-calls/")
 async def create_beer_call(
         squad_id: int,
+        background_tasks: BackgroundTasks,
         file: UploadFile = File(...),
         latitude: float = Form(...),
         longitude: float = Form(...),
@@ -131,6 +135,14 @@ async def create_beer_call(
     current_user.consecutive_piscine = 0
 
     db.commit()
+
+    target_tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
+    background_tasks.add_task(
+        send_push_notifications,
+        tokens=target_tokens,
+        title="Beer Call ! 🍻",
+        body=f"{current_user.username} a lancé un apéro pour la Squad {squad.name} !"
+    )
 
     return {
         "message": "Beer Call lancé avec succès ! 🍻",
@@ -217,6 +229,7 @@ def get_squad_details(
 @router.post("/join", response_model=SquadResponse)
 def join_squad(
         join_data: SquadJoin,
+        background_tasks: BackgroundTasks,
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
@@ -234,8 +247,15 @@ def join_squad(
     # 3. Ajouter l'utilisateur à la Squad
     squad.members.append(current_user)
     db.commit()
-    db.refresh(squad)
+    target_tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
+    background_tasks.add_task(
+        send_push_notifications,
+        tokens=target_tokens,
+        title="Nouveau membre ! 🎉",
+        body=f"{current_user.username} a rejoint votre squad '{squad.name}'"
+    )
 
+    db.refresh(squad)
     return squad
 
 
@@ -243,6 +263,7 @@ def join_squad(
 @router.post("/{squad_id}/beer-calls/{apero_id}/join/")
 async def join_beer_call(
         squad_id: int,
+        background_tasks: BackgroundTasks,
         apero_id: str,
         file: UploadFile = File(...),
         db: Session = Depends(get_db),
@@ -329,6 +350,26 @@ async def join_beer_call(
 
     db.add(participant)
     db.commit()
+
+    squad = db.query(Squad).filter(Squad.id == squad_id).first()
+    declined_participants = db.query(AperoParticipant).filter(
+        AperoParticipant.apero_id == actual_apero_id,
+        AperoParticipant.status == ParticipationStatus.DECLINED
+    ).all()
+    declined_ids = [p.user_id for p in declined_participants]
+
+    target_tokens = [
+        m.push_token for m in squad.members
+        if m.id != current_user.id and m.id not in declined_ids and m.push_token
+    ]
+
+    background_tasks.add_task(
+        send_push_notifications,
+        tokens=target_tokens,
+        title="Un renfort arrive ! 🍻",
+        body=f"{current_user.username} a rejoint l'apéro de la squad {squad.name}"
+    )
+
     return {"message": "Tu es au Bar ! 🍻", "bonus": 30}
 
 
@@ -336,6 +377,7 @@ async def join_beer_call(
 @router.post("/{squad_id}/beer-calls/{apero_id}/decline/")
 async def decline_beer_call(
         squad_id: int,
+        background_tasks: BackgroundTasks,
         apero_id: str,
         decline_data: AperoDecline,
         db: Session = Depends(get_db),
@@ -378,6 +420,29 @@ async def decline_beer_call(
 
     db.add(participant)
     db.commit()
+
+    # NOTIF : Uniquement ceux qui ont rejoint le Bar (JOINED)
+    squad = db.query(Squad).filter(Squad.id == squad_id).first()
+    apero = db.query(Apero).filter(Apero.id == actual_apero_id).first()
+
+    joined_participants = db.query(AperoParticipant).filter(
+        AperoParticipant.apero_id == actual_apero_id,
+        AperoParticipant.status == ParticipationStatus.JOINED
+    ).all()
+
+    target_tokens = [
+        p.user.push_token for p in joined_participants
+        if p.user_id != current_user.id and p.user.push_token
+    ]
+
+    location = apero.location_name or "inconnu"
+    background_tasks.add_task(
+        send_push_notifications,
+        tokens=target_tokens,
+        title="Un lâcheur... 🌊",
+        body=f"{current_user.username} a décliné l'apéro au {location} de la squad {squad.name}"
+    )
+
     return {"message": "Plouf ! Direction la piscine. 🌊", "bonus": 5}
 
 

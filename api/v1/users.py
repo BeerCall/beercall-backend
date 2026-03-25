@@ -14,7 +14,7 @@ from core.security import (
 from db.database import get_db
 from models.gamification import Skin
 from models.user import User
-from schemas.user import BuyItemRequest, AvatarSchema
+from schemas.user import BuyItemRequest, AvatarSchema, PushTokenUpdate
 from schemas.user import ConnectionItem
 from schemas.user import (
     FullProfileResponse,
@@ -373,3 +373,14 @@ def get_user_connections(current_user: User = Depends(get_current_user)):
     sorted_connections = sorted(connections_dict.values(), key=lambda x: x["caps"], reverse=True)
 
     return sorted_connections
+
+
+@router.put("/push-token/")
+def update_push_token(
+        token_data: PushTokenUpdate,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
+):
+    current_user.push_token = token_data.token
+    db.commit()
+    return {"message": "Push token mis à jour !"}

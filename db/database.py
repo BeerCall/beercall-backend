@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 # On récupère l'URL depuis les variables d'environnement (configurées dans docker-compose)
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./beercall.db")
 
 # Configuration de l'engine
 if DATABASE_URL.startswith("postgresql"):
