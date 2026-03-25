@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -22,6 +22,7 @@ from schemas.user import (
     UserProfileResponse,
     UserResponse
 )
+from services.notifications import send_push_notifications
 
 router = APIRouter()
 
@@ -384,3 +385,30 @@ def update_push_token(
     current_user.push_token = token_data.token
     db.commit()
     return {"message": "Push token mis à jour !"}
+
+
+@router.post("/test-notification/")
+def test_push_notification(
+        background_tasks: BackgroundTasks,
+        current_user: User = Depends(get_current_user)
+):
+    # 1. On vérifie si l'utilisateur a bien un token enregistré
+    if not current_user.push_token:
+        # Pour tester que la connexion Firebase marche MÊME SANS TOKEN réel,
+        # on peut envoyer un faux token. Firebase nous renverra une erreur spécifique.
+        fake_token = "fake_token_pour_tester_la_connexion"
+        tokens_to_test = [fake_token]
+        msg = "Pas de vrai token en base. Test envoyé avec un faux token (Regarde les logs du serveur !)"
+    else:
+        tokens_to_test = [current_user.push_token]
+        msg = "Notification envoyée sur ton téléphone ! 📱"
+
+    # 2. On déclenche l'envoi
+    background_tasks.add_task(
+        send_push_notifications,
+        tokens=tokens_to_test,
+        title="Test Beer Call 🍻",
+        body="Si tu vois ça, Firebase fonctionne parfaitement !"
+    )
+
+    return {"message": msg}

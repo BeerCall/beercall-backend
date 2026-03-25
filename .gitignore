@@ -30,3 +30,5 @@ uploads/aperos/*
 .idea/
 .vscode/
 *.swp
+
+firebase-credentials.json

@@ -35,10 +35,17 @@ def send_push_notifications(tokens: List[str], title: str, body: str, data: dict
                 title=title,
                 body=body,
             ),
-            data=data or {},  # Pour envoyer des infos cachées au front (ex: l'id de l'apéro)
+            # --- NOUVEAU : Configuration spécifique pour le Web (Chrome) ---
+            webpush=messaging.WebpushConfig(
+                notification=messaging.WebpushNotification(
+                    # Mets ici un lien vers le logo de ton app (un PNG carré transparent c'est le mieux)
+                    icon="https://raw.githubusercontent.com/BeerCall/beercall-app/main/public/favicon.svg",
+                )
+            ),
+            # ---------------------------------------------------------------
+            data=data or {},
             tokens=valid_tokens,
         )
         response = messaging.send_each_for_multicast(message)
-        logger.info(f"🚀 Notifs envoyées : {response.success_count} succès, {response.failure_count} échecs.")
     except Exception as e:
         logger.error(f"❌ Erreur lors de l'envoi de la notification : {e}")

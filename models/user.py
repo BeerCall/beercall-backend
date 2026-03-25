@@ -23,4 +23,4 @@ class User(Base):
     consecutive_declines = Column(Integer, default=0)  # Pour le badge Casanier
     consecutive_piscine = Column(Integer, default=0)  # Pour le badge Nageur
 
-    # push_token = Column(String, nullable=True)
+    push_token = Column(String, nullable=True)
