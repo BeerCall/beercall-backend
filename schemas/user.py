@@ -7,6 +7,7 @@ class AvatarSchema(BaseModel):
     body: str
     legs: str
     feet: str
+    animation: str
     accessory: Optional[str] = None
     gender: str
 

@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
 
     if models_dir.exists():
         for file in models_dir.glob("*.fbx"):
-            if file.stem in {'Bar', 'Floaty_Island', 'Swimming_pool'}:
+            if file.stem in {'Bar', 'Floaty_Island', 'Swimming_pool', 'Animations'}:
                 continue
             parts = file.stem.split('_')
             if len(parts) == 4:
