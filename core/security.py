@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -12,9 +13,9 @@ from models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
 
-SECRET_KEY = "L_APPEL_DE_LA_BIERE_EST_SACRE_123"
+SECRET_KEY = os.getenv("BEERCALL_SECRET_KEY", "BEERCALL_DEV_KEY")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 heures
+ACCESS_TOKEN_EXPIRE_MINUTES = 5256000
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -77,4 +78,3 @@ def get_optional_current_user(
 
     # On cherche l'utilisateur en base
     return db.query(User).filter(User.username == username).first()
-

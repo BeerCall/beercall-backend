@@ -56,6 +56,9 @@ def get_my_squads(current_user: User = Depends(get_current_user)):
     return current_user.squads
 
 
+from datetime import datetime, timezone, timedelta
+
+
 @router.post("/{squad_id}/beer-calls/")
 async def create_beer_call(
         squad_id: int,
@@ -75,11 +78,27 @@ async def create_beer_call(
     if current_user not in squad.members:
         raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
 
-    # --- NOUVEAU (1.5) : Vérifier s'il y a déjà un apéro actif à proximité ---
+    # Définir la limite de temps pour un apéro "actif" (4 heures)
     now = datetime.now(timezone.utc)
+    time_limit = now - timedelta(hours=4)
+
+    # --- NOUVELLE RÈGLE : L'utilisateur a-t-il déjà un apéro en cours ? ---
+    user_active_apero = db.query(Apero).filter(
+        Apero.creator_id == current_user.id,
+        Apero.created_at >= time_limit
+    ).first()
+
+    if user_active_apero:
+        raise HTTPException(
+            status_code=400,
+            detail="Tu as déjà lancé un Beer Call il y a moins de 4 heures ! Laisse les autres profiter de celui-ci avant d'en recréer un."
+        )
+    # ----------------------------------------------------------------------
+
+    # --- RÈGLE EXISTANTE (1.5) : Vérifier s'il y a déjà un apéro actif à proximité ---
     active_aperos = db.query(Apero).filter(
         Apero.squad_id == squad_id,
-        (now - Apero.created_at) < timedelta(hours=4)
+        Apero.created_at >= time_limit
     ).all()
 
     for existing_apero in active_aperos:
