@@ -1,10 +1,8 @@
 import os
 import uuid
-from datetime import datetime, timedelta, timezone
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi import UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Request, BackgroundTasks
 from sqlalchemy.orm import Session
 
 from core.security import get_current_user
@@ -17,10 +15,8 @@ from schemas.apero import AperoDecline, WorldsResponse
 from schemas.squad import SquadCreate, SquadDetailsResponse
 from schemas.squad import SquadResponse, SquadJoin
 from services.gamification import handle_ia_fraud, award_badge
-from services.photo_validation import is_drink_detected, calculate_geodistance
-from fastapi import BackgroundTasks
 from services.notifications import send_push_notifications
-import os
+from services.photo_validation import is_drink_detected, calculate_geodistance
 
 router = APIRouter()
 
@@ -497,6 +493,7 @@ async def decline_beer_call(
 def get_beer_call_worlds(
         squad_id: int,
         beer_call_id: str,
+        request: Request,
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
@@ -524,9 +521,8 @@ def get_beer_call_worlds(
                 "user_id": f"u_{user.id}",
                 "username": user.username,
                 "avatar_config": user.avatar_config or {},
-                # On simule l'URL pour que le front puisse charger l'image
-                "proof_photo_url": f"http://127.0.0.1:8000/{p.photo_path}",
-                "joined_at": datetime.utcnow()  # Idéalement, à remplacer par p.created_at
+                "proof_photo_url": f"{request.base_url}{p.photo_path}",
+                "joined_at": datetime.utcnow()
             })
         elif p.status == ParticipationStatus.DECLINED:
             piscine_participants.append({
