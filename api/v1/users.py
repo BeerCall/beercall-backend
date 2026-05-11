@@ -110,21 +110,19 @@ def login(
 
 @router.get("/me", response_model=UserProfileResponse)
 def read_users_me(current_user: User = Depends(get_current_user)):
-    # Calcul du rang
-    if current_user.capsules < 50:
-        title = "Nouvelle Recrue"
-    elif current_user.capsules < 150:
-        title = "Amateur de Houblon"
-    elif current_user.capsules < 300:
-        title = "Pilier Émérite"
-    else:
-        title = "Général de la Soif"
-
     return {
         "username": current_user.username,
-        "caps": current_user.capsules,  # Mapping capsules -> caps
-        "title": title,
-        "avatar": current_user.avatar_config or {}
+        "caps": current_user.capsules,
+        "score": current_user.score,
+        "title": get_rank_title(current_user.score),
+        "avatar": current_user.avatar_config or {},
+        "stats": {
+            "aperos_created": current_user.aperos_created_count,
+            "aperos_joined": current_user.aperos_joined_count,
+            "aperos_declined": current_user.aperos_declined_count,
+            "aperos_missed": current_user.aperos_missed_count,
+            "fraud_count": current_user.ia_fraud_count
+        }
     }
 
 
@@ -154,22 +152,24 @@ def get_full_profile(
             "id": 0,
             "username": "Guest",
             "caps": 0,
+            "score": 0,
             "title": "Nouveau Venu",
             "avatar": {},
             "unlocked_badges": [],
             "squads": [],
-            "shop_items": shop_items
+            "shop_items": shop_items,
+            "stats": {
+                "aperos_created": 0,
+                "aperos_joined": 0,
+                "aperos_declined": 0,
+                "aperos_missed": 0,
+                "fraud_count": 0
+            }
         }
 
     # --- CAS 2 : Utilisateur connecté (Dashboard / Boutique) ---
     # Calcul du titre
-    title = "Nouvelle Recrue"
-    if current_user.capsules >= 300:
-        title = "Général de la Soif"
-    elif current_user.capsules >= 150:
-        title = "Pilier Émérite"
-    elif current_user.capsules >= 50:
-        title = "Amateur de Houblon"
+    title = get_rank_title(current_user.score)
 
     # Liste des IDs que l'utilisateur possède
     owned_skin_ids = [skin.id for skin in current_user.skins]
@@ -190,11 +190,19 @@ def get_full_profile(
         "id": current_user.id,
         "username": current_user.username,
         "caps": current_user.capsules,
+        "score": current_user.score,
         "title": title,
         "avatar": current_user.avatar_config or {},
         "unlocked_badges": current_user.badges,
         "squads": current_user.squads,
-        "shop_items": shop_items
+        "shop_items": shop_items,
+        "stats": {
+            "aperos_created": current_user.aperos_created_count,
+            "aperos_joined": current_user.aperos_joined_count,
+            "aperos_declined": current_user.aperos_declined_count,
+            "aperos_missed": current_user.aperos_missed_count,
+            "fraud_count": current_user.ia_fraud_count
+        }
     }
 
 
@@ -222,13 +230,7 @@ def get_user_profile(
         pass  # Tu pourrais lever une erreur ici si tu le souhaites, ou juste laisser passer.
 
     # 3. Calcul dynamique du titre de CE joueur
-    title = "Nouvelle Recrue"
-    if target_user.capsules >= 300:
-        title = "Général de la Soif"
-    elif target_user.capsules >= 150:
-        title = "Pilier Émérite"
-    elif target_user.capsules >= 50:
-        title = "Amateur de Houblon"
+    title = get_rank_title(current_user.score)
 
     # 4. On récupère le catalogue de la boutique
     all_skins = db.query(Skin).all()
@@ -254,11 +256,19 @@ def get_user_profile(
         "id": target_user.id,
         "username": target_user.username,
         "caps": target_user.capsules,
+        "score": target_user.score,  # Ajoute ça
         "title": title,
         "avatar": target_user.avatar_config or {},
         "unlocked_badges": target_user.badges,
         "squads": target_user.squads,
-        "shop_items": shop_items
+        "shop_items": shop_items,
+        "stats": {  # Et ça
+            "aperos_created": target_user.aperos_created_count,
+            "aperos_joined": target_user.aperos_joined_count,
+            "aperos_declined": target_user.aperos_declined_count,
+            "aperos_missed": target_user.aperos_missed_count,
+            "fraud_count": target_user.ia_fraud_count
+        }
     }
 
 
@@ -340,40 +350,47 @@ def equip_avatar(
     }
 
 
+def get_rank_title(score: int) -> str:
+    if score < 50: return "Nouvelle Recrue"
+    if score < 150: return "Amateur de Houblon"
+    if score < 300: return "Pilier de Comptoir"
+    if score < 600: return "Maître Brasseur"
+    if score < 1000: return "Chevalier de la Pinte"
+    if score < 2500: return "Seigneur du Fût"
+    if score < 5000: return "Légende de l'Apéro"
+    if score < 10000: return "Empereur de la Soif"
+    return "Dieu du Beer Call"  # 10 000 et plus 👑
+
+
 @router.get("/connections/", response_model=List[ConnectionItem])
 def get_user_connections(current_user: User = Depends(get_current_user)):
-    connections_dict = {}
+    # 1. On commence par s'ajouter soi-même
+    connections_dict = {
+        current_user.id: {
+            "id": f"u_{current_user.id}",
+            "username": current_user.username,
+            "caps": current_user.capsules,
+            "score": current_user.score,
+            "title": get_rank_title(current_user.score),
+            "avatar": current_user.avatar_config or {}
+        }
+    }
 
-    # 1. On parcourt toutes les squads dont le joueur fait partie
+    # 2. On ajoute les membres des squads (évite les doublons grâce à l'ID)
     for squad in current_user.squads:
-        # 2. On parcourt tous les membres de ces squads
         for member in squad.members:
-            # 3. On exclut le joueur lui-même et on évite les doublons
-            if member.id != current_user.id and member.id not in connections_dict:
-
-                # Calcul du titre (comme d'habitude)
-                title = "Nouvelle Recrue"
-                if member.capsules >= 300:
-                    title = "Général de la Soif"
-                elif member.capsules >= 150:
-                    title = "Pilier Émérite"
-                elif member.capsules >= 50:
-                    title = "Amateur de Houblon"
-
-                # On l'ajoute à notre dictionnaire (pour écraser les doublons si on le recroise dans une autre squad)
+            if member.id not in connections_dict:
                 connections_dict[member.id] = {
-                    "id": f"u_{member.id}",  # Format prêt pour ton lien Front-end !
+                    "id": f"u_{member.id}",
                     "username": member.username,
                     "caps": member.capsules,
-                    "title": title,
+                    "score": member.score,
+                    "title": get_rank_title(member.score),
                     "avatar": member.avatar_config or {}
                 }
 
-    # 4. On convertit le dictionnaire en liste pour la réponse JSON
-    # On peut même les trier par ordre alphabétique ou par nombre de capsules (ici par capsules décroissantes)
-    sorted_connections = sorted(connections_dict.values(), key=lambda x: x["caps"], reverse=True)
-
-    return sorted_connections
+    # 3. Tri par SCORE décroissant (Prestige)
+    return sorted(connections_dict.values(), key=lambda x: x["score"], reverse=True)
 
 
 @router.put("/push-token/")

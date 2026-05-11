@@ -19,8 +19,8 @@ class Apero(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relations pour naviguer facilement dans le code
-    creator = relationship("User")
-    squad = relationship("Squad")
+    creator = relationship("User", backref="aperos_created")
+    squad = relationship("Squad", backref="aperos")
 
 
 class ParticipationStatus(enum.Enum):
@@ -40,4 +40,4 @@ class AperoParticipant(Base):
     photo_path = Column(String, nullable=True)  # Pour le "Bar"
 
     apero = relationship("Apero", backref="participants")
-    user = relationship("User")
+    user = relationship("User", backref="participations")

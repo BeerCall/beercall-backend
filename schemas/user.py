@@ -2,6 +2,14 @@ from pydantic import BaseModel
 from typing import Optional, List
 
 
+class UserStats(BaseModel):
+    aperos_created: int
+    aperos_joined: int
+    aperos_declined: int
+    aperos_missed: int
+    fraud_count: int
+
+
 class AvatarSchema(BaseModel):
     head: str
     body: str
@@ -33,8 +41,10 @@ class UserResponse(BaseModel):
 class UserProfileResponse(BaseModel):
     username: str
     caps: int
+    score: int
     title: str
     avatar: AvatarSchema
+    stats: UserStats
 
 
 class BadgeResponse(BaseModel):
@@ -70,11 +80,13 @@ class FullProfileResponse(BaseModel):
     id: int
     username: str
     caps: int
+    score: int
     title: str
     avatar: dict
     unlocked_badges: List[BadgeResponse] = []
     squads: List[SquadBasicInfo] = []
     shop_items: List[ShopItem] = []
+    stats: UserStats
 
 
 class BuyItemRequest(BaseModel):
@@ -85,8 +97,10 @@ class ConnectionItem(BaseModel):
     id: str
     username: str
     caps: int
+    score: int
     title: str
     avatar: dict
+
 
 class PushTokenUpdate(BaseModel):
     token: str
