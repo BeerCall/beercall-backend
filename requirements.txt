@@ -13,3 +13,4 @@ sqlalchemy
 ultralytics
 ultralytics-thop
 uvicorn[standard]
+google-genai

@@ -1,6 +1,6 @@
 import enum
 
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Enum
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Enum, JSON
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from db.database import Base
@@ -22,6 +22,8 @@ class Apero(Base):
     creator = relationship("User", backref="aperos_created")
     squad = relationship("Squad", backref="aperos")
 
+    current_game_id = Column(String, nullable=True) # ex: "SOMMELIER", "HOT_POTATO"
+    current_game_state = Column(JSON, nullable=True) # Données internes du jeu (timers, joueurs ayant voté, etc.)
 
 class ParticipationStatus(enum.Enum):
     JOINED = "joined"  # Le Bar

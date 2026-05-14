@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 
 from api.v1.squads import router as squad_router
 from api.v1.users import router as user_router
+from api.v1.games import router as games_router
 from db.database import Base
 from db.database import engine, SessionLocal
 from models import gamification
@@ -81,6 +82,7 @@ app.add_middleware(
 
 # Inclusion des routes
 app.include_router(squad_router, prefix="/api/squads", tags=["Squads"])
+app.include_router(games_router, prefix="/api/aperos", tags=["Games"])
 app.include_router(user_router, prefix="/api/auth", tags=["Authentication"])
 
 # S'assurer que le dossier existe pour éviter un crash au démarrage
