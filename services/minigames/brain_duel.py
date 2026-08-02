@@ -27,6 +27,7 @@ class BrainDuelGame(BaseMiniGame):
         state["duel_p1_id"] = p1_id
         state["duel_p2_id"] = p2_id
         state["winner"] = None
+        state["status"] = "PRE_DUEL"  # PRE_DUEL, DUEL_IN_PROGRESS
 
         apero.current_game_state = state
 
@@ -54,6 +55,18 @@ class BrainDuelGame(BaseMiniGame):
                 ]
             }
 
+        if state.get("status") == "PRE_DUEL":
+            return {
+                "turn_of": f"{p1_name} VS {p2_name}",
+                "instruction_header": "Préparez-vous !",
+                "title": "Duel de Réflexes ⚡",
+                "description": f"Les joueurs {p1_name} et {p2_name} se préparent à toucher l'écran quand c'est vert",
+                "required_sensor": {"type": "BUTTONS"},
+                "actions": [
+                    {"label": "Prêts ? Démarrer !", "action_id": "START_DUEL", "style": "primary"}
+                ]
+            }
+
         # Sinon, on lance le composant de Duel
         return {
             "turn_of": f"{p1_name} VS {p2_name}",
@@ -73,7 +86,10 @@ class BrainDuelGame(BaseMiniGame):
         action_id = action_payload.get("action_id", "")
         state = dict(apero.current_game_state)
 
-        if action_id == "WINNER_TOP":
+        if action_id == "START_DUEL":
+            state["status"] = "DUEL_IN_PROGRESS"
+            apero.current_game_state = state
+        elif action_id == "WINNER_TOP":
             state["winner"] = "P2"
             apero.current_game_state = state
         elif action_id == "WINNER_BOTTOM":
