@@ -32,6 +32,7 @@ class PenaltyShootoutGame(BaseMiniGame):
         # --- CAS 1 : GAGNÉ ---
         if state.get("status") == "WON":
             return {
+                "game_id": self.game_id,
                 "turn_of": "Gooooooooaaaal ! ⚽",
                 "instruction_header": "Résultat",
                 "title": "Pleine lucarne !",
@@ -43,6 +44,7 @@ class PenaltyShootoutGame(BaseMiniGame):
         # --- CAS 2 : PERDU ---
         if state.get("status") == "LOST":
             return {
+                "game_id": self.game_id,
                 "turn_of": "Dans les tribunes... 🕊️",
                 "instruction_header": "Résultat",
                 "title": "Quel raté !",
@@ -56,6 +58,7 @@ class PenaltyShootoutGame(BaseMiniGame):
                                                                                'wind_force'] != 0 else "Pas de vent, c'est le moment parfait !"
 
         return {
+            "game_id": self.game_id,
             "turn_of": current_username,
             "instruction_header": "Tir au but",
             "title": "Pression sur le Point de Penalty",

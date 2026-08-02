@@ -31,6 +31,7 @@ class DeathFingerGame(BaseMiniGame):
         # --- CAS 1 : LE DOIGT A ÉTÉ CHOISI ---
         if state.get("selection_done"):
             return {
+                "game_id": self.game_id,
                 "turn_of": "Le sort en est jeté ☠️",
                 "instruction_header": "Résultat",
                 "title": "C'est toi !",
@@ -43,6 +44,7 @@ class DeathFingerGame(BaseMiniGame):
 
         # --- CAS 2 : ON POSE LES DOIGTS ---
         return {
+            "game_id": self.game_id,
             "turn_of": "Tout le monde",
             "instruction_header": "Posez l'appareil au centre",
             "title": "Le Doigt de la Mort 🖐️",

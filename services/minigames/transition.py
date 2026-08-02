@@ -23,6 +23,7 @@ class TurnTransitionGame(BaseMiniGame):
                                 "Inconnu")
 
         return {
+            "game_id": self.game_id,
             "turn_of": current_username,
             "instruction_header": f"Passez le téléphone à {current_username}",
             "title": "Nouveau défi ! 🔥",

@@ -33,6 +33,7 @@ class MaxPressureGame(BaseMiniGame):
         # --- CAS 1 : GAGNÉ ---
         if state.get("status") == "WON":
             return {
+                "game_id": self.game_id,
                 "turn_of": "Bouteille explosée 🍾",
                 "instruction_header": "Résultat",
                 "title": "Quelle énergie !",
@@ -44,6 +45,7 @@ class MaxPressureGame(BaseMiniGame):
         # --- CAS 2 : PERDU ---
         if state.get("status") == "LOST":
             return {
+                "game_id": self.game_id,
                 "turn_of": "Pschitt... 💨",
                 "instruction_header": "Résultat",
                 "title": "Manque de jus...",
@@ -54,6 +56,7 @@ class MaxPressureGame(BaseMiniGame):
 
         # --- CAS 3 : EN JEU ---
         return {
+            "game_id": self.game_id,
             "turn_of": current_username,
             "instruction_header": "Jeu de force",
             "title": "Pression Maximale 💥",

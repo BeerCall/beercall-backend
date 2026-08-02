@@ -76,6 +76,7 @@ class PhotoChallengeGame(BaseMiniGame):
         # --- CAS 1 : LA PHOTO A ÉTÉ PRISE (VOTE DU GROUPE) ---
         if state.get("photo_base64"):
             return {
+                "game_id": self.game_id,
                 "turn_of": "Le Jury (Tout le monde)",
                 "instruction_header": f"Défi de {current_username}",
                 "title": "A-t-il respecté le thème ?",
@@ -92,6 +93,7 @@ class PhotoChallengeGame(BaseMiniGame):
 
         # --- CAS 2 : PHASE DE CAPTURE ---
         return {
+            "game_id": self.game_id,
             "turn_of": current_username,
             "instruction_header": "Objectif compromettant",
             "title": "Paparazzi 📸",

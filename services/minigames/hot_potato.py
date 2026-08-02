@@ -88,6 +88,7 @@ class HotPotatoGame(BaseMiniGame):
         # --- CAS 1 : LA BOMBE A EXPLOSÉ ---
         if state.get("is_exploded", False):
             return {
+                "game_id": self.game_id,
                 "turn_of": "BOOM 💥",
                 "instruction_header": "Trop tard !",
                 "title": f"Désolé {holder_name}...",
@@ -102,6 +103,7 @@ class HotPotatoGame(BaseMiniGame):
         remaining_time = max(0, state["explode_at"] - time.time())
 
         return {
+            "game_id": self.game_id,
             "turn_of": holder_name,
             "instruction_header": f"La bombe est sur {holder_name} 💣",
             "title": state["theme"],

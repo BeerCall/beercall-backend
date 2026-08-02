@@ -45,6 +45,7 @@ class BrainDuelGame(BaseMiniGame):
             winner_name = p1_name if state["winner"] == "P1" else p2_name
             loser_name = p2_name if state["winner"] == "P1" else p1_name
             return {
+                "game_id": self.game_id,
                 "turn_of": "Fin du Duel ⚔️",
                 "instruction_header": "Résultat",
                 "title": f"{winner_name} l'emporte !",
@@ -57,6 +58,7 @@ class BrainDuelGame(BaseMiniGame):
 
         if state.get("status") == "PRE_DUEL":
             return {
+                "game_id": self.game_id,
                 "turn_of": f"{p1_name} VS {p2_name}",
                 "instruction_header": "Préparez-vous !",
                 "title": "Duel de Réflexes ⚡",
@@ -69,6 +71,7 @@ class BrainDuelGame(BaseMiniGame):
 
         # Sinon, on lance le composant de Duel
         return {
+            "game_id": self.game_id,
             "turn_of": f"{p1_name} VS {p2_name}",
             "instruction_header": "Posez le téléphone à plat entre vous",
             "title": "Duel de Réflexes ⚡",

@@ -126,6 +126,7 @@ class DrunkenDrawingGame(BaseMiniGame):
             punishment = "Distribue 2 gorgées !" if won else "Bois 3 gorgées de la honte !"
 
             return {
+                "game_id": self.game_id,
                 "turn_of": "Le Critique d'Art 🤖",
                 "instruction_header": f"Verdict pour {current_username}",
                 "title": title,
@@ -141,6 +142,7 @@ class DrunkenDrawingGame(BaseMiniGame):
 
         # --- CAS 2 : PHASE DE DESSIN ---
         return {
+            "game_id": self.game_id,
             "turn_of": current_username,
             "instruction_header": "Picas-soûl 🎨",
             "title": "Dessin d'Ivrogne",

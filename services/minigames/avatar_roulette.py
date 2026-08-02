@@ -60,6 +60,7 @@ class AvatarRussianRouletteGame(BaseMiniGame):
     def get_sdui_payload(self, apero: Apero, db: Session) -> Dict[str, Any]:
         participants = [p.user.username for p in apero.participants if p.status == ParticipationStatus.JOINED]
         return {
+            "game_id": self.game_id,
             "turn_of": "Tout le monde",
             "instruction_header": "Votez !",
             "title": "Roulette Russe 🎯",

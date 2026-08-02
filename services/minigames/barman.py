@@ -33,6 +33,7 @@ class BarmanGame(BaseMiniGame):
         # --- CAS 1 : GAGNÉ ---
         if state.get("status") == "WON":
             return {
+                "game_id": self.game_id,
                 "turn_of": "Victoire 🏆",
                 "instruction_header": "Résultat",
                 "title": "Service parfait !",
@@ -44,6 +45,7 @@ class BarmanGame(BaseMiniGame):
         # --- CAS 2 : PERDU ---
         if state.get("status") == "LOST":
             return {
+                "game_id": self.game_id,
                 "turn_of": "Désastre 💥",
                 "instruction_header": "Résultat",
                 "title": "Tout est par terre !",
@@ -54,6 +56,7 @@ class BarmanGame(BaseMiniGame):
 
         # --- CAS 3 : EN JEU ---
         return {
+            "game_id": self.game_id,
             "turn_of": current_username,
             "instruction_header": "Jeu d'équilibre",
             "title": "Le Plateau de Pintes 🍺",
