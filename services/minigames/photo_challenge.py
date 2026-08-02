@@ -1,8 +1,58 @@
 import random
-from typing import Dict, Any
+import base64
+import os
+from typing import Dict, Any, Tuple
+
+from google import genai
+from google.genai import types
 from sqlalchemy.orm import Session
 from models.apero import Apero
 from .base import BaseMiniGame
+
+
+def analyze_photo_with_ai(base64_str: str, challenge: str) -> Tuple[bool, str]:
+    """
+    Analyse le dessin avec Gemini 2.5 Flash.
+    """
+    if not os.getenv("GEMINI_API_KEY"):
+        return True, "Mode hors-ligne : Le jury populaire valide à l'unanimité !"
+
+    try:
+        if "," in base64_str:
+            base64_str = base64_str.split(",")[1]
+
+        image_bytes = base64.b64decode(base64_str)
+
+        prompt = (
+            f"Tu es un juge sarcastique pour un jeu photo dans un bar. "
+            f"Le défi était : '{challenge}'. Regarde cette photo prise par un joueur.\n"
+            f"Ligne 1 : Réponds STRICTEMENT par 'OUI' si le défi est réussi (sois indulgent, on est là pour s'amuser), ou 'NON' si c'est complètement hors-sujet.\n"
+            f"Ligne 2 : Fais un commentaire très drôle et piquant sur la photo (1 phrase courte)."
+        )
+
+        client = genai.Client()
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=[
+                prompt,
+                types.Part.from_bytes(
+                    data=image_bytes,
+                    mime_type='image/jpeg'
+                )
+            ]
+        )
+
+        lines = response.text.strip().split('\n')
+        lines = [line.strip() for line in lines if line.strip()]
+
+        is_valid = "OUI" in lines[0].upper()
+        comment = lines[1] if len(lines) > 1 else "Je reste sans voix..."
+
+        return is_valid, comment
+
+    except Exception as e:
+        print(f"[ERREUR IA PHOTO] {e}")
+        return False, "Le juge IA s'est étouffé avec une cacahuète (Erreur API)."
 
 
 class PhotoChallengeGame(BaseMiniGame):
@@ -61,7 +111,9 @@ class PhotoChallengeGame(BaseMiniGame):
 
         state = dict(apero.current_game_state)
         state["challenge"] = random.choice(challenges)
-        state["photo_base64"] = None  # Contiendra la photo prise
+        state["photo_base64"] = None
+        state["ai_verdict"] = None
+        state["ai_comment"] = None
         apero.current_game_state = state
 
     def get_sdui_payload(self, apero: Apero, db: Session) -> Dict[str, Any]:
@@ -73,21 +125,25 @@ class PhotoChallengeGame(BaseMiniGame):
         current_username = next((p.user.username for p in apero.participants if p.user_id == current_player_id),
                                 "Le Photographe")
 
-        # --- CAS 1 : LA PHOTO A ÉTÉ PRISE (VOTE DU GROUPE) ---
-        if state.get("photo_base64"):
+        # --- CAS 1 : L'IA A RENDU SON VERDICT ---
+        if state.get("ai_verdict"):
+            won = (state["ai_verdict"] == "WON")
+            title = "Défi validé !" if won else "Défi raté..."
+            style = "success" if won else "danger"
+            punishment = "Tu peux distribuer 3 gorgées !" if won else "Tu bois 2 gorgées pour la peine !"
+
             return {
                 "game_id": self.game_id,
-                "turn_of": "Le Jury (Tout le monde)",
-                "instruction_header": f"Défi de {current_username}",
-                "title": "A-t-il respecté le thème ?",
-                "description": f"Thème : {state['challenge']}",
+                "turn_of": "Le Juge IA 🤖",
+                "instruction_header": f"Analyse du défi de {current_username}",
+                "title": title,
+                "description": f"L'IA a dit : \"{state.get('ai_comment')}\"\n\n{punishment}",
                 "required_sensor": {
-                    "type": "IMAGE_DISPLAY",  # Un simple composant pour afficher une image
+                    "type": "IMAGE_DISPLAY",
                     "image_data": state["photo_base64"]
                 },
                 "actions": [
-                    {"label": "Validé ! (Il distribue 2 gorgées)", "action_id": "VOTE_YES", "style": "success"},
-                    {"label": "Nul ! (Il boit 2 gorgées)", "action_id": "VOTE_NO", "style": "danger"}
+                    {"label": "Au suivant !", "action_id": "NEXT_TURN", "style": style}
                 ]
             }
 
@@ -100,8 +156,8 @@ class PhotoChallengeGame(BaseMiniGame):
             "description": f"Tu as 10 secondes pour prendre cette photo : {state['challenge']}",
             "required_sensor": {
                 "type": "CAMERA_CAPTURE",
-                "facing_mode": "user",  # Demande la caméra frontale (selfie)
-                "auto_capture_ms": 10000  # Le front prend la photo tout seul après 10s si le joueur n'a pas cliqué
+                "facing_mode": "user",
+                "auto_capture_ms": 10000
             },
             "actions": []
         }
@@ -111,12 +167,16 @@ class PhotoChallengeGame(BaseMiniGame):
         state = dict(apero.current_game_state)
 
         if action_id == "PHOTO_TAKEN":
-            # Le frontend envoie la photo encodée en base64
-            state["photo_base64"] = action_payload.get("image_base64")
+            image_b64 = action_payload.get("image_base64", "")
+            state["photo_base64"] = image_b64
+
+            is_valid, comment = analyze_photo_with_ai(image_b64, state["challenge"])
+
+            state["ai_verdict"] = "WON" if is_valid else "LOST"
+            state["ai_comment"] = comment
             apero.current_game_state = state
 
-        elif action_id in ["VOTE_YES", "VOTE_NO"]:
-            # Fin du jeu, on incrémente le tour et on passe à la transition
+        elif action_id == "NEXT_TURN":
             state["turn_index"] = state.get("turn_index", 0) + 1
             apero.current_game_state = state
             apero.current_game_id = "TURN_TRANSITION"
