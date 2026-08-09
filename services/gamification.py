@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from sqlalchemy.orm import Session
 
+from models.apero import Apero, AperoParticipant
 from models.gamification import Badge
 from models.user import User
 
