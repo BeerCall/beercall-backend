@@ -46,15 +46,42 @@ async def lifespan(app: FastAPI):
         db.commit()
 
     BADGES = [
+        # --- LES CLASSIQUES (Présence) ---
         {"id": "BAPTEME", "name": "Le Baptême", "description": "1er apéro rejoint", "icon": "👼"},
         {"id": "HABITUE", "name": "L'Habitué", "description": "10 apéros rejoints", "icon": "🍻"},
         {"id": "PILIER", "name": "Le Pilier de Comptoir", "description": "50 apéros rejoints", "icon": "🗿"},
         {"id": "LEGENDE", "name": "La Légende", "description": "100 apéros rejoints", "icon": "👑"},
+
+        # --- LES ANIMATEURS (Création) ---
         {"id": "ETINCELLE", "name": "L'Étincelle", "description": "1er apéro créé", "icon": "⚡"},
         {"id": "RABATTEUR", "name": "Le Rabatteur", "description": "10 apéros créés", "icon": "📢"},
+        {"id": "AUBERGISTE", "name": "L'Aubergiste", "description": "50 apéros créés", "icon": "🍺"},
+        {"id": "DIEU_FETE", "name": "Dieu de la Fête", "description": "100 apéros créés", "icon": "🎆"},
+
+        # --- LA VITESSE (Réactivité) ---
+        {"id": "SNIPER", "name": "Le Sniper", "description": "A rejoint en < 10s", "icon": "🎯"},
         {"id": "LUCKY_LUKE", "name": "Lucky Luke", "description": "Présence validée en < 30s", "icon": "⏱️"},
         {"id": "INCRUSTE", "name": "L'Incruste", "description": "A rejoint en < 3 min", "icon": "🥷"},
+        {"id": "RETARDATAIRE", "name": "Le Retardataire", "description": "A rejoint dans les 10 dernières minutes",
+         "icon": "🐌"},
+
+        # --- LES SÉRIES (Rétention / Streaks) ---
+        {"id": "MARATHONIEN", "name": "Le Marathonien", "description": "Présent 3 apéros de suite", "icon": "🏃‍♂️"},
+        {"id": "INCREVABLE", "name": "L'Increvable", "description": "Présent 10 apéros de suite", "icon": "🧟‍♂️"},
+
+        # --- LE TROLL & LE CHAMBRAGE ---
         {"id": "FAUSSAIRE", "name": "Le Faussaire", "description": "Triche avérée 3 fois", "icon": "🤥"},
+        {"id": "ENNEMI_PUBLIC", "name": "Ennemi Public", "description": "Triche avérée 10 fois", "icon": "🦹‍♂️"},
+        {"id": "NAGEUR", "name": "Le Nageur", "description": "A esquivé 5 apéros (La Piscine)", "icon": "🏊"},
+        {"id": "CASANIER", "name": "Le Casanier", "description": "A décliné avec excuse 5 fois", "icon": "🏠"},
+        {"id": "SOMNAMBULE", "name": "Le Somnambule", "description": "A fait le mort 10 fois (Le Dodo)", "icon": "👻"},
+        {"id": "REVENANT", "name": "Le Revenant", "description": "Retour au Bar après 10 absences", "icon": "🧟"},
+
+        # --- BOUTIQUE & ÉVÉNEMENTS ---
+        {"id": "FLAMBEUR", "name": "Le Flambeur", "description": "A acheté un objet à 5000 capsules", "icon": "💸"},
+        {"id": "PADDOCK_MASTER", "name": "Maître du Paddock",
+         "description": "Possède un accessoire des 11 écuries F1 (Cadillac & Audi incluses !)", "icon": "🏎️"},
+        {"id": "FASHION_VICTIM", "name": "Fashion Victim", "description": "Possède 10 skins différents", "icon": "👗"}
     ]
 
     for b in BADGES:

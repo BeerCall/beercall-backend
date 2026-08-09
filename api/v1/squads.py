@@ -14,7 +14,7 @@ from models.user import User
 from schemas.apero import AperoDecline, WorldsResponse
 from schemas.squad import SquadCreate, SquadDetailsResponse
 from schemas.squad import SquadResponse, SquadJoin
-from services.gamification import handle_ia_fraud, award_badge
+from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges
 from services.notifications import send_push_notifications
 from services.photo_validation import is_drink_detected, calculate_geodistance
 
@@ -138,35 +138,44 @@ async def create_beer_call(
     )
 
     db.add(new_apero)
-    db.commit()  # On commit ici pour que new_apero génère son ID
+    db.commit()
     db.refresh(new_apero)
 
-    # --- Ajouter le créateur comme 1er participant validé (au Bar) ---
+    # Ajouter le créateur comme 1er participant validé (au Bar)
     creator_participant = AperoParticipant(
         apero_id=new_apero.id,
         user_id=current_user.id,
         status=ParticipationStatus.JOINED,
-        photo_path=file_path  # On utilise la même photo que celle de l'apéro
+        photo_path=file_path
     )
     db.add(creator_participant)
-    # -------------------------------------------------------------------------
-
-    previous_apero = db.query(Apero).filter(
-        Apero.squad_id == squad_id, Apero.location_name == location_name
-    ).first()
+    previous_apero = db.query(Apero).filter(Apero.squad_id == squad_id,
+                                            Apero.location_name == location_name).first()
     bonus_explo = 20 if not previous_apero else 0
 
-    # 3. Récompense de base
+    # MISE À JOUR DES COMPTEURS DU CRÉATEUR
     current_user.capsules += (50 + bonus_explo)
-
-    # 4. Badges de création
-    created_count = db.query(Apero).filter(Apero.creator_id == current_user.id).count()
-    if created_count == 1: award_badge(current_user, "ETINCELLE", db)
-    if created_count == 10: award_badge(current_user, "RABATTEUR", db)
-
-    # On remet les compteurs de flemme à zéro
+    current_user.consecutive_joins += 1
     current_user.consecutive_declines = 0
     current_user.consecutive_piscine = 0
+
+    # DISTRIBUTION DES BADGES (Création)
+    created_count = db.query(Apero).filter(Apero.creator_id == current_user.id).count()
+    if created_count >= 1: award_badge(current_user, "ETINCELLE", db)
+    if created_count >= 10: award_badge(current_user, "RABATTEUR", db)
+    if created_count >= 50: award_badge(current_user, "AUBERGISTE", db)
+    if created_count >= 100: award_badge(current_user, "DIEU_FETE", db)
+    # DISTRIBUTION DES BADGES (Présence & Streaks)
+    join_count = db.query(AperoParticipant).filter(
+        AperoParticipant.user_id == current_user.id,
+        AperoParticipant.status == ParticipationStatus.JOINED
+    ).count() + 1  # +1 car le commit du participant n'est pas encore fait
+    if join_count >= 1: award_badge(current_user, "BAPTEME", db)
+    if join_count >= 10: award_badge(current_user, "HABITUE", db)
+    if join_count >= 50: award_badge(current_user, "PILIER", db)
+    if join_count >= 100: award_badge(current_user, "LEGENDE", db)
+    if current_user.consecutive_joins >= 3: award_badge(current_user, "MARATHONIEN", db)
+    if current_user.consecutive_joins >= 10: award_badge(current_user, "INCREVABLE", db)
 
     db.commit()
 
@@ -177,7 +186,6 @@ async def create_beer_call(
         title="Beer Call ! 🍻",
         body=f"{current_user.username} a lancé un apéro pour la Squad {squad.name} !"
     )
-
     return {
         "message": "Beer Call lancé avec succès ! 🍻",
         "apero_id": new_apero.id,
@@ -344,7 +352,11 @@ async def join_beer_call(
     with open(file_path, "wb") as f:
         f.write(file_bytes)
 
-    # 3. Enregistrement participation
+    past_ghost_streak = check_and_award_ghost_badges(current_user, db)
+    if past_ghost_streak >= 10:
+        award_badge(current_user, "REVENANT", db)
+
+    # 1. Enregistrement de la participation
     participant = AperoParticipant(
         apero_id=actual_apero_id,
         user_id=current_user.id,
@@ -352,43 +364,48 @@ async def join_beer_call(
         photo_path=file_path
     )
 
-    # --- Gestion des dates et fuseaux ---
+    # 2. Gestion des dates pour les bonus de vitesse
     apero_created_at = apero_obj.created_at
     if apero_created_at.tzinfo is None:
         apero_created_at = apero_created_at.replace(tzinfo=timezone.utc)
 
-    time_diff = datetime.now(timezone.utc) - apero_created_at
-    diff_seconds = time_diff.total_seconds()
+    diff_seconds = (datetime.now(timezone.utc) - apero_created_at).total_seconds()
 
-    # --- Calcul des Bonus & Badges (ton code conservé à 100%) ---
+    # 3. BONUS FLASH ET BADGES DE VITESSE
     bonus_flash = 15 if diff_seconds <= 120 else 0
 
-    if diff_seconds <= 30:
+    if diff_seconds <= 10:
+        award_badge(current_user, "SNIPER", db)
+    elif diff_seconds <= 30:
         award_badge(current_user, "LUCKY_LUKE", db)
     elif diff_seconds <= 180:
         award_badge(current_user, "INCRUSTE", db)
 
+    if diff_seconds >= 13800:  # Les 10 dernières minutes des 4h d'ouverture
+        award_badge(current_user, "RETARDATAIRE", db)
+
+    # 4. MISE À JOUR DES COMPTEURS STREAKS
     current_user.consecutive_joins += 1
-    bonus_streak = 30 if current_user.consecutive_joins >= 3 else 0
-
-    join_count = db.query(AperoParticipant).filter(
-        AperoParticipant.user_id == current_user.id,
-        AperoParticipant.status == ParticipationStatus.JOINED
-    ).count()
-
-    total_joins = join_count + 1
-    if total_joins == 1:
-        award_badge(current_user, "BAPTEME", db)
-    elif total_joins == 10:
-        award_badge(current_user, "HABITUE", db)
-    elif total_joins == 50:
-        award_badge(current_user, "PILIER", db)
-
     current_user.consecutive_declines = 0
     current_user.consecutive_piscine = 0
 
+    bonus_streak = 30 if current_user.consecutive_joins >= 3 else 0
     total_gained = 30 + bonus_flash + bonus_streak
     current_user.capsules += total_gained
+
+    # 5. BADGES DE PRÉSENCE & STREAKS (avec >=)
+    join_count = db.query(AperoParticipant).filter(
+        AperoParticipant.user_id == current_user.id,
+        AperoParticipant.status == ParticipationStatus.JOINED
+    ).count() + 1
+
+    if join_count >= 1: award_badge(current_user, "BAPTEME", db)
+    if join_count >= 10: award_badge(current_user, "HABITUE", db)
+    if join_count >= 50: award_badge(current_user, "PILIER", db)
+    if join_count >= 100: award_badge(current_user, "LEGENDE", db)
+
+    if current_user.consecutive_joins >= 3: award_badge(current_user, "MARATHONIEN", db)
+    if current_user.consecutive_joins >= 10: award_badge(current_user, "INCREVABLE", db)
 
     db.add(participant)
     db.commit()
@@ -428,7 +445,6 @@ async def decline_beer_call(
 ):
     actual_apero_id = int(apero_id.replace("bc_", ""))
 
-    # NOUVEAU : Vérifier si l'utilisateur a déjà répondu
     existing_participant = db.query(AperoParticipant).filter(
         AperoParticipant.apero_id == actual_apero_id,
         AperoParticipant.user_id == current_user.id
@@ -444,16 +460,14 @@ async def decline_beer_call(
         excuse=decline_data.excuse
     )
 
-    # Récompense Politesse
-    current_user.capsules += 5
-
-    # Cassage de la Streak de présence
+    current_user.capsules += 15
     current_user.consecutive_joins = 0
-
-    # Progression Badges Troll
     current_user.consecutive_piscine += 1
+
     if decline_data.excuse:
         current_user.consecutive_declines += 1
+    else:
+        current_user.consecutive_declines = 0  # Casse la série si pas d'excuse !
 
     if current_user.consecutive_piscine >= 5:
         award_badge(current_user, "NAGEUR", db)
@@ -486,7 +500,7 @@ async def decline_beer_call(
         body=f"{current_user.username} a décliné l'apéro au {location} de la squad {squad.name}"
     )
 
-    return {"message": "Plouf ! Direction la piscine. 🌊", "bonus": 5}
+    return {"message": "Plouf ! Direction la piscine. 🌊", "bonus": 15}
 
 
 @router.get("/{squad_id}/beer-calls/{beer_call_id}/worlds", response_model=WorldsResponse)

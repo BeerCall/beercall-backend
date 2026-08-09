@@ -22,6 +22,7 @@ from schemas.user import (
     UserProfileResponse,
     UserResponse
 )
+from services.gamification import check_and_award_ghost_badges
 from services.notifications import send_push_notifications
 
 router = APIRouter()
@@ -109,7 +110,14 @@ def login(
 
 
 @router.get("/me", response_model=UserProfileResponse)
-def read_users_me(current_user: User = Depends(get_current_user)):
+def read_users_me(
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
+):
+    check_and_award_ghost_badges(current_user, db)
+    db.commit()
+    db.refresh(current_user)
+
     return {
         "username": current_user.username,
         "caps": current_user.capsules,
