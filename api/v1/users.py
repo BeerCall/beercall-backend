@@ -238,7 +238,7 @@ def get_user_profile(
         pass  # Tu pourrais lever une erreur ici si tu le souhaites, ou juste laisser passer.
 
     # 3. Calcul dynamique du titre de CE joueur
-    title = get_rank_title(current_user.score)
+    title = get_rank_title(target_user.score)
 
     # 4. On récupère le catalogue de la boutique
     all_skins = db.query(Skin).all()
