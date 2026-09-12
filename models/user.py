@@ -49,7 +49,41 @@ class User(Base):
 
     @property
     def aperos_missed_count(self) -> int:
-        # Tous les apéros des squads du joueur
-        total_squad_aperos = sum(len(squad.aperos) for squad in self.squads)
-        # Moins ceux où il a une participation enregistrée
-        return total_squad_aperos - len(self.participations)
+        # Calculate the earliest apéro date per squad where the user either created or joined (status JOINED)
+        squad_start_dates = {}  # squad_id -> datetime
+        
+        # From apéros created by the user
+        for aperó in self.aperos_created:
+            squad_id = aperó.squad_id
+            if squad_id not in squad_start_dates or aperó.created_at < squad_start_dates[squad_id]:
+                squad_start_dates[squad_id] = aperó.created_at
+        
+        # From apéros joined by the user (status JOINED)
+        for participation in self.participations:
+            if participation.status == ParticipationStatus.JOINED:
+                aperó = participation.apero
+                squad_id = aperó.squad_id
+                if squad_id not in squad_start_dates or aperó.created_at < squad_start_dates[squad_id]:
+                    squad_start_dates[squad_id] = aperó.created_at
+        
+        # If the user has no created or joined apéro in any squad, they haven't started activity yet
+        if not squad_start_dates:
+            return 0
+        
+        # Precompute set of apéro ids the user has participated in (any status) for quick lookup
+        participated_aperos_ids = {p.apero_id for p in self.participations}
+        
+        total_missed = 0
+        for squad in self.squads:
+            start_date = squad_start_dates.get(squad.id)
+            if start_date is None:
+                # User has not created or joined any apéro in this squad, so no missed apéros to count
+                continue
+            for aperó in squad.aperos:
+                if aperó.created_at < start_date:
+                    # Apéro occurred before user's start date in this squad, skip
+                    continue
+                if aperó.id not in participated_aperos_ids:
+                    # No participation record -> missed
+                    total_missed += 1
+        return total_missed
