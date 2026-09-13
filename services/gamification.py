@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from sqlalchemy.orm import Session
 
-from models.apero import Apero, AperoParticipant
+from models.apero import Apero, AperoParticipant, ParticipationStatus
 from models.gamification import Badge
 from models.user import User
 
@@ -36,17 +36,17 @@ def check_and_award_ghost_badges(current_user, db: Session) -> int:
     # 1. Compute the user's start date per squad (earliest apéro they created or joined)
     squad_start_dates = {}  # squad_id -> datetime
     # From apéros created by the user
-    for aperó in current_user.aperos_created:
-        squad_id = aperó.squad_id
-        if squad_id not in squad_start_dates or aperó.created_at < squad_start_dates[squad_id]:
-            squad_start_dates[squad_id] = aperó.created_at
+    for apero in current_user.aperos_created:
+        squad_id = apero.squad_id
+        if squad_id not in squad_start_dates or apero.created_at < squad_start_dates[squad_id]:
+            squad_start_dates[squad_id] = apero.created_at
     # From apéros joined by the user (status JOINED)
     for participation in current_user.participations:
         if participation.status == ParticipationStatus.JOINED:
-            aperó = participation.apero
-            squad_id = aperó.squad_id
-            if squad_id not in squad_start_dates or aperó.created_at < squad_start_dates[squad_id]:
-                squad_start_dates[squad_id] = aperó.created_at
+            apero = participation.apero
+            squad_id = apero.squad_id
+            if squad_id not in squad_start_dates or apero.created_at < squad_start_dates[squad_id]:
+                squad_start_dates[squad_id] = apero.created_at
 
     # If the user has no created or joined apéro in any squad, they haven't started activity yet
     if not squad_start_dates:
