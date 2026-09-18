@@ -7,15 +7,16 @@ from sqlalchemy.orm import Session
 
 from core.security import get_current_user
 from db.database import get_db
-from models.apero import Apero
+from models.apero import Apero, AperoStatus
 from models.apero import AperoParticipant, ParticipationStatus
 from models.squad import Squad
 from models.user import User
-from schemas.apero import AperoDecline, WorldsResponse
+from schemas.apero import AperoDecline, WorldsResponse, ScheduledAperoCreate
 from schemas.squad import SquadCreate, SquadDetailsResponse
+from services.apero_lifecycle import APERO_DURATION, MAX_START_DISTANCE_METERS, get_apero_for_squad, get_squad_member, start_scheduled_apero, validate_distance
 from schemas.squad import SquadResponse, SquadJoin
-from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges
-from services.notifications import send_push_notifications
+from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges, apply_apero_start_rewards
+from services.notifications import send_push_notifications, notify_scheduled_apero, notify_started_scheduled_apero
 from services.photo_validation import is_drink_detected, calculate_geodistance
 
 router = APIRouter()
@@ -81,7 +82,8 @@ async def create_beer_call(
     # --- NOUVELLE RÈGLE : L'utilisateur a-t-il déjà un apéro en cours ? ---
     user_active_apero = db.query(Apero).filter(
         Apero.creator_id == current_user.id,
-        Apero.created_at >= time_limit
+        Apero.status == AperoStatus.ACTIVE,
+        Apero.ended_at > now,
     ).first()
 
     if user_active_apero:
@@ -94,7 +96,8 @@ async def create_beer_call(
     # --- RÈGLE EXISTANTE (1.5) : Vérifier s'il y a déjà un apéro actif à proximité ---
     active_aperos = db.query(Apero).filter(
         Apero.squad_id == squad_id,
-        Apero.created_at >= time_limit
+        Apero.status == AperoStatus.ACTIVE,
+        Apero.ended_at > now,
     ).all()
 
     for existing_apero in active_aperos:
@@ -134,7 +137,10 @@ async def create_beer_call(
         location_name=location_name,
         latitude=latitude,
         longitude=longitude,
-        photo_path=file_path
+        photo_path=file_path,
+        status=AperoStatus.ACTIVE,
+        started_at=now,
+        ended_at=now + APERO_DURATION,
     )
 
     db.add(new_apero)
@@ -183,8 +189,8 @@ async def create_beer_call(
     background_tasks.add_task(
         send_push_notifications,
         tokens=target_tokens,
-        title="Beer Call ! 🍻",
-        body=f"{current_user.username} a lancé un apéro pour la Squad {squad.name} !"
+        title="🍺 RUPTURE DE SOBRIÉTÉ !",
+        body=f"{current_user.username} a craqué et réclame du renfort ! Viens sauver son foie !"
     )
     return {
         "message": "Beer Call lancé avec succès ! 🍻",
@@ -192,6 +198,99 @@ async def create_beer_call(
         "bonus_capsules": 50,
         "total_capsules": current_user.capsules
     }
+
+
+@router.post("/{squad_id}/scheduled-beer-calls/")
+def create_scheduled_beer_call(
+        squad_id: int,
+        scheduled: ScheduledAperoCreate,
+        background_tasks: BackgroundTasks,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user),
+):
+    try:
+        squad = get_squad_member(db, squad_id, current_user.id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc))
+    scheduled_for = scheduled.scheduled_for.astimezone(timezone.utc)
+    if scheduled_for <= datetime.now(timezone.utc):
+        raise HTTPException(status_code=400, detail="La date doit être dans le futur")
+    existing_aperos = db.query(Apero).filter(
+        Apero.squad_id == squad_id, 
+        Apero.status.in_([AperoStatus.SCHEDULED, AperoStatus.ACTIVE])
+    ).all()
+    
+    for existing in existing_aperos:
+        existing_time = existing.scheduled_for if existing.status == AperoStatus.SCHEDULED else (existing.started_at or existing.created_at)
+        if existing_time:
+            if existing_time.tzinfo is None:
+                existing_time = existing_time.replace(tzinfo=timezone.utc)
+            
+            time_diff = abs((scheduled_for - existing_time).total_seconds())
+            if time_diff < 4 * 3600:  # Moins de 4 heures d'écart
+                if calculate_geodistance(scheduled.latitude, scheduled.longitude, existing.latitude, existing.longitude) <= 500:
+                    status_str = "programmé" if existing.status == AperoStatus.SCHEDULED else "en cours"
+                    raise HTTPException(status_code=400, detail=f"Un apéro est déjà {status_str} à cet endroit dans ce créneau horaire")
+    apero = Apero(squad_id=squad_id, creator_id=current_user.id, location_name=scheduled.location_name,
+                  latitude=scheduled.latitude, longitude=scheduled.longitude,
+                  status=AperoStatus.SCHEDULED, scheduled_for=scheduled_for)
+    db.add(apero)
+    db.commit()
+    db.refresh(apero)
+    tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
+    background_tasks.add_task(notify_scheduled_apero, tokens, squad_id, apero.id,
+                              apero.location_name, scheduled_for.isoformat())
+    return apero
+
+
+@router.post("/{squad_id}/beer-calls/{apero_id}/start/")
+async def start_scheduled_beer_call(
+        squad_id: int, apero_id: str, background_tasks: BackgroundTasks,
+        file: UploadFile = File(...), latitude: float = Form(...), longitude: float = Form(...),
+        db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
+):
+    try:
+        squad = get_squad_member(db, squad_id, current_user.id)
+        apero = get_apero_for_squad(db, squad_id, int(apero_id.replace("bc_", "")))
+    except (ValueError, LookupError) as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc))
+    if apero.status != AperoStatus.SCHEDULED:
+        raise HTTPException(status_code=409, detail="Cet apéro n'est plus programmé")
+
+    # Empêcher le démarrage si un apéro est déjà en cours au même endroit
+    active_aperos = db.query(Apero).filter(Apero.squad_id == squad_id, Apero.status == AperoStatus.ACTIVE).all()
+    for active_apero in active_aperos:
+        if calculate_geodistance(latitude, longitude, active_apero.latitude, active_apero.longitude) <= 500:
+            raise HTTPException(status_code=400, detail="Un apéro est déjà en cours à proximité")
+
+    distance = validate_distance(apero, latitude, longitude)
+    if distance > MAX_START_DISTANCE_METERS:
+        handle_ia_fraud(current_user, db)
+        db.commit()
+        raise HTTPException(status_code=403, detail=f"Tu es à {int(distance)}m, approche-toi à moins de 500m")
+    file_bytes = await file.read()
+    if not await is_drink_detected(file_bytes):
+        handle_ia_fraud(current_user, db)
+        db.commit()
+        raise HTTPException(status_code=400, detail="Pas de boisson, pas de démarrage")
+    os.makedirs("uploads/aperos", exist_ok=True)
+    file_path = f"uploads/aperos/{uuid.uuid4()}.{(file.filename or 'jpg').split('.')[-1]}"
+    with open(file_path, "wb") as output:
+        output.write(file_bytes)
+    started, result = start_scheduled_apero(db, apero.id, current_user.id, file_path)
+    if not started:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Cet apéro a déjà été démarré")
+    apply_apero_start_rewards(current_user, started, db)
+    db.commit()
+    tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
+    background_tasks.add_task(notify_started_scheduled_apero, tokens, squad_id, started.id, started.location_name or "ce lieu")
+    return {"message": "Apéro démarré", "apero_id": started.id, "status": started.status.value,
+            "started_at": started.started_at, "ended_at": started.ended_at}
 
 
 @router.get("/{squad_id}", response_model=SquadDetailsResponse)
@@ -211,51 +310,51 @@ def get_squad_details(
     # 2. Récupérer tous les Apéros (du plus récent au plus ancien)
     aperos = db.query(Apero).filter(Apero.squad_id == squad_id).order_by(Apero.created_at.desc()).all()
 
-    active_beer_call = []
-    past_beer_calls = []
-
-    now = datetime.now(timezone.utc)
-
+    active_beer_call, scheduled_beer_calls, past_beer_calls = [], [], []
     for apero in aperos:
-        # Gestion propre des fuseaux horaires avec SQLAlchemy
-        created_at = apero.created_at
-        if created_at.tzinfo is None:
-            created_at = created_at.replace(tzinfo=timezone.utc)
+        apero_end = apero.ended_at or (apero.created_at + timedelta(hours=4))
+        if apero_end.tzinfo is None:
+            apero_end = apero_end.replace(tzinfo=timezone.utc)
 
-        # Compter les participants qui ont rejoint (statut Bar)
-        # Note : Si tu as bien ajouté le créateur dans AperoParticipant lors de la création,
-        # le joined_count comptera déjà le créateur ! (Tu peux donc potentiellement enlever le "1 +")
+        if apero.status == AperoStatus.ACTIVE and apero_end <= datetime.now(timezone.utc):
+            apero.status = AperoStatus.ENDED
+            if not apero.ended_at:
+                apero.ended_at = apero_end
+            db.commit()
         joined_count = db.query(AperoParticipant).filter(
             AperoParticipant.apero_id == apero.id,
             AperoParticipant.status == ParticipationStatus.JOINED
         ).count()
-
-        # NOUVEAU : Vérifier si le current_user a répondu à CET apéro
         user_participant = db.query(AperoParticipant).filter(
-            AperoParticipant.apero_id == apero.id,
-            AperoParticipant.user_id == current_user.id
+            AperoParticipant.apero_id == apero.id, AperoParticipant.user_id == current_user.id
         ).first()
+        def force_utc(dt):
+            if dt and dt.tzinfo is None:
+                return dt.replace(tzinfo=timezone.utc)
+            return dt
 
-        has_responded = user_participant is not None
-        user_status = user_participant.status.value if user_participant else None
-
-        apero_item = {
+        item = {
             "id": f"bc_{apero.id}",
             "creator_name": apero.creator.username,
+            "creator_id": apero.creator_id,
             "location_name": apero.location_name or "Lieu inconnu",
             "longitude": apero.longitude,
             "latitude": apero.latitude,
-            "started_at": created_at,
-            "participants_count": joined_count,  # Adapté selon ton implémentation du créateur
-            "has_responded": has_responded,  # Retourne True ou False
-            "user_status": user_status  # Retourne "joined", "declined" ou null
+            "status": apero.status,
+            "scheduled_for": force_utc(apero.scheduled_for),
+            "started_at": force_utc(apero.started_at),
+            "ended_at": force_utc(apero.ended_at),
+            "participants_count": joined_count,
+            "has_responded": user_participant is not None,
+            "user_status": user_participant.status if user_participant else None,
+            "can_start": apero.status == AperoStatus.SCHEDULED,
         }
-
-        # 3. Tri : Actif (moins de 4h) vs Historique
-        if (now - created_at) < timedelta(hours=4):
-            active_beer_call.append(apero_item)
+        if apero.status == AperoStatus.SCHEDULED:
+            scheduled_beer_calls.append(item)
+        elif apero.status == AperoStatus.ACTIVE:
+            active_beer_call.append(item)
         else:
-            past_beer_calls.append(apero_item)
+            past_beer_calls.append(item)
 
     return {
         "id": f"sq_{squad.id}",
@@ -264,6 +363,7 @@ def get_squad_details(
         "icon": squad.icon,
         "invite_code": squad.invite_code,
         "active_beer_call": active_beer_call,
+        "scheduled_beer_calls": scheduled_beer_calls,
         "past_beer_calls": past_beer_calls
     }
 
@@ -293,8 +393,8 @@ def join_squad(
     background_tasks.add_task(
         send_push_notifications,
         tokens=target_tokens,
-        title="Nouveau membre ! 🎉",
-        body=f"{current_user.username} a rejoint votre squad '{squad.name}'"
+        title="🥩 NOUVELLE CHAIR À PÂTÉ !",
+        body=f"{current_user.username} vient de débarquer dans '{squad.name}'. Préparez le bizutage !"
     )
 
     db.refresh(squad)
@@ -325,8 +425,13 @@ async def join_beer_call(
 
     # --- NOUVEAU : VÉRIFICATION GÉOGRAPHIQUE ---
     apero_obj = db.query(Apero).filter(Apero.id == actual_apero_id).first()
-    if not apero_obj:
-        raise HTTPException(status_code=404, detail="Apéro introuvable")
+    squad = db.query(Squad).filter(Squad.id == squad_id).first()
+    if not apero_obj or apero_obj.squad_id != squad_id:
+        raise HTTPException(status_code=404, detail="Apéro introuvable dans cette squad")
+    if not squad or current_user not in squad.members:
+        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
+    if apero_obj.status != AperoStatus.ACTIVE:
+        raise HTTPException(status_code=409, detail="Cet apéro n'est pas actif")
 
     distance = calculate_geodistance(lat, lon, apero_obj.latitude, apero_obj.longitude)
 
@@ -365,11 +470,11 @@ async def join_beer_call(
     )
 
     # 2. Gestion des dates pour les bonus de vitesse
-    apero_created_at = apero_obj.created_at
-    if apero_created_at.tzinfo is None:
-        apero_created_at = apero_created_at.replace(tzinfo=timezone.utc)
+    apero_started_at = apero_obj.started_at or apero_obj.created_at
+    if apero_started_at.tzinfo is None:
+        apero_started_at = apero_started_at.replace(tzinfo=timezone.utc)
 
-    diff_seconds = (datetime.now(timezone.utc) - apero_created_at).total_seconds()
+    diff_seconds = (datetime.now(timezone.utc) - apero_started_at).total_seconds()
 
     # 3. BONUS FLASH ET BADGES DE VITESSE
     bonus_flash = 15 if diff_seconds <= 120 else 0
@@ -426,8 +531,8 @@ async def join_beer_call(
     background_tasks.add_task(
         send_push_notifications,
         tokens=target_tokens,
-        title="Un renfort arrive ! 🍻",
-        body=f"{current_user.username} a rejoint l'apéro de la squad {squad.name}"
+        title="🚀 UN SOIVARD DE PLUS !",
+        body=f"{current_user.username} a ramené sa fraise ! Tournée générale !"
     )
 
     return {"message": "Tu es au Bar ! 🍻", "bonus": total_gained}
@@ -444,6 +549,14 @@ async def decline_beer_call(
         current_user: User = Depends(get_current_user)
 ):
     actual_apero_id = int(apero_id.replace("bc_", ""))
+    squad = db.query(Squad).filter(Squad.id == squad_id).first()
+    apero = db.query(Apero).filter(Apero.id == actual_apero_id).first()
+    if not squad or current_user not in squad.members:
+        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
+    if not apero or apero.squad_id != squad_id:
+        raise HTTPException(status_code=404, detail="Apéro introuvable dans cette squad")
+    if apero.status != AperoStatus.ACTIVE:
+        raise HTTPException(status_code=409, detail="Cet apéro n'est pas actif")
 
     existing_participant = db.query(AperoParticipant).filter(
         AperoParticipant.apero_id == actual_apero_id,
@@ -496,8 +609,8 @@ async def decline_beer_call(
     background_tasks.add_task(
         send_push_notifications,
         tokens=target_tokens,
-        title="Un lâcheur... 🌊",
-        body=f"{current_user.username} a décliné l'apéro au {location} de la squad {squad.name}"
+        title="🤡 ALERTE FRAGILE !",
+        body=f"{current_user.username} s'est dégonflé pour {location}... Tu paieras le triple la prochaine fois !"
     )
 
     return {"message": "Plouf ! Direction la piscine. 🌊", "bonus": 15}

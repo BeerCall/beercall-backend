@@ -9,7 +9,6 @@ from alembic import context
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # 2. On importe la Base et TOUS tes modèles pour qu'Alembic les lise
-# 2. On importe la Base et TOUS tes modèles pour qu'Alembic les lise
 from db.database import Base
 import models.user          # noqa
 import models.squad         # noqa

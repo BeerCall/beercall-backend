@@ -17,6 +17,24 @@ from db.database import Base
 from db.database import engine, SessionLocal
 from models import gamification
 
+import logging
+from datetime import datetime, timezone
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from services.gamification import run_daily_apero_checks
+
+logger = logging.getLogger(__name__)
+
+def scheduled_daily_checks():
+    logger.info("🕒 Lancement de la tâche cron interne : daily_apero_checks")
+    db = SessionLocal()
+    try:
+        run_daily_apero_checks(db, datetime.now(timezone.utc))
+    except Exception as e:
+        logger.error(f"❌ Erreur lors des checks quotidiens: {e}")
+        db.rollback()
+    finally:
+        db.close()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -81,7 +99,9 @@ async def lifespan(app: FastAPI):
         {"id": "FLAMBEUR", "name": "Le Flambeur", "description": "A acheté un objet à 5000 capsules", "icon": "💸"},
         {"id": "PADDOCK_MASTER", "name": "Maître du Paddock",
          "description": "Possède un accessoire des 11 écuries F1 (Cadillac & Audi incluses !)", "icon": "🏎️"},
-        {"id": "FASHION_VICTIM", "name": "Fashion Victim", "description": "Possède 10 skins différents", "icon": "👗"}
+        {"id": "FASHION_VICTIM", "name": "Fashion Victim", "description": "Possède 10 skins différents", "icon": "👗"},
+        {"id": "REMI_SANS_AMIS", "name": "rémi sans amis", "description": "Seul participant à un apéro", "icon": "🍺"},
+        {"id": "FLOP_PERSONNE_N_EST_VENU", "name": "flop, personne n'est venu", "description": "Apéro programmé sans participant", "icon": "🫥"}
     ]
 
     for b in BADGES:
@@ -93,8 +113,15 @@ async def lifespan(app: FastAPI):
 
     db.close()
 
+    # --- Démarrage du Scheduler (Cron interne) ---
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(scheduled_daily_checks, 'cron', hour=0, minute=0) # Tous les jours à minuit
+    scheduler.start()
+    print("⏰ Scheduler démarré: les vérifications quotidiennes auront lieu à minuit.")
+
     yield
 
+    scheduler.shutdown()
     print("🛑 Arrêt du serveur Beer Call. À la prochaine ! 🍻")
 
 

@@ -1,92 +1,116 @@
-# Fichier: services/gamification.py
+import logging
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy.orm import Session
 
-from models.apero import Apero, AperoParticipant, ParticipationStatus
+from models.apero import Apero, AperoParticipant, AperoStatus, ParticipationStatus
 from models.gamification import Badge
 from models.user import User
 
+logger = logging.getLogger(__name__)
+
 
 def award_badge(user: User, badge_id: str, db: Session):
-    """Vérifie si le joueur a le badge, sinon lui donne."""
-    has_badge = any(b.id == badge_id for b in user.badges)
-    if not has_badge:
+    if not any(b.id == badge_id for b in user.badges):
         badge = db.query(Badge).filter(Badge.id == badge_id).first()
         if badge:
             user.badges.append(badge)
 
 
 def handle_ia_fraud(user: User, db: Session):
-    """Applique le malus de capsule et vérifie le badge Faussaire"""
-    # Malus de 15 caps (sans descendre en dessous de 0)
     user.capsules = max(0, user.capsules - 15)
     user.ia_fraud_count += 1
-
     if user.ia_fraud_count >= 3:
         award_badge(user, "FAUSSAIRE", db)
 
 
+def apply_apero_start_rewards(user: User, apero: Apero, db: Session):
+    """Apply creation/presence rewards exactly once, after a successful start."""
+    created_count = db.query(Apero).filter(Apero.creator_id == user.id).count()
+    joined_count = db.query(AperoParticipant).filter(
+        AperoParticipant.user_id == user.id,
+        AperoParticipant.status == ParticipationStatus.JOINED,
+    ).count()
+    user.capsules += 50
+    user.consecutive_joins += 1
+    user.consecutive_declines = 0
+    user.consecutive_piscine = 0
+    for threshold, badge_id in ((1, "ETINCELLE"), (10, "RABATTEUR"), (50, "AUBERGISTE"), (100, "DIEU_FETE")):
+        if created_count >= threshold:
+            award_badge(user, badge_id, db)
+    for threshold, badge_id in ((1, "BAPTEME"), (10, "HABITUE"), (50, "PILIER"), (100, "LEGENDE")):
+        if joined_count >= threshold:
+            award_badge(user, badge_id, db)
+    if user.consecutive_joins >= 3:
+        award_badge(user, "MARATHONIEN", db)
+    if user.consecutive_joins >= 10:
+        award_badge(user, "INCREVABLE", db)
+
+
 def check_and_award_ghost_badges(current_user, db: Session) -> int:
-    """
-    Calcule la série actuelle de 'Fantôme' (apéros ignorés).
-    Attribue le badge SOMNAMBULE si la série atteint 10.
-    Retourne le nombre consécutif de ghosts.
-    """
-    # 1. Compute the user's start date per squad (earliest apéro they created or joined)
-    squad_start_dates = {}  # squad_id -> datetime
-    # From apéros created by the user
+    squad_start_dates = {}
     for apero in current_user.aperos_created:
-        squad_id = apero.squad_id
-        if squad_id not in squad_start_dates or apero.created_at < squad_start_dates[squad_id]:
-            squad_start_dates[squad_id] = apero.created_at
-    # From apéros joined by the user (status JOINED)
+        if apero.status in (AperoStatus.ACTIVE, AperoStatus.ENDED):
+            squad_start_dates[apero.squad_id] = min(squad_start_dates.get(apero.squad_id, apero.created_at), apero.created_at)
     for participation in current_user.participations:
         if participation.status == ParticipationStatus.JOINED:
             apero = participation.apero
-            squad_id = apero.squad_id
-            if squad_id not in squad_start_dates or apero.created_at < squad_start_dates[squad_id]:
-                squad_start_dates[squad_id] = apero.created_at
-
-    # If the user has no created or joined apéro in any squad, they haven't started activity yet
+            squad_start_dates[apero.squad_id] = min(squad_start_dates.get(apero.squad_id, apero.created_at), apero.created_at)
     if not squad_start_dates:
         return 0
-
     squad_ids = [s.id for s in current_user.squads]
-    if not squad_ids:
-        return 0
-
-    # 2. Récupérer les apéros terminés (vieux de plus de 4h) triés du plus récent au plus ancien
-    four_hours_ago = datetime.now(timezone.utc) - timedelta(hours=4)
     closed_aperos = db.query(Apero).filter(
-        Apero.squad_id.in_(squad_ids),
-        Apero.created_at <= four_hours_ago
-    ).order_by(Apero.created_at.desc()).all()
-
-    # 3. Filter aperos to only those on or after the user's start date in their squad
-    filtered_aperos = []
+        Apero.squad_id.in_(squad_ids), Apero.status == AperoStatus.ENDED,
+        Apero.ended_at <= datetime.now(timezone.utc)
+    ).order_by(Apero.ended_at.desc()).all()
+    participated = {p.apero_id for p in db.query(AperoParticipant).filter(AperoParticipant.user_id == current_user.id)}
+    streak = 0
     for apero in closed_aperos:
-        start_date = squad_start_dates.get(apero.squad_id)
-        if start_date is not None and apero.created_at >= start_date:
-            filtered_aperos.append(apero)
-
-    # 4. Dictionnaire des participations de l'utilisateur (pour une recherche instantanée)
-    participations = {
-        p.apero_id: p.status
-        for p in db.query(AperoParticipant).filter(AperoParticipant.user_id == current_user.id).all()
-    }
-
-    # 5. Calculate ghost streak on the filtered apéros
-    ghost_streak = 0
-    for a in filtered_aperos:
-        if a.id in participations:
-            # Dès qu'on trouve un apéro où il a répondu (Join ou Decline), la série fantôme s'arrête
+        if apero.created_at < squad_start_dates.get(apero.squad_id, apero.created_at):
+            continue
+        if apero.id in participated:
             break
-        ghost_streak += 1
-
-    # 6. Attribution du badge Somnambule
-    if ghost_streak >= 10:
+        streak += 1
+    if streak >= 10:
         award_badge(current_user, "SOMNAMBULE", db)
-        # db.commit() est géré par la route appelante
+    return streak
 
-    return ghost_streak
+
+def run_daily_apero_checks(db: Session, now: datetime | None = None):
+    """Idempotent processing of recent ended aperos and scheduled flops."""
+    now = now or datetime.now(timezone.utc)
+    since = now - timedelta(hours=240000)
+    ended = db.query(Apero).filter(
+        Apero.status == AperoStatus.ENDED,
+        Apero.ended_at >= since, Apero.ended_at <= now,
+        Apero.daily_check_processed_at.is_(None),
+    ).all()
+    scheduled = db.query(Apero).filter(
+        Apero.status == AperoStatus.SCHEDULED,
+        Apero.scheduled_for >= since, Apero.scheduled_for <= now,
+        Apero.daily_check_processed_at.is_(None),
+    ).all()
+    processed = 0
+    for apero in ended:
+        joined = [p for p in apero.participants if p.status == ParticipationStatus.JOINED]
+        if len(joined) == 1:
+            award_badge(joined[0].user, "REMI_SANS_AMIS", db)
+        apero.daily_check_processed_at = now
+        processed += 1
+        logger.info("daily_apero_check apero_id=%s decision=ended joined=%s", apero.id, len(joined))
+    for apero in scheduled:
+        joined = [p for p in apero.participants if p.status == ParticipationStatus.JOINED]
+        if joined:
+            logger.warning("daily_apero_check apero_id=%s decision=skip_inconsistent joined=%s", apero.id, len(joined))
+            apero.daily_check_processed_at = now
+            continue
+        award_badge(apero.creator, "FLOP_PERSONNE_N_EST_VENU", db)
+        apero.creator.capsules = max(0, apero.creator.capsules - 15)
+        apero.daily_check_processed_at = now
+        for participant in list(apero.participants):
+            db.delete(participant)
+        db.delete(apero)
+        processed += 1
+        logger.info("daily_apero_check apero_id=%s decision=flop creator_id=%s", apero.id, apero.creator_id)
+    db.commit()
+    return processed

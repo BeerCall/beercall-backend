@@ -2,8 +2,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from pydantic import BaseModel
-
-from models.apero import ParticipationStatus
+from models.apero import AperoStatus, ParticipationStatus
 
 
 class SquadBase(BaseModel):
@@ -27,13 +26,18 @@ class SquadResponse(SquadBase):
 class BeerCallItem(BaseModel):
     id: str
     creator_name: str
+    creator_id: int
     location_name: str
     longitude: float
     latitude: float
-    started_at: datetime
+    status: AperoStatus
+    scheduled_for: Optional[datetime] = None
+    started_at: Optional[datetime] = None
+    ended_at: Optional[datetime] = None
     participants_count: int
     has_responded: bool
     user_status: Optional[ParticipationStatus] = None
+    can_start: bool = False
 
 
 class SquadDetailsResponse(BaseModel):
@@ -43,6 +47,7 @@ class SquadDetailsResponse(BaseModel):
     icon: str
     invite_code: str
     active_beer_call: List[BeerCallItem] = []
+    scheduled_beer_calls: List[BeerCallItem] = []
     past_beer_calls: List[BeerCallItem] = []
 
 
