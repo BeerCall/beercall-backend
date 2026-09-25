@@ -4,7 +4,7 @@ firebase-admin
 passlib[bcrypt]
 bcrypt==4.0.1
 pillow
-psycopg2-binary
+psycopg[binary]
 pydantic
 python-dotenv
 python-jose
