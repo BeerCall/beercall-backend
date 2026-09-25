@@ -27,7 +27,7 @@ jobs:
           pip install pytest pytest-asyncio pytest-cov httpx
           
       - name: Run tests
-        run: pytest
+        run: python -m pytest
 
   trigger:
     needs: test
