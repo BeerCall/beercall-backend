@@ -348,8 +348,12 @@ def get_squad_details(
     if current_user not in squad.members:
         raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
 
-    # 2. Récupérer tous les Apéros (du plus récent au plus ancien)
-    aperos = db.query(Apero).filter(Apero.squad_id == squad_id).order_by(Apero.created_at.desc()).all()
+    # 2. Récupérer tous les Apéros (du plus récent au plus ancien) avec Eager Loading
+    from sqlalchemy.orm import joinedload
+    aperos = db.query(Apero).options(
+        joinedload(Apero.creator),
+        joinedload(Apero.participants)
+    ).filter(Apero.squad_id == squad_id).order_by(Apero.created_at.desc()).all()
 
     active_beer_call, scheduled_beer_calls, past_beer_calls = [], [], []
     for apero in aperos:
@@ -361,13 +365,10 @@ def get_squad_details(
             apero.status = AperoStatus.ENDED
             if not apero.ended_at:
                 apero.ended_at = apero_end
-        joined_count = db.query(AperoParticipant).filter(
-            AperoParticipant.apero_id == apero.id,
-            AperoParticipant.status == ParticipationStatus.JOINED
-        ).count()
-        user_participant = db.query(AperoParticipant).filter(
-            AperoParticipant.apero_id == apero.id, AperoParticipant.user_id == current_user.id
-        ).first()
+
+        joined_count = sum(1 for p in apero.participants if p.status == ParticipationStatus.JOINED)
+        user_participant = next((p for p in apero.participants if p.user_id == current_user.id), None)
+        
         def force_utc(dt):
             if dt and dt.tzinfo is None:
                 return dt.replace(tzinfo=timezone.utc)

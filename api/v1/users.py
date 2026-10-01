@@ -416,21 +416,26 @@ def get_rank_title(score: int) -> str:
 
 
 @router.get("/connections/", response_model=List[ConnectionItem])
-def get_user_connections(current_user: User = Depends(get_current_user)):
+def get_user_connections(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    from sqlalchemy.orm import joinedload
+    current_user_eager = db.query(User).options(
+        joinedload(User.squads).joinedload(Squad.members)
+    ).filter(User.id == current_user.id).first()
+
     # 1. On commence par s'ajouter soi-même
     connections_dict = {
-        current_user.id: {
-            "id": f"u_{current_user.id}",
-            "username": current_user.username,
-            "caps": current_user.capsules,
-            "score": current_user.score,
-            "title": get_rank_title(current_user.score),
-            "avatar": current_user.avatar_config or {}
+        current_user_eager.id: {
+            "id": f"u_{current_user_eager.id}",
+            "username": current_user_eager.username,
+            "caps": current_user_eager.capsules,
+            "score": current_user_eager.score,
+            "title": get_rank_title(current_user_eager.score),
+            "avatar": current_user_eager.avatar_config or {}
         }
     }
 
     # 2. On ajoute les membres des squads (évite les doublons grâce à l'ID)
-    for squad in current_user.squads:
+    for squad in current_user_eager.squads:
         for member in squad.members:
             if member.id not in connections_dict:
                 connections_dict[member.id] = {
