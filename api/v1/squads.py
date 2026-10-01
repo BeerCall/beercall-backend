@@ -389,7 +389,6 @@ def get_squad_details(
             apero.status = AperoStatus.ENDED
             if not apero.ended_at:
                 apero.ended_at = apero_end
-            db.commit()
         joined_count = db.query(AperoParticipant).filter(
             AperoParticipant.apero_id == apero.id,
             AperoParticipant.status == ParticipationStatus.JOINED
@@ -424,6 +423,8 @@ def get_squad_details(
             active_beer_call.append(item)
         else:
             past_beer_calls.append(item)
+
+    db.commit()
 
     return {
         "id": f"sq_{squad.id}",
