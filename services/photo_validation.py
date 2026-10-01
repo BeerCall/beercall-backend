@@ -13,7 +13,7 @@ DRINK_CLASS_IDS = [39, 40, 41, 45]  # 39: bottle, 41: cup, 45: bowl (souvent con
 
 # On peut aussi ajouter 40: wine glass si nécessaire
 
-async def is_drink_detected(file_bytes: bytes) -> bool:
+def is_drink_detected(file_bytes: bytes) -> bool:
     """
     Analyse réelle de l'image via YOLOv8 pour détecter une boisson.
     Entièrement gratuit et local.
@@ -48,6 +48,19 @@ def calculate_geodistance(lat1: float, lon1: float, lat2: float, lon2: float) ->
     a = math.sin(dphi / 2.0) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2.0) ** 2
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return R * c
+
+
+def validate_image_file(file_bytes: bytes) -> str:
+    """
+    Validation stricte du fichier (A04:2021) via Magic Numbers.
+    Empêche les attaques d'Unrestricted File Upload (XSS/RCE).
+    """
+    if file_bytes.startswith(b'\xff\xd8\xff'):
+        return "jpg"
+    elif file_bytes.startswith(b'\x89PNG\r\n\x1a\n'):
+        return "png"
+    else:
+        raise ValueError("Format de fichier non autorisé. Seuls les JPG et PNG authentiques sont acceptés.")
 
 
 # Nom public stable utilisé par les services métier.

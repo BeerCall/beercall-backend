@@ -25,10 +25,10 @@ def test_apero_active_within_4_hours(client: TestClient, db_session):
     squad_id = res.json()["id"]
 
     data = {"latitude": 48.8, "longitude": 2.3, "location_name": "Loc"}
-    files = {"file": ("test.jpg", b"fake_image_data", "image/jpeg")}
+    files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     
-    with patch("api.v1.squads.is_drink_detected", new_callable=AsyncMock) as mock_is_drink, \
-         patch("api.v1.squads.send_push_notifications", new_callable=AsyncMock):
+    with patch("api.v1.squads.is_drink_detected") as mock_is_drink, \
+         patch("api.v1.squads.send_push_notifications", ):
         mock_is_drink.return_value = True
         
         # 1st apero
@@ -36,12 +36,12 @@ def test_apero_active_within_4_hours(client: TestClient, db_session):
         assert res1.status_code == 200
         
         # 2nd apero immediately -> should fail with 400 (already active apero by user)
-        files = {"file": ("test2.jpg", b"fake_image_data", "image/jpeg")}
+        files = {"file": ("test2.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
         res2 = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers)
         assert res2.status_code == 400
         assert "4 heures" in res2.json()["detail"]
 
-@patch("api.v1.squads.is_drink_detected", new_callable=AsyncMock)
+@patch("api.v1.squads.is_drink_detected")
 def test_apero_ia_fraud(mock_is_drink, client: TestClient, db_session):
     mock_is_drink.return_value = False # Force YOLO to fail
 
@@ -53,7 +53,7 @@ def test_apero_ia_fraud(mock_is_drink, client: TestClient, db_session):
     squad_id = res.json()["id"]
 
     data = {"latitude": 48.8, "longitude": 2.3, "location_name": "Loc"}
-    files = {"file": ("test.jpg", b"fake_image_data", "image/jpeg")}
+    files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     
     res = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers)
     assert res.status_code == 400

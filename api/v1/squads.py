@@ -73,8 +73,9 @@ def get_my_squads(current_user: User = Depends(get_current_user)):
 
 
 from datetime import datetime, timezone, timedelta
+from asgiref.sync import async_to_sync
 
-async def process_beer_call_creation(
+def process_beer_call_creation(
     squad_id: int,
     creator_id: int,
     location_name: str,
@@ -88,12 +89,12 @@ async def process_beer_call_creation(
         current_user = db.query(User).filter(User.id == creator_id).first()
         squad = db.query(Squad).filter(Squad.id == squad_id).first()
         
-        ia_validation = await is_drink_detected(file_bytes)
+        ia_validation = is_drink_detected(file_bytes)
 
         if not ia_validation:
             handle_ia_fraud(current_user, db)
             db.commit()
-            asyncio.create_task(manager.broadcast_to_squad(squad_id, {"type": "REFRESH_SQUAD", "action": "REJECTED"}))
+            async_to_sync(manager.broadcast_to_squad)(squad_id, {"type": "REFRESH_SQUAD", "action": "REJECTED"})
             return
 
         os.makedirs("uploads/aperos", exist_ok=True)
@@ -131,16 +132,14 @@ async def process_beer_call_creation(
 
         db.commit()
         
-        asyncio.create_task(manager.broadcast_to_squad(squad_id, {"type": "REFRESH_SQUAD", "action": "CREATE"}))
+        async_to_sync(manager.broadcast_to_squad)(squad_id, {"type": "REFRESH_SQUAD", "action": "CREATE"})
 
         target_tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
         if target_tokens:
-            asyncio.create_task(
-                send_push_notifications(
-                    tokens=target_tokens,
-                    title="🍻 RUPTURE DE SOBRIÉTÉ !",
-                    body=f"{current_user.username} a craqué et réclame du renfort ! Viens sauver son foie !"
-                )
+            async_to_sync(send_push_notifications)(
+                tokens=target_tokens,
+                title="🍻 RUPTURE DE SOBRIÉTÉ !",
+                body=f"{current_user.username} a craqué et réclame du renfort ! Viens sauver son foie !"
             )
             
     except Exception as e:
@@ -311,7 +310,7 @@ async def start_scheduled_beer_call(
         db.commit()
         raise HTTPException(status_code=403, detail=f"Tu es à {int(distance)}m, approche-toi à moins de 500m")
     file_bytes = await file.read()
-    if not await is_drink_detected(file_bytes):
+    if not is_drink_detected(file_bytes):
         handle_ia_fraud(current_user, db)
         db.commit()
         raise HTTPException(status_code=400, detail="Pas de boisson, pas de démarrage")
@@ -490,7 +489,7 @@ async def join_beer_call(
 
     # 1. Validation IA de la photo
     file_bytes = await file.read()
-    if not await is_drink_detected(file_bytes):
+    if not is_drink_detected(file_bytes):
         handle_ia_fraud(current_user, db)
         db.commit()
         raise HTTPException(status_code=400, detail="Pas de boisson, pas de Bar ! -15 Caps 📉")
