@@ -1,5 +1,5 @@
-alembic
-fastapi
+alembic==1.13.3
+fastapi==0.115.0
 firebase-admin
 passlib[bcrypt]
 bcrypt==4.0.1
@@ -9,7 +9,7 @@ pydantic
 python-dotenv
 python-jose
 python-multipart
-sqlalchemy
+sqlalchemy==2.0.35
 ultralytics
 ultralytics-thop
 uvicorn[standard]
