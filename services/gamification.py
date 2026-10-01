@@ -47,32 +47,137 @@ def apply_apero_start_rewards(user: User, apero: Apero, db: Session):
         award_badge(user, "INCREVABLE", db)
 
 
-def check_and_award_ghost_badges(current_user, db: Session) -> int:
+def apply_beer_call_creation_rewards(user: User, squad_id: int, location_name: str, db: Session):
+    previous_apero = db.query(Apero).filter(
+        Apero.squad_id == squad_id,
+        Apero.location_name == location_name
+    ).first()
+    bonus_explo = 20 if not previous_apero else 0
+
+    user.capsules += (50 + bonus_explo)
+    user.consecutive_joins += 1
+    user.consecutive_declines = 0
+    user.consecutive_piscine = 0
+
+    created_count = db.query(Apero).filter(Apero.creator_id == user.id).count()
+    if created_count >= 1: award_badge(user, "ETINCELLE", db)
+    if created_count >= 10: award_badge(user, "RABATTEUR", db)
+    if created_count >= 50: award_badge(user, "AUBERGISTE", db)
+    if created_count >= 100: award_badge(user, "DIEU_FETE", db)
+    
+    join_count = db.query(AperoParticipant).filter(
+        AperoParticipant.user_id == user.id,
+        AperoParticipant.status == ParticipationStatus.JOINED
+    ).count() + 1
+    
+    if join_count >= 1: award_badge(user, "BAPTEME", db)
+    if join_count >= 10: award_badge(user, "HABITUE", db)
+    if join_count >= 50: award_badge(user, "PILIER", db)
+    if join_count >= 100: award_badge(user, "LEGENDE", db)
+    if user.consecutive_joins >= 3: award_badge(user, "MARATHONIEN", db)
+    if user.consecutive_joins >= 10: award_badge(user, "INCREVABLE", db)
+
+
+def apply_beer_call_join_rewards(user: User, apero_obj: Apero, db: Session) -> int:
+    past_ghost_streak = check_and_award_ghost_badges(user, db)
+    if past_ghost_streak >= 10:
+        award_badge(user, "REVENANT", db)
+
+    apero_started_at = apero_obj.started_at or apero_obj.created_at
+    if apero_started_at.tzinfo is None:
+        apero_started_at = apero_started_at.replace(tzinfo=timezone.utc)
+
+    diff_seconds = (datetime.now(timezone.utc) - apero_started_at).total_seconds()
+
+    bonus_flash = 15 if diff_seconds <= 120 else 0
+
+    if diff_seconds <= 10:
+        award_badge(user, "SNIPER", db)
+    elif diff_seconds <= 30:
+        award_badge(user, "LUCKY_LUKE", db)
+    elif diff_seconds <= 180:
+        award_badge(user, "INCRUSTE", db)
+
+    if diff_seconds >= 13800:
+        award_badge(user, "RETARDATAIRE", db)
+
+    user.consecutive_joins += 1
+    user.consecutive_declines = 0
+    user.consecutive_piscine = 0
+
+    bonus_streak = 30 if user.consecutive_joins >= 3 else 0
+    total_gained = 30 + bonus_flash + bonus_streak
+    user.capsules += total_gained
+
+    join_count = db.query(AperoParticipant).filter(
+        AperoParticipant.user_id == user.id,
+        AperoParticipant.status == ParticipationStatus.JOINED
+    ).count() + 1
+
+    if join_count >= 1: award_badge(user, "BAPTEME", db)
+    if join_count >= 10: award_badge(user, "HABITUE", db)
+    if join_count >= 50: award_badge(user, "PILIER", db)
+    if join_count >= 100: award_badge(user, "LEGENDE", db)
+
+    if user.consecutive_joins >= 3: award_badge(user, "MARATHONIEN", db)
+    if user.consecutive_joins >= 10: award_badge(user, "INCREVABLE", db)
+
+    return total_gained
+
+
+def check_and_award_ghost_badges(current_user: User, db: Session) -> int:
+    from sqlalchemy import func
+
+    # Récupérer la date de première activité du user pour chaque squad
     squad_start_dates = {}
-    for apero in current_user.aperos_created:
-        if apero.status in (AperoStatus.ACTIVE, AperoStatus.ENDED):
-            squad_start_dates[apero.squad_id] = min(squad_start_dates.get(apero.squad_id, apero.created_at), apero.created_at)
-    for participation in current_user.participations:
-        if participation.status == ParticipationStatus.JOINED:
-            apero = participation.apero
-            squad_start_dates[apero.squad_id] = min(squad_start_dates.get(apero.squad_id, apero.created_at), apero.created_at)
+
+    created_dates = db.query(
+        Apero.squad_id,
+        func.min(Apero.created_at)
+    ).filter(
+        Apero.creator_id == current_user.id,
+        Apero.status.in_([AperoStatus.ACTIVE, AperoStatus.ENDED])
+    ).group_by(Apero.squad_id).all()
+
+    for sq_id, first_date in created_dates:
+        squad_start_dates[sq_id] = first_date
+
+    participated_dates = db.query(
+        Apero.squad_id,
+        func.min(Apero.created_at)
+    ).join(AperoParticipant, AperoParticipant.apero_id == Apero.id).filter(
+        AperoParticipant.user_id == current_user.id,
+        AperoParticipant.status == ParticipationStatus.JOINED
+    ).group_by(Apero.squad_id).all()
+
+    for sq_id, first_date in participated_dates:
+        squad_start_dates[sq_id] = min(squad_start_dates.get(sq_id, first_date), first_date)
+
     if not squad_start_dates:
         return 0
-    squad_ids = [s.id for s in current_user.squads]
+
+    squad_ids = list(squad_start_dates.keys())
+
+    # Limitation stricte à 50 apéros max (Big O temporel/spatial optimisé)
     closed_aperos = db.query(Apero).filter(
-        Apero.squad_id.in_(squad_ids), Apero.status == AperoStatus.ENDED,
+        Apero.squad_id.in_(squad_ids),
+        Apero.status == AperoStatus.ENDED,
         Apero.ended_at <= datetime.now(timezone.utc)
-    ).order_by(Apero.ended_at.desc()).all()
+    ).order_by(Apero.ended_at.desc()).limit(50).all()
+
     participated = {p.apero_id for p in db.query(AperoParticipant).filter(AperoParticipant.user_id == current_user.id)}
     streak = 0
+    
     for apero in closed_aperos:
         if apero.created_at < squad_start_dates.get(apero.squad_id, apero.created_at):
             continue
         if apero.id in participated:
             break
         streak += 1
+
     if streak >= 10:
         award_badge(current_user, "SOMNAMBULE", db)
+        
     return streak
 
 
