@@ -582,8 +582,16 @@ async def join_beer_call(
     if current_user.consecutive_joins >= 3: award_badge(current_user, "MARATHONIEN", db)
     if current_user.consecutive_joins >= 10: award_badge(current_user, "INCREVABLE", db)
 
-    db.add(participant)
-    db.commit()
+    from sqlalchemy.exc import IntegrityError
+    import os
+    try:
+        db.add(participant)
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        raise HTTPException(status_code=409, detail="Tu as déjà rejoint cet apéro !")
 
     # --- VISION PRODUIT : Temps Réel (WebSockets) ---
     background_tasks.add_task(manager.broadcast_to_squad, squad_id, {"type": "REFRESH_SQUAD", "action": "JOIN"})
