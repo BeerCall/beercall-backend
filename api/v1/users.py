@@ -8,6 +8,7 @@ from core.security import get_current_user
 from core.security import (
     verify_password,
     create_access_token,
+    create_refresh_token,
     get_password_hash,
     get_optional_current_user
 )
@@ -70,6 +71,7 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
 
     # 4. Génération du token
     token = create_access_token(data={"sub": new_user.username})
+    refresh_token = create_refresh_token(data={"sub": new_user.username})
 
     # 5. Retour des infos
     return {
@@ -78,6 +80,7 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
         "capsules": new_user.capsules,
         "avatar": new_user.avatar_config,
         "access_token": token,
+        "refresh_token": refresh_token,
         "token_type": "bearer"
     }
 
@@ -101,22 +104,64 @@ def login(
     # 3. Création du token JWT
     # On met le username dans le "sub" (subject) du token
     access_token = create_access_token(data={"sub": user.username})
+    refresh_token = create_refresh_token(data={"sub": user.username})
 
     # 4. Retour conforme au standard OAuth2
     return {
         "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer"
+    }
+
+
+from fastapi import Form
+from jose import jwt, JWTError
+from core.security import SECRET_KEY, ALGORITHM
+
+@router.post("/refresh/")
+def refresh_token(
+        refresh_token: str = Form(...),
+        db: Session = Depends(get_db)
+):
+    try:
+        payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        token_type: str = payload.get("type")
+        if username is None or token_type != "refresh":
+            raise HTTPException(status_code=401, detail="Refresh token invalide")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Refresh token invalide ou expiré")
+    
+    user = db.query(User).filter(User.username == username).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="Utilisateur introuvable")
+        
+    access_token = create_access_token(data={"sub": user.username})
+    new_refresh_token = create_refresh_token(data={"sub": user.username})
+    
+    return {
+        "access_token": access_token,
+        "refresh_token": new_refresh_token,
         "token_type": "bearer"
     }
 
 
 @router.get("/me", response_model=UserProfileResponse)
 def read_users_me(
+        background_tasks: BackgroundTasks,
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    check_and_award_ghost_badges(current_user, db)
-    db.commit()
-    db.refresh(current_user)
+    def background_ghost_check(user_id: int):
+        from db.database import SessionLocal
+        with SessionLocal() as bg_db:
+            bg_user = bg_db.query(User).filter(User.id == user_id).first()
+            if bg_user:
+                check_and_award_ghost_badges(bg_user, bg_db)
+                bg_db.commit()
+
+    # Découplage de la gamification via BackgroundTasks (Zéro blocage)
+    background_tasks.add_task(background_ghost_check, current_user.id)
 
     return {
         "username": current_user.username,
@@ -128,7 +173,7 @@ def read_users_me(
             "aperos_created": current_user.aperos_created_count,
             "aperos_joined": current_user.aperos_joined_count,
             "aperos_declined": current_user.aperos_declined_count,
-            "aperos_missed": current_user.aperos_missed_count,
+            "aperos_missed": current_user.get_aperos_missed_count(db),
             "fraud_count": current_user.ia_fraud_count
         }
     }
@@ -208,7 +253,7 @@ def get_full_profile(
             "aperos_created": current_user.aperos_created_count,
             "aperos_joined": current_user.aperos_joined_count,
             "aperos_declined": current_user.aperos_declined_count,
-            "aperos_missed": current_user.aperos_missed_count,
+            "aperos_missed": current_user.get_aperos_missed_count(db),
             "fraud_count": current_user.ia_fraud_count
         }
     }
@@ -274,7 +319,7 @@ def get_user_profile(
             "aperos_created": target_user.aperos_created_count,
             "aperos_joined": target_user.aperos_joined_count,
             "aperos_declined": target_user.aperos_declined_count,
-            "aperos_missed": target_user.aperos_missed_count,
+            "aperos_missed": target_user.get_aperos_missed_count(db),
             "fraud_count": target_user.ia_fraud_count
         }
     }
