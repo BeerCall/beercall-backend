@@ -28,8 +28,12 @@
    ```bash
    python -m pytest
    ```
+
 5. Exécuter les tests de migration (Nécessite PostgreSQL) :
    Les tests Alembic nécessitent une base PostgreSQL éphémère.
-   L'URL doit obligatoirement contenir eercall_test pour éviter toute destruction accidentelle.
-   `ash
-   export TEST_DATABASE_URL=" postgresql+psycopg://beercall:beercall@localhost:55432/beercall_test\n
+   L'URL doit obligatoirement contenir `beercall_test` pour éviter toute destruction accidentelle.
+   ```bash
+   docker compose -f docker-compose.test.yml up -d --wait
+   export TEST_DATABASE_URL="postgresql+psycopg://beercall:beercall@localhost:55432/beercall_test"
+   python -m pytest tests/postgres
+   ```

@@ -122,8 +122,6 @@ def upgrade() -> None:
     op.create_index(op.f('ix_aperos_id'), 'aperos', ['id'], unique=False)
 
     # 9. apero_participants
-    # Create Enum
-    sa.Enum('JOINED', 'DECLINED', 'GHOST', name='participationstatus').create(op.get_bind())
     
     op.create_table(
         'apero_participants',
@@ -144,7 +142,9 @@ def downgrade() -> None:
     # 9
     op.drop_index(op.f('ix_apero_participants_id'), table_name='apero_participants')
     op.drop_table('apero_participants')
-    sa.Enum('JOINED', 'DECLINED', 'GHOST', name='participationstatus').drop(op.get_bind())
+    bind = op.get_bind()
+    if bind.engine.name == 'postgresql':
+        op.execute("DROP TYPE participationstatus")
     # 8
     op.drop_index(op.f('ix_aperos_id'), table_name='aperos')
     op.drop_table('aperos')

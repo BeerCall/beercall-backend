@@ -31,11 +31,15 @@ def canonize_default(default: str) -> str:
     return default
 
 
+from sqlalchemy.engine.url import make_url
+
 def get_schema_fingerprint(url: str) -> Dict[str, Any]:
     if not url.startswith("postgresql"):
         print("URL must be postgresql", file=sys.stderr)
         sys.exit(1)
-    if not (url.endswith("_test") or url.endswith("_staging_clone")):
+    
+    parsed = make_url(url)
+    if not (parsed.database and (parsed.database.endswith("_test") or parsed.database.endswith("_staging_clone"))):
         print("Database name must end with _test or _staging_clone", file=sys.stderr)
         sys.exit(1)
 
@@ -81,26 +85,26 @@ def get_schema_fingerprint(url: str) -> Dict[str, Any]:
             
         pk = inspector.get_pk_constraint(table)
         if pk and pk.get("constrained_columns"):
-            t_info["pk"] = sorted([clean_name(c) for c in pk["constrained_columns"]])
+            t_info["pk"] = [clean_name(c) for c in pk["constrained_columns"]]
             
         for fk in inspector.get_foreign_keys(table):
             fk_info = {
-                "constrained_columns": sorted([clean_name(c) for c in fk["constrained_columns"]]),
+                "constrained_columns": [clean_name(c) for c in fk["constrained_columns"]],
                 "referred_table": clean_name(fk["referred_table"]),
-                "referred_columns": sorted([clean_name(c) for c in fk["referred_columns"]]),
+                "referred_columns": [clean_name(c) for c in fk["referred_columns"]],
                 "options": fk.get("options", {})
             }
             t_info["fk"].append(fk_info)
         t_info["fk"] = sorted(t_info["fk"], key=lambda x: str(x))
             
         for uq in inspector.get_unique_constraints(table):
-            t_info["uniques"].append(sorted([clean_name(c) for c in uq["column_names"]]))
+            t_info["uniques"].append([clean_name(c) for c in uq["column_names"]])
         t_info["uniques"] = sorted(t_info["uniques"])
             
         for idx in inspector.get_indexes(table):
             idx_info = {
                 "name": clean_name(idx["name"]),
-                "columns": sorted([clean_name(c) for c in idx["column_names"]]),
+                "columns": [clean_name(c) for c in idx["column_names"]],
                 "unique": idx["unique"]
             }
             t_info["indexes"].append(idx_info)

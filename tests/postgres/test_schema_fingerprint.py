@@ -39,3 +39,9 @@ def test_labels_enum_differents():
     d2 = {"tables": {"t": {"columns": {"e": {"type": "enum (B,A)"}}}}}
     diff = dict_diff(d1, d2)
     assert diff != {}
+
+def test_ordre_index_different():
+    d1 = {"tables": {"users": {"indexes": [{"name": "idx", "columns": ["a", "b"], "unique": False}]}}}
+    d2 = {"tables": {"users": {"indexes": [{"name": "idx", "columns": ["b", "a"], "unique": False}]}}}
+    diff = dict_diff(d1, d2)
+    assert diff != {}
