@@ -13,9 +13,8 @@ from models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
 
-SECRET_KEY = os.getenv("BEERCALL_SECRET_KEY")
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY environment variable is required")
+from core.config import SECRET_KEY
+
 ALGORITHM = "HS256"
 # A07:2021 Security Fix: Reduce Access Token TTL to 15 minutes, add Refresh Token (7 days)
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
