@@ -12,8 +12,8 @@ def postgres_url():
     parsed_url = make_url(url)
     if "sqlite" in parsed_url.drivername:
         pytest.skip("TEST_DATABASE_URL is a sqlite URL, skipping postgres tests")
-    if not (parsed_url.database == "beercall_test" or parsed_url.database.endswith("_test") or parsed_url.database.endswith("_staging_clone")):
-        raise ValueError("TEST_DATABASE_URL database name must end with '_test' or '_staging_clone' to avoid destroying production data")
+    if not (parsed_url.database == "beercall_test" or parsed_url.database.endswith("_test")):
+        raise ValueError("TEST_DATABASE_URL database name must end with '_test' to avoid destroying production data")
     return url
 
 @pytest.fixture(scope="session")
