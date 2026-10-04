@@ -4,12 +4,12 @@ fastapi==0.115.0
 firebase-admin==7.4.0
 passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
-pillow==12.1.0
+pillow==12.3.0
 psycopg[binary]==3.3.6
 pydantic==2.12.5
 python-dotenv==1.2.2
 python-jose==3.5.0
-python-multipart==0.0.22
+python-multipart==0.0.30
 sqlalchemy==2.0.35
 ultralytics==8.4.171
 ultralytics-thop==2.2.2
