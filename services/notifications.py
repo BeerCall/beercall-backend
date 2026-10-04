@@ -7,16 +7,33 @@ from firebase_admin import credentials, messaging
 logger = logging.getLogger("beercall_notifications")
 logger.setLevel(logging.INFO)
 
-try:
-    cred = credentials.Certificate("firebase-credentials.json")
-    firebase_admin.initialize_app(cred)
-except ValueError:
-    logger.info("Firebase est déjà initialisé")
-except FileNotFoundError:
-    logger.warning("Fichier firebase-credentials.json introuvable")
+import os
+
+def initialize_firebase():
+    firebase_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
+    if not firebase_path:
+        logger.info("Firebase disabled: FIREBASE_CREDENTIALS_PATH is not set")
+        return False
+    
+    if not os.path.exists(firebase_path):
+        raise FileNotFoundError(f"Firebase credentials not found at: {firebase_path}")
+
+    try:
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(firebase_path)
+            firebase_admin.initialize_app(cred)
+        return True
+    except Exception as e:
+        raise ValueError(f"Failed to initialize Firebase: {e}")
+
+FIREBASE_ENABLED = initialize_firebase()
 
 
 def send_push_notifications(tokens: List[str], title: str, body: str, data: Optional[dict] = None):
+    if not FIREBASE_ENABLED:
+        logger.info(f"Firebase disabled, ignoring notification: {title}")
+        return
+
     valid_tokens = [token for token in tokens if token]
     for offset in range(0, len(valid_tokens), 500):
         batch = valid_tokens[offset:offset + 500]
