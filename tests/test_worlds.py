@@ -32,9 +32,14 @@ def test_beer_call_worlds(mock_push, mock_is_drink, client: TestClient, db_sessi
         "longitude": 2.3522,
         "location_name": "Paris Bar"
     }
-    files = {"file": ("test.jpg", b"fake_image_data", "image/jpeg")}
+    # Fix Magic Number for file upload
+    files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers1)
-    apero_id = response.json()["apero_id"]
+    assert response.status_code == 202
+    
+    from models.apero import Apero
+    apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()
+    apero_id = apero.id
 
     # World endpoint
     res_world = client.get(f"/api/squads/{squad_id}/beer-calls/bc_{apero_id}/worlds", headers=headers1)

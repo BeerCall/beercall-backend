@@ -46,6 +46,10 @@ def db_session() -> Generator:
     finally:
         db.close()
 
+@pytest.fixture(scope="function", autouse=True)
+def patch_session_local(db_session, monkeypatch):
+    monkeypatch.setattr("api.v1.squads.SessionLocal", lambda: db_session)
+
 @pytest.fixture(scope="function")
 def client(db_session) -> Generator:
     def override_get_db():

@@ -33,7 +33,7 @@ def test_apero_active_within_4_hours(client: TestClient, db_session):
         
         # 1st apero
         res1 = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers)
-        assert res1.status_code == 200
+        assert res1.status_code == 202
         
         # 2nd apero immediately -> should fail with 400 (already active apero by user)
         files = {"file": ("test2.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
@@ -56,5 +56,8 @@ def test_apero_ia_fraud(mock_is_drink, client: TestClient, db_session):
     files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     
     res = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers)
-    assert res.status_code == 400
-    assert "refusée" in res.json()["detail"]
+    assert res.status_code == 202
+    
+    from models.user import User
+    user = db_session.query(User).filter(User.username == "user_fraud_test").first()
+    assert user.ia_fraud_count > 0

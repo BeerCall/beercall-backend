@@ -107,5 +107,8 @@ def test_create_beer_call(mock_push, mock_is_drink, client: TestClient, db_sessi
     files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers)
-    assert response.status_code == 200
-    assert "apero_id" in response.json()
+    assert response.status_code == 202
+    
+    from models.apero import Apero
+    apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()
+    assert apero is not None
