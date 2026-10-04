@@ -1,0 +1,14 @@
+{
+    "tables": {
+        "users": {
+            "columns": {
+                "id": { "type": "integer" }
+            },
+            "pk": ["id"],
+            "fk": [],
+            "indexes": [],
+            "uniques": []
+        }
+    },
+    "alembic_version": ["1ea8c26a76d9"]
+}
