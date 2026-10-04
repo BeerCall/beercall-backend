@@ -17,6 +17,8 @@ from db.database import Base
 from db.database import engine, SessionLocal
 from models import gamification
 
+from api.v1.health import router as health_router
+
 import logging
 from datetime import datetime, timezone
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -38,7 +40,7 @@ def scheduled_daily_checks():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("🚀 Démarrage du serveur Beer Call et Seeding des modèles 3D...")
+    logger.info("🚀 Démarrage du serveur Beer Call et Seeding des modèles 3D...")
     db = SessionLocal()
     models_dir = Path("static/models")
 
@@ -117,12 +119,12 @@ async def lifespan(app: FastAPI):
     scheduler = AsyncIOScheduler()
     scheduler.add_job(scheduled_daily_checks, 'cron', hour=0, minute=0) # Tous les jours à minuit
     scheduler.start()
-    print("⏰ Scheduler démarré: les vérifications quotidiennes auront lieu à minuit.")
+    logger.info("⏰ Scheduler démarré: les vérifications quotidiennes auront lieu à minuit.")
 
     yield
 
     scheduler.shutdown()
-    print("🛑 Arrêt du serveur Beer Call. À la prochaine ! 🍻")
+    logger.info("🛑 Arrêt du serveur Beer Call. À la prochaine ! 🍻")
 
 
 # Initialisation DB
@@ -142,6 +144,7 @@ app.add_middleware(
 app.include_router(squad_router, prefix="/api/squads", tags=["Squads"])
 app.include_router(games_router, prefix="/api/aperos", tags=["Games"])
 app.include_router(user_router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(health_router, prefix="/api/health", tags=["Health"])
 
 # S'assurer que le dossier existe pour éviter un crash au démarrage
 os.makedirs("uploads/aperos", exist_ok=True)
