@@ -57,7 +57,8 @@ def get_schema_fingerprint(url: str) -> Dict[str, Any]:
                 version = conn.execute(text("SELECT version_num FROM alembic_version")).scalar()
                 fingerprint["alembic_version"] = [version] if version else []
     except Exception:
-        pass
+        print("Erreur critique: impossible de lire alembic_version.", file=sys.stderr)
+        sys.exit(1)
 
     tables = sorted(inspector.get_table_names())
     for table in tables:
