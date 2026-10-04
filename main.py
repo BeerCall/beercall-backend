@@ -126,7 +126,7 @@ async def lifespan(app: FastAPI):
 
 
 # Initialisation DB
-Base.metadata.create_all(bind=engine)
+
 app = FastAPI(title="Beer Call API", lifespan=lifespan)
 
 # CONFIGURATION CORS - À placer IMPÉRATIVEMENT avant app.include_router
