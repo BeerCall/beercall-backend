@@ -47,43 +47,41 @@ class User(Base):
     def aperos_declined_count(self) -> int:
         return sum(1 for p in self.participations if p.status == ParticipationStatus.DECLINED)
 
-    @property
-    def aperos_missed_count(self) -> int:
-        # Calculate the earliest apéro date per squad where the user either created or joined (status JOINED)
-        squad_start_dates = {}  # squad_id -> datetime
+    def get_aperos_missed_count(self, db) -> int:
+        from sqlalchemy import func
+        from models.apero import Apero, AperoParticipant, ParticipationStatus
+
+        # Apero where user is creator
+        query_created = db.query(Apero.squad_id, func.min(Apero.created_at)).filter(
+            Apero.creator_id == self.id
+        ).group_by(Apero.squad_id)
         
-        # From apéros created by the user
-        for aperó in self.aperos_created:
-            squad_id = aperó.squad_id
-            if squad_id not in squad_start_dates or aperó.created_at < squad_start_dates[squad_id]:
-                squad_start_dates[squad_id] = aperó.created_at
+        # Apero where user joined
+        query_joined = db.query(Apero.squad_id, func.min(Apero.created_at)).join(
+            AperoParticipant, Apero.id == AperoParticipant.apero_id
+        ).filter(
+            AperoParticipant.user_id == self.id,
+            AperoParticipant.status == ParticipationStatus.JOINED
+        ).group_by(Apero.squad_id)
         
-        # From apéros joined by the user (status JOINED)
-        for participation in self.participations:
-            if participation.status == ParticipationStatus.JOINED:
-                aperó = participation.apero
-                squad_id = aperó.squad_id
-                if squad_id not in squad_start_dates or aperó.created_at < squad_start_dates[squad_id]:
-                    squad_start_dates[squad_id] = aperó.created_at
-        
-        # If the user has no created or joined apéro in any squad, they haven't started activity yet
+        squad_start_dates = {}
+        for squad_id, start in query_created.all():
+            squad_start_dates[squad_id] = start
+        for squad_id, start in query_joined.all():
+            if squad_id not in squad_start_dates or start < squad_start_dates[squad_id]:
+                squad_start_dates[squad_id] = start
+                
         if not squad_start_dates:
             return 0
-        
-        # Precompute set of apéro ids the user has participated in (any status) for quick lookup
-        participated_aperos_ids = {p.apero_id for p in self.participations}
-        
+            
         total_missed = 0
-        for squad in self.squads:
-            start_date = squad_start_dates.get(squad.id)
-            if start_date is None:
-                # User has not created or joined any apéro in this squad, so no missed apéros to count
-                continue
-            for aperó in squad.aperos:
-                if aperó.created_at < start_date:
-                    # Apéro occurred before user's start date in this squad, skip
-                    continue
-                if aperó.id not in participated_aperos_ids:
-                    # No participation record -> missed
-                    total_missed += 1
+        subq = db.query(AperoParticipant.apero_id).filter(AperoParticipant.user_id == self.id).subquery()
+        for squad_id, start_date in squad_start_dates.items():
+            missed = db.query(Apero).filter(
+                Apero.squad_id == squad_id,
+                Apero.created_at >= start_date,
+                ~Apero.id.in_(subq)
+            ).count()
+            total_missed += missed
+            
         return total_missed

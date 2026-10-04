@@ -8,19 +8,23 @@ from core.security import get_current_user
 from core.security import (
     verify_password,
     create_access_token,
+    create_refresh_token,
     get_password_hash,
     get_optional_current_user
 )
 from db.database import get_db
 from models.gamification import Skin
+from models.squad import Squad
 from models.user import User
-from schemas.user import BuyItemRequest, AvatarSchema, PushTokenUpdate
-from schemas.user import ConnectionItem
 from schemas.user import (
     FullProfileResponse,
     UserCreate,
     UserProfileResponse,
-    UserResponse
+    UserResponse,
+    AvatarSchema,
+    BuyItemRequest,
+    PushTokenUpdate,
+    ConnectionItem
 )
 from services.gamification import check_and_award_ghost_badges
 from services.notifications import send_push_notifications
@@ -70,6 +74,7 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
 
     # 4. Génération du token
     token = create_access_token(data={"sub": new_user.username})
+    refresh_token = create_refresh_token(data={"sub": new_user.username})
 
     # 5. Retour des infos
     return {
@@ -78,6 +83,7 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
         "capsules": new_user.capsules,
         "avatar": new_user.avatar_config,
         "access_token": token,
+        "refresh_token": refresh_token,
         "token_type": "bearer"
     }
 
@@ -101,22 +107,63 @@ def login(
     # 3. Création du token JWT
     # On met le username dans le "sub" (subject) du token
     access_token = create_access_token(data={"sub": user.username})
+    refresh_token = create_refresh_token(data={"sub": user.username})
 
     # 4. Retour conforme au standard OAuth2
     return {
         "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer"
+    }
+
+
+from fastapi import Form
+from jose import jwt, JWTError
+from core.security import SECRET_KEY, ALGORITHM
+
+
+@router.post("/refresh/")
+def refresh_token(
+        refresh_token: str = Form(...),
+        db: Session = Depends(get_db)
+):
+    try:
+        payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        token_type: str = payload.get("type")
+        if username is None or token_type != "refresh":
+            raise HTTPException(status_code=401, detail="Refresh token invalide")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Refresh token invalide ou expiré")
+
+    user = db.query(User).filter(User.username == username).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="Utilisateur introuvable")
+
+    access_token = create_access_token(data={"sub": user.username})
+    new_refresh_token = create_refresh_token(data={"sub": user.username})
+
+    return {
+        "access_token": access_token,
+        "refresh_token": new_refresh_token,
         "token_type": "bearer"
     }
 
 
 @router.get("/me", response_model=UserProfileResponse)
 def read_users_me(
+        background_tasks: BackgroundTasks,
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    check_and_award_ghost_badges(current_user, db)
-    db.commit()
-    db.refresh(current_user)
+    def background_ghost_check(user_id: int, bg_db: Session):
+        bg_user = bg_db.query(User).filter(User.id == user_id).first()
+        if bg_user:
+            check_and_award_ghost_badges(bg_user, bg_db)
+            bg_db.commit()
+
+    # Découplage de la gamification via BackgroundTasks (Zéro blocage)
+    background_tasks.add_task(background_ghost_check, current_user.id, db)
 
     return {
         "username": current_user.username,
@@ -128,7 +175,7 @@ def read_users_me(
             "aperos_created": current_user.aperos_created_count,
             "aperos_joined": current_user.aperos_joined_count,
             "aperos_declined": current_user.aperos_declined_count,
-            "aperos_missed": current_user.aperos_missed_count,
+            "aperos_missed": current_user.get_aperos_missed_count(db),
             "fraud_count": current_user.ia_fraud_count
         }
     }
@@ -208,7 +255,7 @@ def get_full_profile(
             "aperos_created": current_user.aperos_created_count,
             "aperos_joined": current_user.aperos_joined_count,
             "aperos_declined": current_user.aperos_declined_count,
-            "aperos_missed": current_user.aperos_missed_count,
+            "aperos_missed": current_user.get_aperos_missed_count(db),
             "fraud_count": current_user.ia_fraud_count
         }
     }
@@ -274,7 +321,7 @@ def get_user_profile(
             "aperos_created": target_user.aperos_created_count,
             "aperos_joined": target_user.aperos_joined_count,
             "aperos_declined": target_user.aperos_declined_count,
-            "aperos_missed": target_user.aperos_missed_count,
+            "aperos_missed": target_user.get_aperos_missed_count(db),
             "fraud_count": target_user.ia_fraud_count
         }
     }
@@ -371,21 +418,26 @@ def get_rank_title(score: int) -> str:
 
 
 @router.get("/connections/", response_model=List[ConnectionItem])
-def get_user_connections(current_user: User = Depends(get_current_user)):
+def get_user_connections(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    from sqlalchemy.orm import joinedload
+    current_user_eager = db.query(User).options(
+        joinedload(User.squads).joinedload(Squad.members)
+    ).filter(User.id == current_user.id).first()
+
     # 1. On commence par s'ajouter soi-même
     connections_dict = {
-        current_user.id: {
-            "id": f"u_{current_user.id}",
-            "username": current_user.username,
-            "caps": current_user.capsules,
-            "score": current_user.score,
-            "title": get_rank_title(current_user.score),
-            "avatar": current_user.avatar_config or {}
+        current_user_eager.id: {
+            "id": f"u_{current_user_eager.id}",
+            "username": current_user_eager.username,
+            "caps": current_user_eager.capsules,
+            "score": current_user_eager.score,
+            "title": get_rank_title(current_user_eager.score),
+            "avatar": current_user_eager.avatar_config or {}
         }
     }
 
     # 2. On ajoute les membres des squads (évite les doublons grâce à l'ID)
-    for squad in current_user.squads:
+    for squad in current_user_eager.squads:
         for member in squad.members:
             if member.id not in connections_dict:
                 connections_dict[member.id] = {

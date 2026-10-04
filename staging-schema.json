@@ -1,0 +1,586 @@
+{
+  "tables": {
+    "apero_participants": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "default": "nextval('apero_participants_id_seq'::regclass)"
+        },
+        "apero_id": {
+          "type": "integer",
+          "nullable": false,
+          "default": null
+        },
+        "user_id": {
+          "type": "integer",
+          "nullable": false,
+          "default": null
+        },
+        "status": {
+          "type": "participationstatus (JOINED,DECLINED,GHOST)",
+          "nullable": true,
+          "default": null
+        },
+        "excuse": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        },
+        "photo_path": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        },
+        "created_at": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null
+        }
+      },
+      "pk": [
+        "id"
+      ],
+      "fk": [
+        {
+          "constrained_columns": [
+            "apero_id"
+          ],
+          "referred_table": "aperos",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        },
+        {
+          "constrained_columns": [
+            "user_id"
+          ],
+          "referred_table": "users",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        }
+      ],
+      "uniques": [
+        [
+          "apero_id",
+          "user_id"
+        ]
+      ],
+      "indexes": [
+        {
+          "name": "ix_apero_participants_id",
+          "columns": [
+            "id"
+          ],
+          "unique": false
+        },
+        {
+          "name": "uq_apero_participant_user",
+          "columns": [
+            "apero_id",
+            "user_id"
+          ],
+          "unique": true
+        }
+      ]
+    },
+    "aperos": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "default": "nextval('aperos_id_seq'::regclass)"
+        },
+        "squad_id": {
+          "type": "integer",
+          "nullable": false,
+          "default": null
+        },
+        "creator_id": {
+          "type": "integer",
+          "nullable": false,
+          "default": null
+        },
+        "location_name": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        },
+        "latitude": {
+          "type": "double precision",
+          "nullable": false,
+          "default": null
+        },
+        "longitude": {
+          "type": "double precision",
+          "nullable": false,
+          "default": null
+        },
+        "photo_path": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        },
+        "created_at": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()"
+        },
+        "current_game_id": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        },
+        "current_game_state": {
+          "type": "json",
+          "nullable": true,
+          "default": null
+        },
+        "status": {
+          "type": "varchar(20)",
+          "nullable": false,
+          "default": "'ACTIVE'::text"
+        },
+        "scheduled_for": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null
+        },
+        "started_at": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null
+        },
+        "ended_at": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null
+        },
+        "daily_check_processed_at": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": null
+        }
+      },
+      "pk": [
+        "id"
+      ],
+      "fk": [
+        {
+          "constrained_columns": [
+            "creator_id"
+          ],
+          "referred_table": "users",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        },
+        {
+          "constrained_columns": [
+            "squad_id"
+          ],
+          "referred_table": "squads",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        }
+      ],
+      "uniques": [],
+      "indexes": [
+        {
+          "name": "ix_aperos_daily_check_processed_at",
+          "columns": [
+            "daily_check_processed_at"
+          ],
+          "unique": false
+        },
+        {
+          "name": "ix_aperos_id",
+          "columns": [
+            "id"
+          ],
+          "unique": false
+        },
+        {
+          "name": "ix_aperos_scheduled_for",
+          "columns": [
+            "scheduled_for"
+          ],
+          "unique": false
+        },
+        {
+          "name": "ix_aperos_started_at",
+          "columns": [
+            "started_at"
+          ],
+          "unique": false
+        },
+        {
+          "name": "ix_aperos_status",
+          "columns": [
+            "status"
+          ],
+          "unique": false
+        }
+      ]
+    },
+    "badges": {
+      "columns": {
+        "id": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "name": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "description": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        },
+        "icon": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        }
+      },
+      "pk": [
+        "id"
+      ],
+      "fk": [],
+      "uniques": [],
+      "indexes": [
+        {
+          "name": "ix_badges_id",
+          "columns": [
+            "id"
+          ],
+          "unique": false
+        }
+      ]
+    },
+    "skins": {
+      "columns": {
+        "id": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "name": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "gender": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "category": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "price_caps": {
+          "type": "integer",
+          "nullable": true,
+          "default": null
+        }
+      },
+      "pk": [
+        "id"
+      ],
+      "fk": [],
+      "uniques": [],
+      "indexes": [
+        {
+          "name": "ix_skins_id",
+          "columns": [
+            "id"
+          ],
+          "unique": false
+        }
+      ]
+    },
+    "squad_members": {
+      "columns": {
+        "user_id": {
+          "type": "integer",
+          "nullable": false,
+          "default": null
+        },
+        "squad_id": {
+          "type": "integer",
+          "nullable": false,
+          "default": null
+        }
+      },
+      "pk": [
+        "user_id",
+        "squad_id"
+      ],
+      "fk": [
+        {
+          "constrained_columns": [
+            "squad_id"
+          ],
+          "referred_table": "squads",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        },
+        {
+          "constrained_columns": [
+            "user_id"
+          ],
+          "referred_table": "users",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        }
+      ],
+      "uniques": [],
+      "indexes": []
+    },
+    "squads": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "default": "nextval('squads_id_seq'::regclass)"
+        },
+        "name": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "icon": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        },
+        "color": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        },
+        "invite_code": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        }
+      },
+      "pk": [
+        "id"
+      ],
+      "fk": [],
+      "uniques": [],
+      "indexes": [
+        {
+          "name": "ix_squads_id",
+          "columns": [
+            "id"
+          ],
+          "unique": false
+        },
+        {
+          "name": "ix_squads_invite_code",
+          "columns": [
+            "invite_code"
+          ],
+          "unique": true
+        }
+      ]
+    },
+    "user_badges": {
+      "columns": {
+        "user_id": {
+          "type": "integer",
+          "nullable": false,
+          "default": null
+        },
+        "badge_id": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "unlocked_at": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()"
+        }
+      },
+      "pk": [
+        "user_id",
+        "badge_id"
+      ],
+      "fk": [
+        {
+          "constrained_columns": [
+            "badge_id"
+          ],
+          "referred_table": "badges",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        },
+        {
+          "constrained_columns": [
+            "user_id"
+          ],
+          "referred_table": "users",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        }
+      ],
+      "uniques": [],
+      "indexes": []
+    },
+    "user_skins": {
+      "columns": {
+        "user_id": {
+          "type": "integer",
+          "nullable": false,
+          "default": null
+        },
+        "skin_id": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "unlocked_at": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "default": "now()"
+        }
+      },
+      "pk": [
+        "user_id",
+        "skin_id"
+      ],
+      "fk": [
+        {
+          "constrained_columns": [
+            "skin_id"
+          ],
+          "referred_table": "skins",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        },
+        {
+          "constrained_columns": [
+            "user_id"
+          ],
+          "referred_table": "users",
+          "referred_columns": [
+            "id"
+          ],
+          "options": {}
+        }
+      ],
+      "uniques": [],
+      "indexes": []
+    },
+    "users": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "default": "nextval('users_id_seq'::regclass)"
+        },
+        "username": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "hashed_password": {
+          "type": "varchar",
+          "nullable": false,
+          "default": null
+        },
+        "capsules": {
+          "type": "integer",
+          "nullable": true,
+          "default": null
+        },
+        "avatar_config": {
+          "type": "json",
+          "nullable": true,
+          "default": null
+        },
+        "ia_fraud_count": {
+          "type": "integer",
+          "nullable": true,
+          "default": null
+        },
+        "consecutive_joins": {
+          "type": "integer",
+          "nullable": true,
+          "default": null
+        },
+        "consecutive_declines": {
+          "type": "integer",
+          "nullable": true,
+          "default": null
+        },
+        "consecutive_piscine": {
+          "type": "integer",
+          "nullable": true,
+          "default": null
+        },
+        "push_token": {
+          "type": "varchar",
+          "nullable": true,
+          "default": null
+        },
+        "created_at": {
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": null
+        }
+      },
+      "pk": [
+        "id"
+      ],
+      "fk": [],
+      "uniques": [],
+      "indexes": [
+        {
+          "name": "ix_users_id",
+          "columns": [
+            "id"
+          ],
+          "unique": false
+        },
+        {
+          "name": "ix_users_username",
+          "columns": [
+            "username"
+          ],
+          "unique": true
+        }
+      ]
+    }
+  },
+  "alembic_version": []
+}

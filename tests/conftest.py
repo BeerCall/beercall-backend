@@ -1,17 +1,23 @@
 import os
 import pytest
-import asyncio
-from typing import Generator
-from fastapi.testclient import TestClient
+
+# Ensure we use the test database before anything else is imported
+if "TEST_DATABASE_URL" not in os.environ:
+    os.environ["DATABASE_URL"] = "sqlite:///./test_db.sqlite"
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from typing import Generator
+import asyncio
+from db.database import Base
+from fastapi.testclient import TestClient
 
-from db.database import Base, get_db
-import models.user
-import models.squad
-import models.apero
-import models.gamification
 from main import app
+
+# Utilisation d'une base SQLite en mǸmoire pour les tests par dǸfaut
+# Cela garantit que les tests s'exǸcutent trs vite et sont isolǸs.
+# Note : SQLite ne supporte pas l'async natif simplement avec sqlalchemy standard,
+# on utilise donc un driver synchrone pour les tests.
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test_db.sqlite"
 
@@ -25,8 +31,12 @@ def setup_db():
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
+    engine.dispose()
     if os.path.exists("./test_db.sqlite"):
-        os.remove("./test_db.sqlite")
+        try:
+            os.remove("./test_db.sqlite")
+        except Exception:
+            pass
 
 @pytest.fixture(scope="session")
 def event_loop():
@@ -36,7 +46,7 @@ def event_loop():
 
 @pytest.fixture(scope="function")
 def db_session() -> Generator:
-    # Nettoyer les données entre chaque test
+    # Nettoyer les donnǸes entre chaque test
     for table in reversed(Base.metadata.sorted_tables):
         with engine.begin() as conn:
             conn.execute(table.delete())
@@ -46,15 +56,14 @@ def db_session() -> Generator:
     finally:
         db.close()
 
+@pytest.fixture(scope="function", autouse=True)
+def override_get_db(db_session):
+    from db.database import get_db
+    app.dependency_overrides[get_db] = lambda: db_session
+    yield
+    app.dependency_overrides.pop(get_db, None)
+
 @pytest.fixture(scope="function")
-def client(db_session) -> Generator:
-    def override_get_db():
-        try:
-            yield db_session
-        finally:
-            pass
-            
-    app.dependency_overrides[get_db] = override_get_db
-    with TestClient(app) as test_client:
-        yield test_client
-    app.dependency_overrides.clear()
+def client() -> Generator:
+    with TestClient(app) as c:
+        yield c

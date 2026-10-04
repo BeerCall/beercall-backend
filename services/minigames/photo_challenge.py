@@ -2,6 +2,7 @@ import random
 import base64
 import os
 from typing import Dict, Any, Tuple
+from asgiref.sync import async_to_sync
 
 from google import genai
 from google.genai import types
@@ -10,7 +11,7 @@ from models.apero import Apero
 from .base import BaseMiniGame
 
 
-def analyze_photo_with_ai(base64_str: str, challenge: str) -> Tuple[bool, str]:
+async def analyze_photo_with_ai(base64_str: str, challenge: str) -> Tuple[bool, str]:
     """
     Analyse le dessin avec Gemini 2.5 Flash.
     """
@@ -31,7 +32,7 @@ def analyze_photo_with_ai(base64_str: str, challenge: str) -> Tuple[bool, str]:
         )
 
         client = genai.Client()
-        response = client.models.generate_content(
+        response = await client.aio.models.generate_content(
             model='gemini-2.5-flash',
             contents=[
                 prompt,
@@ -170,7 +171,7 @@ class PhotoChallengeGame(BaseMiniGame):
             image_b64 = action_payload.get("image_base64", "")
             state["photo_base64"] = image_b64
 
-            is_valid, comment = analyze_photo_with_ai(image_b64, state["challenge"])
+            is_valid, comment = async_to_sync(analyze_photo_with_ai)(image_b64, state["challenge"])
 
             state["ai_verdict"] = "WON" if is_valid else "LOST"
             state["ai_comment"] = comment

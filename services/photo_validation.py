@@ -2,10 +2,15 @@ import io
 import math
 
 from PIL import Image
-from ultralytics import YOLO
 
-# Chargement du modèle en mémoire (le modèle 'n' pour nano est le plus rapide)
-model = YOLO('yolov8n.pt')
+_model = None
+
+def get_detector():
+    global _model
+    if _model is None:
+        from ultralytics import YOLO
+        _model = YOLO('yolov8n.pt')
+    return _model
 
 # IDs des classes dans le dataset COCO pour les boissons
 DRINK_CLASS_IDS = [39, 40, 41, 45]  # 39: bottle, 41: cup, 45: bowl (souvent confondu avec un verre large)
@@ -13,7 +18,7 @@ DRINK_CLASS_IDS = [39, 40, 41, 45]  # 39: bottle, 41: cup, 45: bowl (souvent con
 
 # On peut aussi ajouter 40: wine glass si nécessaire
 
-async def is_drink_detected(file_bytes: bytes) -> bool:
+def is_drink_detected(file_bytes: bytes, detector=None) -> bool:
     """
     Analyse réelle de l'image via YOLOv8 pour détecter une boisson.
     Entièrement gratuit et local.
@@ -22,9 +27,12 @@ async def is_drink_detected(file_bytes: bytes) -> bool:
         # Convertir les bytes en image PIL
         image = Image.open(io.BytesIO(file_bytes))
 
+        if detector is None:
+            detector = get_detector()
+
         # Exécuter la détection
         # conf=0.25 est le seuil de confiance (25%)
-        results = model(image, conf=0.25, verbose=False)
+        results = detector(image, conf=0.25, verbose=False)
 
         for result in results:
             # On vérifie si l'une des boîtes de détection appartient aux classes cibles
@@ -48,6 +56,19 @@ def calculate_geodistance(lat1: float, lon1: float, lat2: float, lon2: float) ->
     a = math.sin(dphi / 2.0) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2.0) ** 2
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return R * c
+
+
+def validate_image_file(file_bytes: bytes) -> str:
+    """
+    Validation stricte du fichier (A04:2021) via Magic Numbers.
+    Empêche les attaques d'Unrestricted File Upload (XSS/RCE).
+    """
+    if file_bytes.startswith(b'\xff\xd8\xff'):
+        return "jpg"
+    elif file_bytes.startswith(b'\x89PNG\r\n\x1a\n'):
+        return "png"
+    else:
+        raise ValueError("Format de fichier non autorisé. Seuls les JPG et PNG authentiques sont acceptés.")
 
 
 # Nom public stable utilisé par les services métier.

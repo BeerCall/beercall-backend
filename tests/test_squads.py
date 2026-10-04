@@ -59,7 +59,7 @@ def test_join_squad(client: TestClient, db_session):
     headers2 = {"Authorization": f"Bearer {token2}"}
 
     join_payload = {"invite_code": invite_code}
-    with patch("api.v1.squads.send_push_notifications", new_callable=AsyncMock):
+    with patch("api.v1.squads.send_push_notifications"):
         response = client.post("/api/squads/join", json=join_payload, headers=headers2)
         assert response.status_code == 200
         assert "id" in response.json()
@@ -86,8 +86,8 @@ def test_get_squad_details(client: TestClient, db_session):
     assert data["name"] == "Details Squad"
     assert "active_beer_call" in data
 
-@patch("api.v1.squads.is_drink_detected", new_callable=AsyncMock)
-@patch("api.v1.squads.send_push_notifications", new_callable=AsyncMock)
+@patch("api.v1.squads.is_drink_detected")
+@patch("api.v1.squads.send_push_notifications")
 def test_create_beer_call(mock_push, mock_is_drink, client: TestClient, db_session):
     mock_is_drink.return_value = True
 
@@ -103,8 +103,12 @@ def test_create_beer_call(mock_push, mock_is_drink, client: TestClient, db_sessi
         "longitude": 2.3522,
         "location_name": "Paris Bar"
     }
-    files = {"file": ("test.jpg", b"fake_image_data", "image/jpeg")}
+    # Fix Magic Number for A04:2021 File Upload Security Check
+    files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers)
-    assert response.status_code == 200
-    assert "apero_id" in response.json()
+    assert response.status_code == 202
+    
+    from models.apero import Apero
+    apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()
+    assert apero is not None

@@ -15,8 +15,8 @@ def get_auth_token(client: TestClient, username="squadtestuser"):
     response = client.post("/api/auth/token/", data={"username": username, "password": "Password123!"})
     return response.json()["access_token"]
 
-@patch("api.v1.squads.is_drink_detected", new_callable=AsyncMock)
-@patch("api.v1.squads.send_push_notifications", new_callable=AsyncMock)
+@patch("api.v1.squads.is_drink_detected")
+@patch("api.v1.squads.send_push_notifications")
 def test_create_and_decline_beer_call(mock_push, mock_is_drink, client: TestClient, db_session):
     mock_is_drink.return_value = True
 
@@ -34,10 +34,14 @@ def test_create_and_decline_beer_call(mock_push, mock_is_drink, client: TestClie
         "longitude": 2.3522,
         "location_name": "Paris Bar"
     }
-    files = {"file": ("test.jpg", b"fake_image_data", "image/jpeg")}
+    files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers1)
-    apero_id = response.json()["apero_id"]
+    assert response.status_code == 202
+    
+    from models.apero import Apero
+    apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()
+    apero_id = apero.id
 
     # User 2 joins squad and declines beer call
     token2 = get_auth_token(client, "user_decliner")
@@ -49,8 +53,8 @@ def test_create_and_decline_beer_call(mock_push, mock_is_drink, client: TestClie
     assert response.status_code == 200
     assert response.json()["bonus"] == 15
 
-@patch("api.v1.squads.is_drink_detected", new_callable=AsyncMock)
-@patch("api.v1.squads.send_push_notifications", new_callable=AsyncMock)
+@patch("api.v1.squads.is_drink_detected")
+@patch("api.v1.squads.send_push_notifications")
 def test_create_and_join_beer_call(mock_push, mock_is_drink, client: TestClient, db_session):
     mock_is_drink.return_value = True
 
@@ -68,10 +72,14 @@ def test_create_and_join_beer_call(mock_push, mock_is_drink, client: TestClient,
         "longitude": 2.3522,
         "location_name": "Paris Bar"
     }
-    files = {"file": ("test.jpg", b"fake_image_data", "image/jpeg")}
+    files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers1)
-    apero_id = response.json()["apero_id"]
+    assert response.status_code == 202
+    
+    from models.apero import Apero
+    apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()
+    apero_id = apero.id
 
     # User 2 joins squad and joins beer call
     token2 = get_auth_token(client, "user_joiner_apero")
@@ -82,7 +90,7 @@ def test_create_and_join_beer_call(mock_push, mock_is_drink, client: TestClient,
         "lat": 48.8566,
         "lon": 2.3522
     }
-    files = {"file": ("test2.jpg", b"fake_image_data", "image/jpeg")}
+    files = {"file": ("test2.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     response = client.post(f"/api/squads/{squad_id}/beer-calls/bc_{apero_id}/join/", data=join_data, files=files, headers=headers2)
     assert response.status_code == 200
     assert "bonus" in response.json()
