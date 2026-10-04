@@ -1,5 +1,9 @@
 import os
 import pytest
+
+# Ensure we use the test database before anything else is imported
+os.environ["DATABASE_URL"] = "sqlite:///./test_db.sqlite"
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from typing import Generator
