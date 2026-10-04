@@ -6,14 +6,15 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test_db.sqlite"
+os.environ["DATABASE_URL"] = SQLALCHEMY_DATABASE_URL
+
 from db.database import Base, get_db
 import models.user
 import models.squad
 import models.apero
 import models.gamification
 from main import app
-
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test_db.sqlite"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
