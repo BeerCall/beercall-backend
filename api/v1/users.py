@@ -14,14 +14,17 @@ from core.security import (
 )
 from db.database import get_db
 from models.gamification import Skin
+from models.squad import Squad
 from models.user import User
-from schemas.user import BuyItemRequest, AvatarSchema, PushTokenUpdate
-from schemas.user import ConnectionItem
 from schemas.user import (
     FullProfileResponse,
     UserCreate,
     UserProfileResponse,
-    UserResponse
+    UserResponse,
+    AvatarSchema,
+    BuyItemRequest,
+    PushTokenUpdate,
+    ConnectionItem
 )
 from services.gamification import check_and_award_ghost_badges
 from services.notifications import send_push_notifications
@@ -118,6 +121,7 @@ from fastapi import Form
 from jose import jwt, JWTError
 from core.security import SECRET_KEY, ALGORITHM
 
+
 @router.post("/refresh/")
 def refresh_token(
         refresh_token: str = Form(...),
@@ -131,14 +135,14 @@ def refresh_token(
             raise HTTPException(status_code=401, detail="Refresh token invalide")
     except JWTError:
         raise HTTPException(status_code=401, detail="Refresh token invalide ou expiré")
-    
+
     user = db.query(User).filter(User.username == username).first()
     if not user:
         raise HTTPException(status_code=401, detail="Utilisateur introuvable")
-        
+
     access_token = create_access_token(data={"sub": user.username})
     new_refresh_token = create_refresh_token(data={"sub": user.username})
-    
+
     return {
         "access_token": access_token,
         "refresh_token": new_refresh_token,
