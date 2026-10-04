@@ -156,16 +156,14 @@ def read_users_me(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    def background_ghost_check(user_id: int):
-        from db.database import SessionLocal
-        with SessionLocal() as bg_db:
-            bg_user = bg_db.query(User).filter(User.id == user_id).first()
-            if bg_user:
-                check_and_award_ghost_badges(bg_user, bg_db)
-                bg_db.commit()
+    def background_ghost_check(user_id: int, bg_db: Session):
+        bg_user = bg_db.query(User).filter(User.id == user_id).first()
+        if bg_user:
+            check_and_award_ghost_badges(bg_user, bg_db)
+            bg_db.commit()
 
     # Découplage de la gamification via BackgroundTasks (Zéro blocage)
-    background_tasks.add_task(background_ghost_check, current_user.id)
+    background_tasks.add_task(background_ghost_check, current_user.id, db)
 
     return {
         "username": current_user.username,

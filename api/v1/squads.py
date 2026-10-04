@@ -82,9 +82,9 @@ def process_beer_call_creation(
     latitude: float,
     longitude: float,
     file_bytes: bytes,
-    file_extension: str
+    file_extension: str,
+    db: Session
 ):
-    db = SessionLocal()
     try:
         current_user = db.query(User).filter(User.id == creator_id).first()
         squad = db.query(Squad).filter(Squad.id == squad_id).first()
@@ -136,7 +136,7 @@ def process_beer_call_creation(
 
         target_tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
         if target_tokens:
-            async_to_sync(send_push_notifications)(
+            send_push_notifications(
                 tokens=target_tokens,
                 title="🍻 RUPTURE DE SOBRIÉTÉ !",
                 body=f"{current_user.username} a craqué et réclame du renfort ! Viens sauver son foie !"
@@ -148,8 +148,6 @@ def process_beer_call_creation(
         if 'file_path' in locals() and os.path.exists(file_path):
             os.remove(file_path)
         raise HTTPException(status_code=500, detail="Internal Server Error")
-    finally:
-        db.close()
 
 
 @router.post("/{squad_id}/beer-calls/")
@@ -222,7 +220,8 @@ async def create_beer_call(
         latitude,
         longitude,
         file_bytes,
-        file_extension
+        file_extension,
+        db
     )
 
     return JSONResponse(
