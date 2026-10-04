@@ -2,7 +2,8 @@ import os
 import pytest
 
 # Ensure we use the test database before anything else is imported
-os.environ["DATABASE_URL"] = "sqlite:///./test_db.sqlite"
+if "TEST_DATABASE_URL" not in os.environ:
+    os.environ["DATABASE_URL"] = "sqlite:///./test_db.sqlite"
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
