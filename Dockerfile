@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu --no-cache-dir
+RUN pip install torch==2.14.1 torchvision==0.29.1 --index-url https://download.pytorch.org/whl/cpu --no-cache-dir
 RUN pip install -r requirements.txt --no-cache-dir
 
 COPY . .

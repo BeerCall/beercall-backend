@@ -1,5 +1,7 @@
 # beercall-backend
 
+> **Dette Supply-Chain** : Les tags d'images de base (ex: `python:3.13-slim`) restent actuellement mutables. Il conviendra de les remplacer par des digests (`@sha256:...`) ultérieurement.
+
 ## Installation et Tests
 
 1. Créer et activer un environnement virtuel (venv) :
