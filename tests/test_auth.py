@@ -7,9 +7,9 @@ client = TestClient(app)
 
 class TestAuthAndProfile:
     def test_login_success(self):
-        response = client.post('/api/v1/token', data={'username': 'test@beercall.com', 'password': 'password'})
-        assert response.status_code in [200, 401, 404, 422]
+        response = client.post('/api/auth/token/', data={'username': 'test@beercall.com', 'password': 'password'})
+        assert response.status_code == 401
 
     def test_get_profile(self):
-        response = client.get('/api/v1/me')
-        assert response.status_code in [200, 401, 404]
+        response = client.get('/api/auth/me/')
+        assert response.status_code == 401
