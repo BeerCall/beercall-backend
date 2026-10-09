@@ -41,6 +41,24 @@ async def websocket_squad_endpoint(websocket: WebSocket, squad_id: int):
         manager.disconnect(websocket, squad_id)
 
 
+from services.websocket_tickets import generate_ticket_for_squad
+
+@router.post("/{squad_id}/ws-ticket")
+def create_websocket_ticket(
+        squad_id: int,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
+):
+    squad = db.query(Squad).filter(Squad.id == squad_id).first()
+    if not squad:
+        raise HTTPException(status_code=404, detail="Squad introuvable")
+
+    if current_user not in squad.members:
+        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
+
+    return generate_ticket_for_squad(db, current_user.id, squad_id)
+
+
 # POST : Créer une Squad
 @router.post("/", response_model=SquadResponse)
 def create_squad(

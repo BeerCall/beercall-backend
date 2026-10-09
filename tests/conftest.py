@@ -19,10 +19,11 @@ from main import app
 # Note : SQLite ne supporte pas l'async natif simplement avec sqlalchemy standard,
 # on utilise donc un driver synchrone pour les tests.
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test_db.sqlite"
+SQLALCHEMY_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "sqlite:///./test_db.sqlite")
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"check_same_thread": False} if "sqlite" in SQLALCHEMY_DATABASE_URL else {}
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
