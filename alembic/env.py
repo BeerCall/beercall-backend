@@ -14,6 +14,7 @@ import models.user          # noqa
 import models.squad         # noqa
 import models.apero         # noqa
 import models.gamification  # noqa
+import models.websocket_ticket # noqa
 config = context.config
 
 # ==========================================
