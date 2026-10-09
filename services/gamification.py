@@ -185,16 +185,20 @@ def run_daily_apero_checks(db: Session, now: datetime | None = None):
     """Idempotent processing of recent ended aperos and scheduled flops."""
     now = now or datetime.now(timezone.utc)
     since = now - timedelta(hours=240000)
+    
     ended = db.query(Apero).filter(
         Apero.status == AperoStatus.ENDED,
         Apero.ended_at >= since, Apero.ended_at <= now,
         Apero.daily_check_processed_at.is_(None),
-    ).all()
+    ).with_for_update(skip_locked=True).all()
+    
+    four_hours_ago = now - timedelta(hours=4)
     scheduled = db.query(Apero).filter(
         Apero.status == AperoStatus.SCHEDULED,
-        Apero.scheduled_for >= since, Apero.scheduled_for <= now,
+        Apero.scheduled_for >= since, Apero.scheduled_for <= four_hours_ago,
         Apero.daily_check_processed_at.is_(None),
-    ).all()
+    ).with_for_update(skip_locked=True).all()
+    
     processed = 0
     for apero in ended:
         joined = [p for p in apero.participants if p.status == ParticipationStatus.JOINED]
