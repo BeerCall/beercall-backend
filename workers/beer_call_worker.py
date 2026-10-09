@@ -52,13 +52,19 @@ def claim_and_process_job():
             ((BeerCallJob.status == BeerCallJobStatus.PENDING) & (
                 (BeerCallJob.attempts == 0) |
                 ((BeerCallJob.attempts == 1) & (BeerCallJob.updated_at < retry_delay_1)) |
-                ((BeerCallJob.attempts >= 2) & (BeerCallJob.updated_at < retry_delay_2))
+                ((BeerCallJob.attempts == 2) & (BeerCallJob.updated_at < retry_delay_2))
             )) |
             ((BeerCallJob.status == BeerCallJobStatus.RUNNING) & (BeerCallJob.updated_at < timeout_threshold))
         ).order_by(BeerCallJob.created_at.asc()).first()
         
         if not job:
             return False
+
+        if job.attempts >= 3:
+            job.status = BeerCallJobStatus.FAILED
+            job.owner_id = None
+            db.commit()
+            return True
 
         owner_id = str(uuid.uuid4())
         job.status = BeerCallJobStatus.RUNNING

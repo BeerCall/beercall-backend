@@ -43,7 +43,8 @@ def enqueue_beer_call_job(
     if existing_job:
         if (existing_job.squad_id != squad_id or 
             abs(existing_job.latitude - latitude) > 0.0001 or 
-            abs(existing_job.longitude - longitude) > 0.0001):
+            abs(existing_job.longitude - longitude) > 0.0001 or
+            existing_job.location_name != location_name):
             from fastapi import HTTPException
             raise HTTPException(status_code=409, detail="Idempotency key déjà utilisée pour une requête différente.")
         return {"status": "processing", "job_id": str(existing_job.id), "job_status": existing_job.status.value}
@@ -97,6 +98,12 @@ def enqueue_beer_call_job(
             BeerCallJob.idempotency_key == idempotency_key
         ).first()
         if existing_job:
+            if (existing_job.squad_id != squad_id or 
+                abs(existing_job.latitude - latitude) > 0.0001 or 
+                abs(existing_job.longitude - longitude) > 0.0001 or
+                existing_job.location_name != location_name):
+                from fastapi import HTTPException
+                raise HTTPException(status_code=409, detail="Idempotency key déjà utilisée pour une requête différente.")
             return {"status": "processing", "job_id": str(existing_job.id), "job_status": existing_job.status.value}
         raise RuntimeError("Conflit lors de la création du job.")
 
@@ -173,6 +180,9 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
                 
             # Verrou sur la Squad pour éviter la création concurrente de deux apéros dans la même squad
             locked_squad = db_finalize.query(Squad).with_for_update().filter(Squad.id == locked_job.squad_id).first()
+            
+            # Verrou sur l'utilisateur pour éviter la création concurrente dans plusieurs squads
+            locked_user = db_finalize.query(User).with_for_update().filter(User.id == locked_job.creator_id).first()
             
             # Vérifications métier sous verrou si le YOLO a réussi
             if final_status == BeerCallJobStatus.SUCCEEDED:
@@ -286,16 +296,7 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
             db_finalize.close()
 
         if apero_created:
-            try:
-                db_notify = db_factory()
-                squad = db_notify.query(Squad).filter(Squad.id == locked_job.squad_id).first()
-                if squad:
-                    tokens = [member.fcm_token for member in squad.members if member.fcm_token and member.id != locked_job.creator_id]
-                    if tokens:
-                        send_push_notifications(tokens, "Nouveau Beer Call ! 🍻", f"{locked_job.location_name} t'attend !")
-                db_notify.close()
-            except Exception as e:
-                logger.error(f"Erreur d'envoi de notification push: {e}")
+            pass
 
     finally:
         db.close()

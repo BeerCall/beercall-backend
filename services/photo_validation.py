@@ -19,10 +19,9 @@ DRINK_CLASS_IDS = [39, 40, 41, 45]  # 39: bottle, 41: cup, 45: bowl (souvent con
 # On peut aussi ajouter 40: wine glass si nécessaire
 
 def is_drink_detected(file_bytes: bytes, detector=None) -> bool:
-    """
-    Analyse réelle de l'image via YOLOv8 pour détecter une boisson.
-    Entièrement gratuit et local.
-    """
+    import os
+    if os.getenv("YOLO_MOCK") == "true":
+        return True
     try:
         # Convertir les bytes en image PIL
         image = Image.open(io.BytesIO(file_bytes))

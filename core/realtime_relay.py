@@ -5,6 +5,9 @@ from sqlalchemy.orm import Session
 from models.realtime_event import RealtimeEvent
 from db.database import SessionLocal
 from core.websocket import manager
+from models.squad import Squad
+from services.notifications import send_push_notifications
+from db.database import SessionLocal
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +74,26 @@ async def realtime_relay_loop(stop_event: asyncio.Event):
             
             dispatched_ids = []
             for e in events:
+                # 1. Envoi Temps Réel (WS)
                 await manager.broadcast_to_squad(e["squad_id"], e["payload"])
+                
+                # 2. Envoi Notifications Push (si CREATION)
+                payload = e["payload"]
+                if payload.get("type") == "REFRESH_SQUAD" and payload.get("action") == "CREATE":
+                    def send_pushes(squad_id):
+                        db = SessionLocal()
+                        try:
+                            squad = db.query(Squad).filter(Squad.id == squad_id).first()
+                            if squad:
+                                tokens = [member.push_token for member in squad.members if member.push_token]
+                                if tokens:
+                                    send_push_notifications(tokens, "Nouveau Beer Call ! 🍻", "Un apéro t'attend !")
+                        except Exception as ex:
+                            logger.error(f"Error sending pushes in relay: {ex}")
+                        finally:
+                            db.close()
+                    await asyncio.to_thread(send_pushes, e["squad_id"])
+
                 dispatched_ids.append(e["id"])
                 
             if dispatched_ids:
