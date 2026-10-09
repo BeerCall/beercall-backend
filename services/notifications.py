@@ -29,6 +29,22 @@ def initialize_firebase():
 FIREBASE_ENABLED = initialize_firebase()
 
 
+def send_durable_push(token: str, event_id: str) -> None:
+    """Raise on transient delivery failures so the persisted outbox can retry."""
+    if not FIREBASE_ENABLED:
+        raise RuntimeError("Firebase is disabled; notification remains queued")
+    try:
+        messaging.send(messaging.Message(
+            notification=messaging.Notification(
+                title="Nouveau Beer Call ! 🍻", body="Un apéro t'attend !"
+            ),
+            data={"event_id": event_id},
+            token=token,
+        ))
+    except (messaging.UnregisteredError, messaging.SenderIdMismatchError):
+        logger.warning("Skipping permanently invalid push recipient")
+
+
 def send_push_notifications(tokens: List[str], title: str, body: str, data: Optional[dict] = None):
     if not FIREBASE_ENABLED:
         logger.info(f"Firebase disabled, ignoring notification: {title}")

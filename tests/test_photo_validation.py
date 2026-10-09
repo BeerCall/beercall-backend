@@ -1,6 +1,15 @@
 from unittest.mock import Mock, MagicMock
 from services.photo_validation import is_drink_detected
 
+def test_mock_requires_explicit_e2e_environment(monkeypatch):
+    import pytest
+    monkeypatch.setenv("YOLO_MOCK", "true")
+    monkeypatch.setenv("BEERCALL_ENV", "production")
+    with pytest.raises(RuntimeError):
+        is_drink_detected(b"not an image")
+    monkeypatch.setenv("BEERCALL_ENV", "e2e")
+    assert is_drink_detected(b"not an image") is True
+
 def test_is_drink_detected_true():
     # Mock du résultat YOLO
     box = MagicMock()

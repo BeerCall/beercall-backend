@@ -1,5 +1,6 @@
 import io
 import math
+import os
 
 from PIL import Image
 
@@ -19,8 +20,7 @@ DRINK_CLASS_IDS = [39, 40, 41, 45]  # 39: bottle, 41: cup, 45: bowl (souvent con
 # On peut aussi ajouter 40: wine glass si nécessaire
 
 def is_drink_detected(file_bytes: bytes, detector=None) -> bool:
-    import os
-    if os.getenv("YOLO_MOCK") == "true":
+    if os.getenv("YOLO_MOCK") == "true" and os.getenv("BEERCALL_ENV") == "e2e":
         return True
     try:
         # Convertir les bytes en image PIL

@@ -12,7 +12,6 @@ from models.user import User
 from datetime import datetime, timezone, timedelta
 from services.photo_validation import calculate_geodistance, is_drink_detected
 from services.gamification import handle_ia_fraud, apply_beer_call_creation_rewards
-from services.notifications import send_push_notifications
 
 logger = logging.getLogger(__name__)
 
@@ -172,7 +171,6 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
 
         # 2. Phase de finalisation (verrou final)
         db_finalize = db_factory()
-        apero_created = False
         try:
             locked_job = db_finalize.query(BeerCallJob).with_for_update().filter(BeerCallJob.id == job_id).first()
             if not locked_job or locked_job.owner_id != owner_id or locked_job.status != BeerCallJobStatus.RUNNING:
@@ -250,10 +248,10 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
                 # Outbox event CREATE
                 event = RealtimeEvent(
                     squad_id=locked_job.squad_id,
-                    payload={"type": "REFRESH_SQUAD", "action": "CREATE"}
+                    payload={"type": "REFRESH_SQUAD", "action": "CREATE",
+                             "creator_id": locked_job.creator_id}
                 )
                 db_finalize.add(event)
-                apero_created = True
 
             elif final_status == BeerCallJobStatus.REJECTED:
                 locked_job.status = BeerCallJobStatus.REJECTED
@@ -294,9 +292,6 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
             db_finalize.rollback()
         finally:
             db_finalize.close()
-
-        if apero_created:
-            pass
 
     finally:
         db.close()
