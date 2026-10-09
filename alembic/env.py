@@ -15,6 +15,8 @@ import models.squad         # noqa
 import models.apero         # noqa
 import models.gamification  # noqa
 import models.websocket_ticket # noqa
+import models.beer_call_job # noqa
+import models.realtime_event # noqa
 config = context.config
 
 # ==========================================

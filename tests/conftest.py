@@ -2,7 +2,9 @@ import os
 import pytest
 
 # Ensure we use the test database before anything else is imported
-if "TEST_DATABASE_URL" not in os.environ:
+if "TEST_DATABASE_URL" in os.environ:
+    os.environ["DATABASE_URL"] = os.environ["TEST_DATABASE_URL"]
+else:
     os.environ["DATABASE_URL"] = "sqlite:///./test_db.sqlite"
 
 from sqlalchemy import create_engine
@@ -10,6 +12,7 @@ from sqlalchemy.orm import sessionmaker
 from typing import Generator
 import asyncio
 from db.database import Base
+import models
 from fastapi.testclient import TestClient
 
 from main import app
