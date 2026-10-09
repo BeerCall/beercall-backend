@@ -44,8 +44,8 @@ def is_drink_detected(file_bytes: bytes, detector=None) -> bool:
         return False
     except Exception as e:
         print(f"Erreur lors de l'analyse d'image : {e}")
-        # En cas d'erreur technique, on peut choisir de valider par défaut pour ne pas bloquer l'user
-        return False
+        # En cas d'erreur technique (réseau, modèle), on lève une exception retryable
+        raise RuntimeError(f"Erreur technique lors de l'analyse d'image: {e}") from e
 
 
 def calculate_geodistance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
