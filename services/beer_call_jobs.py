@@ -27,6 +27,13 @@ def enqueue_beer_call_job(
     file_bytes: bytes,
     file_extension: str
 ) -> dict:
+    # 0. Valider le format de l'Idempotency-Key
+    try:
+        uuid.UUID(idempotency_key)
+    except ValueError:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=422, detail="Format Idempotency-Key invalide, doit être un UUID.")
+
     # 1. Vérifier l'idempotence AVANT les règles métier
     existing_job = db.query(BeerCallJob).filter(
         BeerCallJob.creator_id == creator_id,
@@ -34,6 +41,11 @@ def enqueue_beer_call_job(
     ).first()
 
     if existing_job:
+        if (existing_job.squad_id != squad_id or 
+            abs(existing_job.latitude - latitude) > 0.0001 or 
+            abs(existing_job.longitude - longitude) > 0.0001):
+            from fastapi import HTTPException
+            raise HTTPException(status_code=409, detail="Idempotency key déjà utilisée pour une requête différente.")
         return {"status": "processing", "job_id": str(existing_job.id), "job_status": existing_job.status.value}
 
     # 2. Valider métier (Apéro actif, distance)
@@ -126,34 +138,8 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
         # Chemins des fichiers
         input_path = f"uploads/jobs/{job.id}.input"
         
-        # 1. Vérification métier et YOLO
+        # 1. YOLO inference SEULE (les vérifications métier passent sous verrou à la finalisation)
         try:
-            # Re-vérifier l'unicité (règles métier)
-            now = datetime.now(timezone.utc)
-            user_active_apero = db.query(Apero).filter(
-                Apero.creator_id == job.creator_id,
-                Apero.status == AperoStatus.ACTIVE,
-                Apero.ended_at > now,
-            ).first()
-
-            if user_active_apero:
-                raise ValueError("Tu as déjà lancé un Beer Call il y a moins de 4 heures ! Laisse les autres profiter de celui-ci avant d'en recréer un.")
-
-            active_aperos = db.query(Apero).filter(
-                Apero.squad_id == job.squad_id,
-                Apero.status == AperoStatus.ACTIVE,
-                Apero.ended_at > now,
-            ).all()
-
-            for existing_apero in active_aperos:
-                distance = calculate_geodistance(
-                    job.latitude, job.longitude,
-                    existing_apero.latitude, existing_apero.longitude
-                )
-                if distance <= 500:
-                    raise ValueError(f"Un Beer Call est déjà en cours tout près ({int(distance)}m) ! Rejoins-le plutôt.")
-
-            # YOLO inference
             with open(input_path, "rb") as f:
                 file_bytes = f.read()
 
@@ -179,10 +165,42 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
 
         # 2. Phase de finalisation (verrou final)
         db_finalize = db_factory()
+        apero_created = False
         try:
             locked_job = db_finalize.query(BeerCallJob).with_for_update().filter(BeerCallJob.id == job_id).first()
             if not locked_job or locked_job.owner_id != owner_id or locked_job.status != BeerCallJobStatus.RUNNING:
                 return # Perte du lease
+                
+            # Verrou sur la Squad pour éviter la création concurrente de deux apéros dans la même squad
+            locked_squad = db_finalize.query(Squad).with_for_update().filter(Squad.id == locked_job.squad_id).first()
+            
+            # Vérifications métier sous verrou si le YOLO a réussi
+            if final_status == BeerCallJobStatus.SUCCEEDED:
+                now = datetime.now(timezone.utc)
+                user_active_apero = db_finalize.query(Apero).filter(
+                    Apero.creator_id == locked_job.creator_id,
+                    Apero.status == AperoStatus.ACTIVE,
+                    Apero.ended_at > now,
+                ).first()
+
+                if user_active_apero:
+                    final_status = BeerCallJobStatus.REJECTED
+                    error_message = "Tu as déjà lancé un Beer Call il y a moins de 4 heures ! Laisse les autres profiter de celui-ci avant d'en recréer un."
+
+                active_aperos = db_finalize.query(Apero).filter(
+                    Apero.squad_id == locked_job.squad_id,
+                    Apero.status == AperoStatus.ACTIVE,
+                    Apero.ended_at > now,
+                ).all()
+
+                for existing_apero in active_aperos:
+                    distance = calculate_geodistance(
+                        locked_job.latitude, locked_job.longitude,
+                        existing_apero.latitude, existing_apero.longitude
+                    )
+                    if distance <= 500:
+                        final_status = BeerCallJobStatus.REJECTED
+                        error_message = f"Un Beer Call est déjà en cours tout près ({int(distance)}m) ! Rejoins-le plutôt."
             
             if final_status == BeerCallJobStatus.SUCCEEDED:
                 # Promotion photo
@@ -225,6 +243,7 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
                     payload={"type": "REFRESH_SQUAD", "action": "CREATE"}
                 )
                 db_finalize.add(event)
+                apero_created = True
 
             elif final_status == BeerCallJobStatus.REJECTED:
                 locked_job.status = BeerCallJobStatus.REJECTED
@@ -265,6 +284,18 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
             db_finalize.rollback()
         finally:
             db_finalize.close()
+
+        if apero_created:
+            try:
+                db_notify = db_factory()
+                squad = db_notify.query(Squad).filter(Squad.id == locked_job.squad_id).first()
+                if squad:
+                    tokens = [member.fcm_token for member in squad.members if member.fcm_token and member.id != locked_job.creator_id]
+                    if tokens:
+                        send_push_notifications(tokens, "Nouveau Beer Call ! 🍻", f"{locked_job.location_name} t'attend !")
+                db_notify.close()
+            except Exception as e:
+                logger.error(f"Erreur d'envoi de notification push: {e}")
 
     finally:
         db.close()

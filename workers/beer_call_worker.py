@@ -44,10 +44,16 @@ def claim_and_process_job():
     try:
         now = datetime.now(timezone.utc)
         timeout_threshold = now - timedelta(minutes=15)
+        retry_delay_1 = now - timedelta(seconds=10)
+        retry_delay_2 = now - timedelta(seconds=60)
         
-        # Trouver un job PENDING ou RUNNING expiré
+        # Trouver un job PENDING (avec gestion du délai selon tentatives) ou RUNNING expiré
         job = db.query(BeerCallJob).with_for_update(skip_locked=True).filter(
-            (BeerCallJob.status == BeerCallJobStatus.PENDING) |
+            ((BeerCallJob.status == BeerCallJobStatus.PENDING) & (
+                (BeerCallJob.attempts == 0) |
+                ((BeerCallJob.attempts == 1) & (BeerCallJob.updated_at < retry_delay_1)) |
+                ((BeerCallJob.attempts >= 2) & (BeerCallJob.updated_at < retry_delay_2))
+            )) |
             ((BeerCallJob.status == BeerCallJobStatus.RUNNING) & (BeerCallJob.updated_at < timeout_threshold))
         ).order_by(BeerCallJob.created_at.asc()).first()
         
@@ -83,12 +89,13 @@ def purge_orphans():
         now = datetime.now(timezone.utc)
         threshold = now - timedelta(hours=1)
         
-        expired_jobs = db.query(BeerCallJob).filter(
-            BeerCallJob.status.in_([BeerCallJobStatus.UPLOADING, BeerCallJobStatus.PENDING]),
+        # 1. Abandonnés (UPLOADING) : on supprime tout
+        abandoned_jobs = db.query(BeerCallJob).filter(
+            BeerCallJob.status == BeerCallJobStatus.UPLOADING,
             BeerCallJob.created_at < threshold
         ).all()
         
-        for job in expired_jobs:
+        for job in abandoned_jobs:
             input_path = f"uploads/jobs/{job.id}.input"
             tmp_path = f"uploads/jobs/{job.id}.tmp"
             if os.path.exists(input_path):
@@ -96,6 +103,17 @@ def purge_orphans():
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
             db.delete(job)
+
+        # 2. Terminaux (REJECTED, FAILED) : on supprime les fichiers mais on conserve la DB
+        terminal_jobs = db.query(BeerCallJob).filter(
+            BeerCallJob.status.in_([BeerCallJobStatus.REJECTED, BeerCallJobStatus.FAILED]),
+            BeerCallJob.updated_at < threshold
+        ).all()
+        
+        for job in terminal_jobs:
+            input_path = f"uploads/jobs/{job.id}.input"
+            if os.path.exists(input_path):
+                os.remove(input_path)
             
         db.commit()
     except Exception as e:

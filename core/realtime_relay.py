@@ -8,12 +8,12 @@ from core.websocket import manager
 
 logger = logging.getLogger(__name__)
 
-def fetch_and_lock_events():
+def fetch_events_to_dispatch():
     db = SessionLocal()
     try:
         events = db.query(RealtimeEvent).filter(
             RealtimeEvent.dispatched_at.is_(None)
-        ).order_by(RealtimeEvent.created_at.asc()).limit(50).with_for_update(skip_locked=True).all()
+        ).order_by(RealtimeEvent.created_at.asc()).limit(50).all()
         
         results = []
         for e in events:
@@ -22,13 +22,25 @@ def fetch_and_lock_events():
                 "squad_id": e.squad_id,
                 "payload": e.payload
             })
-            e.dispatched_at = datetime.now(timezone.utc)
-        db.commit()
         return results
     except Exception as e:
-        db.rollback()
         logger.error(f"Error fetching events: {e}")
         return []
+    finally:
+        db.close()
+
+def mark_events_dispatched(event_ids: list):
+    if not event_ids:
+        return
+    db = SessionLocal()
+    try:
+        db.query(RealtimeEvent).filter(RealtimeEvent.id.in_(event_ids)).update(
+            {"dispatched_at": datetime.now(timezone.utc)}, synchronize_session=False
+        )
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Error marking events dispatched: {e}")
     finally:
         db.close()
 
@@ -55,9 +67,15 @@ async def realtime_relay_loop(stop_event: asyncio.Event):
     purge_counter = 0
     while not stop_event.is_set():
         try:
-            events = await asyncio.to_thread(fetch_and_lock_events)
+            events = await asyncio.to_thread(fetch_events_to_dispatch)
+            
+            dispatched_ids = []
             for e in events:
                 await manager.broadcast_to_squad(e["squad_id"], e["payload"])
+                dispatched_ids.append(e["id"])
+                
+            if dispatched_ids:
+                await asyncio.to_thread(mark_events_dispatched, dispatched_ids)
             
             purge_counter += 1
             if purge_counter >= 60: # ~ every minute if polling every 1s

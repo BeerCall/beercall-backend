@@ -225,6 +225,36 @@ async def create_beer_call(
         }
     )
 
+from models.beer_call_job import BeerCallJob
+
+@router.get("/{squad_id}/beer-calls/jobs/{job_id}")
+async def get_beer_call_job(
+    squad_id: int,
+    job_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    squad = db.query(Squad).filter(Squad.id == squad_id).first()
+    if not squad:
+        raise HTTPException(status_code=404, detail="Squad introuvable")
+
+    if current_user not in squad.members:
+        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
+
+    job = db.query(BeerCallJob).filter(
+        BeerCallJob.id == job_id,
+        BeerCallJob.squad_id == squad_id
+    ).first()
+
+    if not job:
+        raise HTTPException(status_code=404, detail="Job introuvable")
+
+    return {
+        "id": str(job.id),
+        "status": job.status.value,
+        "reject_reason": "Désolé, aucune boisson détectée !" if job.status.value == "rejected" else None
+    }
+
 @router.post("/{squad_id}/scheduled-beer-calls/")
 def create_scheduled_beer_call(
         squad_id: int,

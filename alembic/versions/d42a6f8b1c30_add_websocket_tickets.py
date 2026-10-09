@@ -35,8 +35,6 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_websocket_tickets_digest'), 'websocket_tickets', ['digest'], unique=True)
     op.create_index('ix_websocket_tickets_squad_expires', 'websocket_tickets', ['squad_id', 'expires_at'], unique=False)
-    with op.batch_alter_table('users') as batch_op:
-        batch_op.drop_column('created_at')
     # ### end Alembic commands ###
 
 def downgrade() -> None:
