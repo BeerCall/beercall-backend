@@ -71,3 +71,32 @@ def override_get_db(db_session):
 def client() -> Generator:
     with TestClient(app) as c:
         yield c
+
+
+@pytest.fixture
+def run_beer_job(db_session, monkeypatch, tmp_path):
+    """Exercise the real claim/finalization path; only image inference is mocked."""
+    from uuid import UUID
+    from sqlalchemy.orm import sessionmaker
+    from models.beer_call_job import BeerCallJob, BeerCallJobStatus
+    from models.apero import Apero
+    from workers import beer_call_worker
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(beer_call_worker, "SessionLocal", sessionmaker(bind=db_session.get_bind()))
+
+    def process(response, drink: bool = True) -> None:
+        assert response.status_code == 202
+        job_id = UUID(response.json()["job_id"])
+        job = db_session.get(BeerCallJob, job_id)
+        assert job.status == BeerCallJobStatus.PENDING
+        assert db_session.query(Apero).filter(Apero.source_job_id == job_id).count() == 0
+        with monkeypatch.context() as context:
+            context.setattr("services.beer_call_jobs.is_drink_detected", lambda _: drink)
+            assert beer_call_worker.claim_and_process_job()
+        db_session.expire_all()
+        assert db_session.get(BeerCallJob, job_id).status == (
+            BeerCallJobStatus.SUCCEEDED if drink else BeerCallJobStatus.REJECTED
+        )
+
+    return process

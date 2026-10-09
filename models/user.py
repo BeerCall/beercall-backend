@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String, JSON
+from datetime import datetime, timezone
+
+from sqlalchemy import Column, DateTime, Integer, String, JSON, func
 from sqlalchemy.orm import relationship
 
 from db.database import Base
@@ -13,6 +15,8 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False,
+                        default=lambda: datetime.now(timezone.utc), server_default=func.now())
     capsules = Column(Integer, default=100)
     avatar_config = Column(JSON, nullable=True)
     badges = relationship("Badge", secondary=user_badges, backref="users")

@@ -64,3 +64,25 @@ def test_run_daily_apero_checks_flop(db_session, test_data):
     
     # verify the recent one is untouched
     assert db_session.query(Apero).filter(Apero.id == recent_scheduled.id).first() is not None
+
+
+def test_daily_check_skips_apero_locked_for_start(db_session, test_data, postgres_engine):
+    from sqlalchemy.orm import Session
+    from services.apero_lifecycle import start_scheduled_apero
+    user, squad = test_data
+    now = datetime.now(timezone.utc)
+    apero = Apero(creator_id=user.id, squad_id=squad.id, status=AperoStatus.SCHEDULED,
+                  scheduled_for=now - timedelta(hours=5), latitude=48.8, longitude=2.3)
+    db_session.add(apero)
+    db_session.commit()
+    apero_id = apero.id
+    with Session(postgres_engine) as starter, Session(postgres_engine) as daily:
+        starter.query(Apero).filter(Apero.id == apero_id).with_for_update().one()
+        assert run_daily_apero_checks(daily, now) == 0
+        started, result = start_scheduled_apero(starter, apero_id, user.id, "test.jpg", now)
+        assert result == "started"
+        starter.commit()
+    db_session.expire_all()
+    assert db_session.get(Apero, apero_id).status == AperoStatus.ACTIVE
+    db_session.refresh(user)
+    assert not user.badges

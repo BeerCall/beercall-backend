@@ -4,12 +4,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db.database import Base
 from models.user import User
+from models.squad import Squad
 from models.apero import Apero, AperoStatus, AperoParticipant, ParticipationStatus
 from services.apero_lifecycle import validate_distance, APERO_DURATION, MAX_START_DISTANCE_METERS, get_apero_for_squad, get_squad_member
 
 def test_apero_lifecycle_methods(db_session):
     user = User(username="lifecycleuser", hashed_password="pw", avatar_config={})
     db_session.add(user)
+    db_session.add(Squad(id=999, name="Lifecycle", invite_code="lifecycle"))
     db_session.commit()
     
     apero = Apero(

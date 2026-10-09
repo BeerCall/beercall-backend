@@ -230,7 +230,7 @@ from models.beer_call_job import BeerCallJob
 @router.get("/{squad_id}/beer-calls/jobs/{job_id}")
 async def get_beer_call_job(
     squad_id: int,
-    job_id: str,
+    job_id: uuid.UUID,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):

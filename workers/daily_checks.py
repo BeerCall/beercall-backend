@@ -9,7 +9,7 @@ from services.gamification import run_daily_apero_checks
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("daily_worker")
 
-def do_daily_checks():
+def do_daily_checks() -> None:
     logger.info("🕒 Lancement de la tâche cron : daily_apero_checks")
     db = SessionLocal()
     try:
@@ -21,13 +21,13 @@ def do_daily_checks():
     finally:
         db.close()
 
-async def main():
+async def main() -> None:
     logger.info("🚀 Démarrage du Daily Worker")
 
     # Rattrapage au lancement
     do_daily_checks()
 
-    scheduler = AsyncIOScheduler()
+    scheduler = AsyncIOScheduler(timezone="UTC")
     scheduler.add_job(do_daily_checks, 'cron', hour=0, minute=5) # 00:05 UTC
     scheduler.start()
     
@@ -35,7 +35,7 @@ async def main():
 
     stop_event = asyncio.Event()
 
-    def stop_worker():
+    def stop_worker() -> None:
         logger.info("🛑 Signal reçu, arrêt du worker...")
         stop_event.set()
 

@@ -4,6 +4,7 @@ import logging
 import shutil
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from fastapi import HTTPException
 from models.beer_call_job import BeerCallJob, BeerCallJobStatus
 from models.realtime_event import RealtimeEvent
 from models.apero import Apero, AperoStatus, AperoParticipant, ParticipationStatus
@@ -28,9 +29,8 @@ def enqueue_beer_call_job(
 ) -> dict:
     # 0. Valider le format de l'Idempotency-Key
     try:
-        uuid.UUID(idempotency_key)
+        idempotency_key = str(uuid.UUID(idempotency_key))
     except ValueError:
-        from fastapi import HTTPException
         raise HTTPException(status_code=422, detail="Format Idempotency-Key invalide, doit être un UUID.")
 
     # 1. Vérifier l'idempotence AVANT les règles métier
@@ -41,10 +41,9 @@ def enqueue_beer_call_job(
 
     if existing_job:
         if (existing_job.squad_id != squad_id or 
-            abs(existing_job.latitude - latitude) > 0.0001 or 
-            abs(existing_job.longitude - longitude) > 0.0001 or
+            existing_job.latitude != latitude or
+            existing_job.longitude != longitude or
             existing_job.location_name != location_name):
-            from fastapi import HTTPException
             raise HTTPException(status_code=409, detail="Idempotency key déjà utilisée pour une requête différente.")
         return {"status": "processing", "job_id": str(existing_job.id), "job_status": existing_job.status.value}
 
@@ -98,10 +97,9 @@ def enqueue_beer_call_job(
         ).first()
         if existing_job:
             if (existing_job.squad_id != squad_id or 
-                abs(existing_job.latitude - latitude) > 0.0001 or 
-                abs(existing_job.longitude - longitude) > 0.0001 or
+                existing_job.latitude != latitude or
+                existing_job.longitude != longitude or
                 existing_job.location_name != location_name):
-                from fastapi import HTTPException
                 raise HTTPException(status_code=409, detail="Idempotency key déjà utilisée pour une requête différente.")
             return {"status": "processing", "job_id": str(existing_job.id), "job_status": existing_job.status.value}
         raise RuntimeError("Conflit lors de la création du job.")

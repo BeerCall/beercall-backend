@@ -23,7 +23,6 @@ class ConnectionManager:
                 ticket_raw = p[len("ticket."):]
 
         if not has_beercall or not ticket_raw:
-            print("REJECTED PROTOCOL:", protocols)
             await websocket.close(code=1008)
             return False
 
@@ -38,7 +37,6 @@ class ConnectionManager:
             ).first()
 
             if not ticket or ticket.consumed_at or ticket.expires_at < now:
-                print("REJECTED TICKET:", ticket)
                 db.rollback()
                 await websocket.close(code=1008)
                 return False

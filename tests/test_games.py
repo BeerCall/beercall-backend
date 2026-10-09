@@ -1,4 +1,5 @@
 import pytest
+import uuid
 from fastapi.testclient import TestClient
 from unittest.mock import patch, AsyncMock
 
@@ -17,12 +18,12 @@ def get_auth_token(client: TestClient, username="gametestuser"):
 
 @patch("api.v1.squads.is_drink_detected")
 @patch("api.v1.squads.send_push_notifications")
-def test_games_lifecycle(mock_push, mock_is_drink, client: TestClient, db_session):
+def test_games_lifecycle(mock_push, mock_is_drink, client: TestClient, db_session, run_beer_job):
     mock_is_drink.return_value = True
 
     # User 1
     token1 = get_auth_token(client, "user_game_creator")
-    headers1 = {"Authorization": f"Bearer {token1}"}
+    headers1 = {"Authorization": f"Bearer {token1}", "Idempotency-Key": str(uuid.uuid4())}
     
     payload = {"name": "Game Squad", "icon": "🎮", "color": "#123456"}
     res = client.post("/api/squads/", json=payload, headers=headers1)
@@ -33,6 +34,7 @@ def test_games_lifecycle(mock_push, mock_is_drink, client: TestClient, db_sessio
     files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers1)
     assert response.status_code == 202
+    run_beer_job(response)
     
     from models.apero import Apero
     apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()
@@ -62,9 +64,9 @@ def test_games_lifecycle(mock_push, mock_is_drink, client: TestClient, db_sessio
     res_action = client.post(f"/api/aperos/{apero_id}/game/action", json=action_data, headers=headers1)
     assert res_action.status_code == 200
 
-def test_games_lifecycle_insufficient_players(client: TestClient, db_session):
+def test_games_lifecycle_insufficient_players(client: TestClient, db_session, run_beer_job):
     token1 = get_auth_token(client, "user_alone")
-    headers1 = {"Authorization": f"Bearer {token1}"}
+    headers1 = {"Authorization": f"Bearer {token1}", "Idempotency-Key": str(uuid.uuid4())}
     
     res = client.post("/api/squads/", json={"name": "Alone Squad", "icon": "🥺", "color": "#111"}, headers=headers1)
     squad_id = res.json()["id"]
@@ -76,6 +78,7 @@ def test_games_lifecycle_insufficient_players(client: TestClient, db_session):
         files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
         response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers1)
         assert response.status_code == 202
+        run_beer_job(response)
         
         from models.apero import Apero
         apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()

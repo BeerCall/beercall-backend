@@ -88,7 +88,7 @@ def test_get_squad_details(client: TestClient, db_session):
 
 @patch("api.v1.squads.is_drink_detected")
 @patch("api.v1.squads.send_push_notifications")
-def test_create_beer_call(mock_push, mock_is_drink, client: TestClient, db_session):
+def test_create_beer_call(mock_push, mock_is_drink, client: TestClient, db_session, run_beer_job):
     mock_is_drink.return_value = True
 
     token = get_auth_token(client, "user_beercall")
@@ -106,8 +106,11 @@ def test_create_beer_call(mock_push, mock_is_drink, client: TestClient, db_sessi
     # Fix Magic Number for A04:2021 File Upload Security Check
     files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     
+    import uuid
+    headers["Idempotency-Key"] = str(uuid.uuid4())
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers)
     assert response.status_code == 202
+    run_beer_job(response)
     
     from models.apero import Apero
     apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()

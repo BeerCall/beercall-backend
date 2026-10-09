@@ -47,7 +47,7 @@ def test_enqueue_success(setup_data, db_session):
     assert response.json()["status"] == "processing"
     assert "job_id" in response.json()
 
-    job_id = response.json()["job_id"]
+    job_id = uuid.UUID(response.json()["job_id"])
     job = db_session.query(BeerCallJob).filter(BeerCallJob.id == job_id).first()
     assert job is not None
     assert job.status == BeerCallJobStatus.PENDING
@@ -117,3 +117,27 @@ def test_enqueue_idempotency_concurrent(setup_data):
     assert results[0]["job_id"] == results[1]["job_id"]
     assert results[0]["status"] == "processing"
     assert results[1]["status"] == "processing"
+
+
+@pytest.mark.parametrize("field,value", [
+    ("latitude", "48.800000001"), ("longitude", "2.300000001"), ("location_name", "Other bar"),
+])
+def test_divergent_idempotent_request_is_rejected(setup_data, field, value):
+    user, squad = setup_data
+    headers = {**get_auth_headers(user), "Idempotency-Key": str(uuid.uuid4())}
+    data = {"latitude": "48.8", "longitude": "2.3", "location_name": "Original bar"}
+    files = {"file": ("test.jpg", b"\xff\xd8\xff image", "image/jpeg")}
+    first = client.post(f"/api/squads/{squad.id}/beer-calls/", headers=headers, data=data, files=files)
+    assert first.status_code == 202
+    divergent = client.post(f"/api/squads/{squad.id}/beer-calls/", headers=headers,
+                            data={**data, field: value}, files=files)
+    assert divergent.status_code == 409
+
+
+def test_invalid_idempotency_key_is_validation_error(setup_data):
+    user, squad = setup_data
+    response = client.post(f"/api/squads/{squad.id}/beer-calls/",
+                           headers={**get_auth_headers(user), "Idempotency-Key": "invalid"},
+                           data={"latitude": "48.8", "longitude": "2.3", "location_name": "Bar"},
+                           files={"file": ("test.jpg", b"\xff\xd8\xff image", "image/jpeg")})
+    assert response.status_code == 422

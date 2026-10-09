@@ -11,6 +11,11 @@ import hashlib
 from datetime import datetime, timezone, timedelta
 from fastapi import WebSocketDisconnect
 
+@pytest.fixture(autouse=True)
+def require_postgres(postgres_engine):
+    """Row locking and concurrent ticket consumption require real PostgreSQL."""
+    yield
+
 client = TestClient(app)
 
 def test_websocket_rejects_missing_protocols(db_session):
