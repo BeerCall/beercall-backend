@@ -1,4 +1,5 @@
 import os
+import asyncio
 from contextlib import asynccontextmanager
 from pathlib import Path
 from dotenv import load_dotenv
@@ -23,6 +24,8 @@ import logging
 from datetime import datetime, timezone
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from services.gamification import run_daily_apero_checks
+
+from core.realtime_relay import realtime_relay_loop
 
 logger = logging.getLogger(__name__)
 
@@ -121,8 +124,15 @@ async def lifespan(app: FastAPI):
     scheduler.start()
     logger.info("⏰ Scheduler démarré: les vérifications quotidiennes auront lieu à minuit.")
 
+    # --- Démarrage du Realtime Relay ---
+    relay_stop_event = asyncio.Event()
+    relay_task = asyncio.create_task(realtime_relay_loop(relay_stop_event))
+
     yield
 
+    relay_stop_event.set()
+    await relay_task
+    
     scheduler.shutdown()
     logger.info("🛑 Arrêt du serveur Beer Call. À la prochaine ! 🍻")
 
