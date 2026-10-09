@@ -104,3 +104,17 @@ def test_purge_preserves_accepted_pending_job_and_input(contract_data, db_sessio
     db_session.refresh(job)
     assert job.status == BeerCallJobStatus.PENDING
     assert Path(f"uploads/jobs/{job.id}.input").exists()
+
+
+def test_purge_cleans_terminal_input_but_keeps_promoted_photo(contract_data, db_session):
+    users, squads, _ = contract_data
+    job = make_job(db_session, users[0], squads[0], status=BeerCallJobStatus.SUCCEEDED,
+                   attempts=1, updated_at=datetime.now(timezone.utc) - timedelta(hours=2))
+    Path("uploads/aperos").mkdir(parents=True)
+    photo = Path(f"uploads/aperos/{job.id}.jpg")
+    photo.write_bytes(b"promoted photo")
+    beer_call_worker.purge_orphans()
+    db_session.refresh(job)
+    assert job.status == BeerCallJobStatus.SUCCEEDED
+    assert not Path(f"uploads/jobs/{job.id}.input").exists()
+    assert photo.exists()

@@ -86,3 +86,17 @@ def test_daily_check_skips_apero_locked_for_start(db_session, test_data, postgre
     assert db_session.get(Apero, apero_id).status == AperoStatus.ACTIVE
     db_session.refresh(user)
     assert not user.badges
+
+
+def test_daily_checks_are_batched(db_session, test_data, postgres_engine):
+    user, squad = test_data
+    now = datetime.now(timezone.utc)
+    db_session.add_all([
+        Apero(creator_id=user.id, squad_id=squad.id, status=AperoStatus.ENDED,
+              ended_at=now - timedelta(hours=1), latitude=48.8, longitude=2.3)
+        for _ in range(501)
+    ])
+    db_session.commit()
+    assert run_daily_apero_checks(db_session, now) == 500
+    assert run_daily_apero_checks(db_session, now) == 1
+    assert run_daily_apero_checks(db_session, now) == 0

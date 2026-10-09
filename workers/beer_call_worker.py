@@ -111,16 +111,17 @@ def purge_orphans():
                 os.remove(tmp_path)
             db.delete(job)
 
-        # 2. Terminaux (REJECTED, FAILED) : on supprime les fichiers mais on conserve la DB
+        # 2. Terminaux : nettoyer les inputs, jamais les photos promues ou l'idempotence.
         terminal_jobs = db.query(BeerCallJob).filter(
-            BeerCallJob.status.in_([BeerCallJobStatus.REJECTED, BeerCallJobStatus.FAILED]),
+            BeerCallJob.status.in_([BeerCallJobStatus.SUCCEEDED, BeerCallJobStatus.REJECTED, BeerCallJobStatus.FAILED]),
             BeerCallJob.updated_at < threshold
         ).all()
         
         for job in terminal_jobs:
-            input_path = f"uploads/jobs/{job.id}.input"
-            if os.path.exists(input_path):
-                os.remove(input_path)
+            for extension in ("input", "tmp"):
+                input_path = f"uploads/jobs/{job.id}.{extension}"
+                if os.path.exists(input_path):
+                    os.remove(input_path)
             
         db.commit()
     except Exception as e:
