@@ -1,12 +1,18 @@
 import os
 import uuid
 import logging
+import shutil
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from models.beer_call_job import BeerCallJob, BeerCallJobStatus
-from models.apero import Apero, AperoStatus
+from models.realtime_event import RealtimeEvent
+from models.apero import Apero, AperoStatus, AperoParticipant, ParticipationStatus
+from models.squad import Squad
+from models.user import User
 from datetime import datetime, timezone, timedelta
-from services.photo_validation import calculate_geodistance
+from services.photo_validation import calculate_geodistance, is_drink_detected
+from services.gamification import handle_ia_fraud, apply_beer_call_creation_rewards
+from services.notifications import send_push_notifications
 
 logger = logging.getLogger(__name__)
 
@@ -104,3 +110,161 @@ def enqueue_beer_call_job(
     db.commit()
 
     return {"status": "processing", "job_id": str(new_job.id), "job_status": new_job.status.value}
+
+def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
+    """
+    Traite un job récupéré par un worker.
+    db_factory est une fonction retournant une nouvelle session DB pour pouvoir faire des requêtes hors de la transaction de lease.
+    """
+    db = db_factory()
+    try:
+        # Lire le job pour récupérer les infos
+        job = db.query(BeerCallJob).filter(BeerCallJob.id == job_id).first()
+        if not job or job.owner_id != owner_id or job.status != BeerCallJobStatus.RUNNING:
+            return
+
+        # Chemins des fichiers
+        input_path = f"uploads/jobs/{job.id}.input"
+        
+        # 1. Vérification métier et YOLO
+        try:
+            # Re-vérifier l'unicité (règles métier)
+            now = datetime.now(timezone.utc)
+            user_active_apero = db.query(Apero).filter(
+                Apero.creator_id == job.creator_id,
+                Apero.status == AperoStatus.ACTIVE,
+                Apero.ended_at > now,
+            ).first()
+
+            if user_active_apero:
+                raise ValueError("Tu as déjà lancé un Beer Call il y a moins de 4 heures ! Laisse les autres profiter de celui-ci avant d'en recréer un.")
+
+            active_aperos = db.query(Apero).filter(
+                Apero.squad_id == job.squad_id,
+                Apero.status == AperoStatus.ACTIVE,
+                Apero.ended_at > now,
+            ).all()
+
+            for existing_apero in active_aperos:
+                distance = calculate_geodistance(
+                    job.latitude, job.longitude,
+                    existing_apero.latitude, existing_apero.longitude
+                )
+                if distance <= 500:
+                    raise ValueError(f"Un Beer Call est déjà en cours tout près ({int(distance)}m) ! Rejoins-le plutôt.")
+
+            # YOLO inference
+            with open(input_path, "rb") as f:
+                file_bytes = f.read()
+
+            ia_validation = is_drink_detected(file_bytes)
+
+            if not ia_validation:
+                raise ValueError("Pas de boisson, pas de Bar ! -15 Caps 📉")
+                
+            final_status = BeerCallJobStatus.SUCCEEDED
+            error_message = None
+
+        except ValueError as e:
+            final_status = BeerCallJobStatus.REJECTED
+            error_message = str(e)
+        except RuntimeError as e:
+            # IA technical error
+            final_status = BeerCallJobStatus.PENDING
+            error_message = str(e)
+        except Exception as e:
+            final_status = BeerCallJobStatus.FAILED
+            error_message = "Erreur inattendue lors du traitement."
+            logger.exception("Unexpected error in process_claimed_job")
+
+        # 2. Phase de finalisation (verrou final)
+        db_finalize = db_factory()
+        try:
+            locked_job = db_finalize.query(BeerCallJob).with_for_update().filter(BeerCallJob.id == job_id).first()
+            if not locked_job or locked_job.owner_id != owner_id or locked_job.status != BeerCallJobStatus.RUNNING:
+                return # Perte du lease
+            
+            if final_status == BeerCallJobStatus.SUCCEEDED:
+                # Promotion photo
+                os.makedirs("uploads/aperos", exist_ok=True)
+                apero_photo_path = f"uploads/aperos/{locked_job.id}.jpg" # we assume JPG or fallback, but let's use job.id for uniqueness
+                shutil.copy(input_path, apero_photo_path)
+                
+                now = datetime.now(timezone.utc)
+                new_apero = Apero(
+                    squad_id=locked_job.squad_id,
+                    creator_id=locked_job.creator_id,
+                    location_name=locked_job.location_name,
+                    latitude=locked_job.latitude,
+                    longitude=locked_job.longitude,
+                    photo_path=apero_photo_path,
+                    status=AperoStatus.ACTIVE,
+                    started_at=now,
+                    ended_at=now + timedelta(hours=4),
+                    source_job_id=locked_job.id
+                )
+                db_finalize.add(new_apero)
+                db_finalize.flush()
+
+                creator_participant = AperoParticipant(
+                    apero_id=new_apero.id,
+                    user_id=locked_job.creator_id,
+                    status=ParticipationStatus.JOINED,
+                    photo_path=apero_photo_path
+                )
+                db_finalize.add(creator_participant)
+                
+                user = db_finalize.query(User).filter(User.id == locked_job.creator_id).first()
+                apply_beer_call_creation_rewards(user, locked_job.squad_id, locked_job.location_name, db_finalize)
+
+                locked_job.status = BeerCallJobStatus.SUCCEEDED
+                
+                # Outbox event CREATE
+                event = RealtimeEvent(
+                    squad_id=locked_job.squad_id,
+                    payload={"type": "REFRESH_SQUAD", "action": "CREATE"}
+                )
+                db_finalize.add(event)
+
+            elif final_status == BeerCallJobStatus.REJECTED:
+                locked_job.status = BeerCallJobStatus.REJECTED
+                user = db_finalize.query(User).filter(User.id == locked_job.creator_id).first()
+                if "Pas de boisson" in (error_message or ""):
+                    handle_ia_fraud(user, db_finalize)
+                    
+                # Outbox event REJECTED
+                event = RealtimeEvent(
+                    squad_id=locked_job.squad_id,
+                    payload={"type": "REFRESH_SQUAD", "action": "REJECTED"}
+                )
+                db_finalize.add(event)
+
+            elif final_status == BeerCallJobStatus.PENDING:
+                if locked_job.attempts >= 3:
+                    locked_job.status = BeerCallJobStatus.FAILED
+                else:
+                    locked_job.status = BeerCallJobStatus.PENDING
+                    locked_job.owner_id = None
+                    
+            elif final_status == BeerCallJobStatus.FAILED:
+                if locked_job.attempts >= 3:
+                    locked_job.status = BeerCallJobStatus.FAILED
+                else:
+                    locked_job.status = BeerCallJobStatus.PENDING
+                    locked_job.owner_id = None
+
+            db_finalize.commit()
+            
+            # Suppression du fichier input une fois terminé terminal
+            if locked_job.status in (BeerCallJobStatus.SUCCEEDED, BeerCallJobStatus.REJECTED, BeerCallJobStatus.FAILED):
+                if os.path.exists(input_path):
+                    os.remove(input_path)
+
+        except Exception as e:
+            logger.exception("Finalization failed")
+            db_finalize.rollback()
+        finally:
+            db_finalize.close()
+
+    finally:
+        db.close()
