@@ -19,6 +19,7 @@ def test_empty_to_head_and_downgrade(alembic_config, postgres_engine):
     # empty -> head
     command.upgrade(alembic_config, "head")
 
+
     with postgres_engine.connect() as conn:
         # Check tables
         tables = conn.execute(text(
@@ -54,3 +55,22 @@ def test_empty_to_head_and_downgrade(alembic_config, postgres_engine):
         assert "alembic_version" in tables
         
     command.upgrade(alembic_config, "head")
+
+
+def test_plan_b_preserves_existing_user_timestamp(alembic_config, postgres_engine):
+    from datetime import datetime, timezone
+    command.downgrade(alembic_config, "9c4e6f2a1b7d")
+    timestamp = datetime(2020, 1, 2, tzinfo=timezone.utc)
+    with postgres_engine.begin() as conn:
+        conn.execute(text(
+            "INSERT INTO users (username, hashed_password, created_at) VALUES (:name, :password, :created)"
+        ), {"name": "preserved-user", "password": "unused", "created": timestamp})
+    command.upgrade(alembic_config, "head")
+    with postgres_engine.begin() as conn:
+        assert conn.execute(text(
+            "SELECT created_at FROM users WHERE username = 'preserved-user'"
+        )).scalar_one() == timestamp
+        conn.execute(text("INSERT INTO users (username, hashed_password) VALUES ('default-user', 'unused')"))
+        assert conn.execute(text(
+            "SELECT created_at FROM users WHERE username = 'default-user'"
+        )).scalar_one() is not None

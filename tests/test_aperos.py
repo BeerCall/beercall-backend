@@ -1,4 +1,5 @@
 import pytest
+import uuid
 from fastapi.testclient import TestClient
 from unittest.mock import patch, AsyncMock
 
@@ -17,12 +18,12 @@ def get_auth_token(client: TestClient, username="squadtestuser"):
 
 @patch("api.v1.squads.is_drink_detected")
 @patch("api.v1.squads.send_push_notifications")
-def test_create_and_decline_beer_call(mock_push, mock_is_drink, client: TestClient, db_session):
+def test_create_and_decline_beer_call(mock_push, mock_is_drink, client: TestClient, db_session, run_beer_job):
     mock_is_drink.return_value = True
 
     # User 1 creates squad and beer call
     token1 = get_auth_token(client, "user_creator_decline")
-    headers1 = {"Authorization": f"Bearer {token1}"}
+    headers1 = {"Authorization": f"Bearer {token1}", "Idempotency-Key": str(uuid.uuid4())}
     
     payload = {"name": "Beer Call Squad", "icon": "🍺", "color": "#123456"}
     res = client.post("/api/squads/", json=payload, headers=headers1)
@@ -38,6 +39,7 @@ def test_create_and_decline_beer_call(mock_push, mock_is_drink, client: TestClie
     
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers1)
     assert response.status_code == 202
+    run_beer_job(response)
     
     from models.apero import Apero
     apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()
@@ -55,12 +57,12 @@ def test_create_and_decline_beer_call(mock_push, mock_is_drink, client: TestClie
 
 @patch("api.v1.squads.is_drink_detected")
 @patch("api.v1.squads.send_push_notifications")
-def test_create_and_join_beer_call(mock_push, mock_is_drink, client: TestClient, db_session):
+def test_create_and_join_beer_call(mock_push, mock_is_drink, client: TestClient, db_session, run_beer_job):
     mock_is_drink.return_value = True
 
     # User 1 creates squad and beer call
     token1 = get_auth_token(client, "user_creator_join")
-    headers1 = {"Authorization": f"Bearer {token1}"}
+    headers1 = {"Authorization": f"Bearer {token1}", "Idempotency-Key": str(uuid.uuid4())}
     
     payload = {"name": "Beer Call Squad 2", "icon": "🍺", "color": "#123456"}
     res = client.post("/api/squads/", json=payload, headers=headers1)
@@ -76,6 +78,7 @@ def test_create_and_join_beer_call(mock_push, mock_is_drink, client: TestClient,
     
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers1)
     assert response.status_code == 202
+    run_beer_job(response)
     
     from models.apero import Apero
     apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()

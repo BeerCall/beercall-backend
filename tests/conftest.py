@@ -2,7 +2,9 @@ import os
 import pytest
 
 # Ensure we use the test database before anything else is imported
-if "TEST_DATABASE_URL" not in os.environ:
+if "TEST_DATABASE_URL" in os.environ:
+    os.environ["DATABASE_URL"] = os.environ["TEST_DATABASE_URL"]
+else:
     os.environ["DATABASE_URL"] = "sqlite:///./test_db.sqlite"
 
 from sqlalchemy import create_engine
@@ -10,6 +12,7 @@ from sqlalchemy.orm import sessionmaker
 from typing import Generator
 import asyncio
 from db.database import Base
+import models
 from fastapi.testclient import TestClient
 
 from main import app
@@ -19,10 +22,11 @@ from main import app
 # Note : SQLite ne supporte pas l'async natif simplement avec sqlalchemy standard,
 # on utilise donc un driver synchrone pour les tests.
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test_db.sqlite"
+SQLALCHEMY_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "sqlite:///./test_db.sqlite")
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"check_same_thread": False} if "sqlite" in SQLALCHEMY_DATABASE_URL else {}
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -67,3 +71,32 @@ def override_get_db(db_session):
 def client() -> Generator:
     with TestClient(app) as c:
         yield c
+
+
+@pytest.fixture
+def run_beer_job(db_session, monkeypatch, tmp_path):
+    """Exercise the real claim/finalization path; only image inference is mocked."""
+    from uuid import UUID
+    from sqlalchemy.orm import sessionmaker
+    from models.beer_call_job import BeerCallJob, BeerCallJobStatus
+    from models.apero import Apero
+    from workers import beer_call_worker
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(beer_call_worker, "SessionLocal", sessionmaker(bind=db_session.get_bind()))
+
+    def process(response, drink: bool = True) -> None:
+        assert response.status_code == 202
+        job_id = UUID(response.json()["job_id"])
+        job = db_session.get(BeerCallJob, job_id)
+        assert job.status == BeerCallJobStatus.PENDING
+        assert db_session.query(Apero).filter(Apero.source_job_id == job_id).count() == 0
+        with monkeypatch.context() as context:
+            context.setattr("services.beer_call_jobs.is_drink_detected", lambda _: drink)
+            assert beer_call_worker.claim_and_process_job()
+        db_session.expire_all()
+        assert db_session.get(BeerCallJob, job_id).status == (
+            BeerCallJobStatus.SUCCEEDED if drink else BeerCallJobStatus.REJECTED
+        )
+
+    return process

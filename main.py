@@ -1,4 +1,5 @@
 import os
+import asyncio
 from contextlib import asynccontextmanager
 from pathlib import Path
 from dotenv import load_dotenv
@@ -21,22 +22,10 @@ from api.v1.health import router as health_router
 
 import logging
 from datetime import datetime, timezone
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from services.gamification import run_daily_apero_checks
+
+from core.realtime_relay import realtime_relay_loop
 
 logger = logging.getLogger(__name__)
-
-def scheduled_daily_checks():
-    logger.info("🕒 Lancement de la tâche cron interne : daily_apero_checks")
-    db = SessionLocal()
-    try:
-        run_daily_apero_checks(db, datetime.now(timezone.utc))
-    except Exception as e:
-        logger.error(f"❌ Erreur lors des checks quotidiens: {e}")
-        db.rollback()
-    finally:
-        db.close()
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -115,15 +104,15 @@ async def lifespan(app: FastAPI):
 
     db.close()
 
-    # --- Démarrage du Scheduler (Cron interne) ---
-    scheduler = AsyncIOScheduler()
-    scheduler.add_job(scheduled_daily_checks, 'cron', hour=0, minute=0) # Tous les jours à minuit
-    scheduler.start()
-    logger.info("⏰ Scheduler démarré: les vérifications quotidiennes auront lieu à minuit.")
+    # --- Démarrage du Realtime Relay ---
+    relay_stop_event = asyncio.Event()
+    relay_task = asyncio.create_task(realtime_relay_loop(relay_stop_event))
 
     yield
 
-    scheduler.shutdown()
+    relay_stop_event.set()
+    await relay_task
+    
     logger.info("🛑 Arrêt du serveur Beer Call. À la prochaine ! 🍻")
 
 

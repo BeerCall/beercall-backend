@@ -1,4 +1,5 @@
 import pytest
+import uuid
 from fastapi.testclient import TestClient
 from unittest.mock import patch, AsyncMock
 
@@ -17,11 +18,11 @@ def get_auth_token(client: TestClient, username="squadtestuser"):
 
 @patch("api.v1.squads.is_drink_detected", new_callable=AsyncMock)
 @patch("api.v1.squads.send_push_notifications", new_callable=AsyncMock)
-def test_beer_call_worlds(mock_push, mock_is_drink, client: TestClient, db_session):
+def test_beer_call_worlds(mock_push, mock_is_drink, client: TestClient, db_session, run_beer_job):
     mock_is_drink.return_value = True
 
     token1 = get_auth_token(client, "world_creator")
-    headers1 = {"Authorization": f"Bearer {token1}"}
+    headers1 = {"Authorization": f"Bearer {token1}", "Idempotency-Key": str(uuid.uuid4())}
     
     payload = {"name": "World Squad", "icon": "🌍", "color": "#123"}
     res = client.post("/api/squads/", json=payload, headers=headers1)
@@ -36,6 +37,7 @@ def test_beer_call_worlds(mock_push, mock_is_drink, client: TestClient, db_sessi
     files = {"file": ("test.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
     response = client.post(f"/api/squads/{squad_id}/beer-calls/", data=data, files=files, headers=headers1)
     assert response.status_code == 202
+    run_beer_job(response)
     
     from models.apero import Apero
     apero = db_session.query(Apero).filter(Apero.squad_id == squad_id).first()

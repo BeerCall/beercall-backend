@@ -1,7 +1,7 @@
 import enum
 from datetime import timedelta
 
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Enum, JSON, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Enum, JSON, UniqueConstraint, UUID
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from db.database import Base
@@ -30,6 +30,7 @@ class Apero(Base):
     started_at = Column(DateTime(timezone=True), nullable=True, index=True)
     ended_at = Column(DateTime(timezone=True), nullable=True)
     daily_check_processed_at = Column(DateTime(timezone=True), nullable=True, index=True)
+    source_job_id = Column(UUID(as_uuid=True), ForeignKey("beer_call_jobs.id", ondelete="SET NULL"), unique=True, nullable=True)
 
     creator = relationship("User", backref="aperos_created")
     squad = relationship("Squad", backref="aperos")

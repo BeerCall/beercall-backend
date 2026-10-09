@@ -6,6 +6,9 @@ from models.apero import Apero, AperoStatus, AperoParticipant, ParticipationStat
 from models.gamification import Badge
 
 def test_gamification_functions(db_session):
+    from models.squad import Squad
+    db_session.add(Squad(id=100, name="Gamification", invite_code="gamification"))
+    db_session.commit()
     # Seed badge
     badge = Badge(id="FAUSSAIRE", name="Faussaire", description="desc", icon="X")
     badge2 = Badge(id="BAPTEME", name="Bapteme", description="desc", icon="X")
@@ -45,6 +48,9 @@ def test_gamification_functions(db_session):
     assert u.capsules > 85
 
 def test_daily_apero_checks(db_session):
+    from models.squad import Squad
+    db_session.add(Squad(id=1, name="Daily", invite_code="daily"))
+    db_session.commit()
     badge3 = Badge(id="REMI_SANS_AMIS", name="Remi", description="desc", icon="X")
     badge4 = Badge(id="FLOP_PERSONNE_N_EST_VENU", name="Flop", description="desc", icon="X")
     # avoid duplicates if previous test already added, but it's isolated per function so it's fine
@@ -66,11 +72,19 @@ def test_daily_apero_checks(db_session):
     # Scheduled but time passed, no participants (flop)
     apero2 = Apero(
         id=102, squad_id=1, creator_id=101, status=AperoStatus.SCHEDULED, latitude=48.8, longitude=2.3, location_name="Loc",
-        scheduled_for=now - timedelta(hours=1), daily_check_processed_at=None
+        scheduled_for=now - timedelta(hours=5), daily_check_processed_at=None
     )
 
-    db_session.add_all([apero1, apero2, p1])
+    within_grace = Apero(
+        id=103, squad_id=1, creator_id=101, status=AperoStatus.SCHEDULED,
+        latitude=48.8, longitude=2.3, location_name="Grace",
+        scheduled_for=now - timedelta(hours=1), daily_check_processed_at=None,
+    )
+    db_session.add_all([apero1, apero2, within_grace, p1])
     db_session.commit()
 
     processed = run_daily_apero_checks(db_session, now)
     assert processed == 2
+    db_session.refresh(within_grace)
+    assert within_grace.daily_check_processed_at is None
+    assert within_grace.status == AperoStatus.SCHEDULED

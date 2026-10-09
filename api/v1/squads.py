@@ -2,7 +2,7 @@ import os
 import uuid
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Request, BackgroundTasks, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Request, BackgroundTasks, WebSocket, WebSocketDisconnect, Header
 from fastapi.responses import JSONResponse
 import asyncio
 from db.database import SessionLocal
@@ -31,14 +31,34 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 @router.websocket("/{squad_id}/ws")
-async def websocket_squad_endpoint(websocket: WebSocket, squad_id: int):
+async def websocket_squad_endpoint(websocket: WebSocket, squad_id: int, db: Session = Depends(get_db)):
     """Point d'entrée WebSocket pour le Temps Réel (Vision Produit)."""
-    await manager.connect(websocket, squad_id)
+    success = await manager.connect(websocket, squad_id, db)
+    if not success:
+        return
     try:
         while True:
             await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket, squad_id)
+
+
+from services.websocket_tickets import generate_ticket_for_squad
+
+@router.post("/{squad_id}/ws-ticket")
+def create_websocket_ticket(
+        squad_id: int,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
+):
+    squad = db.query(Squad).filter(Squad.id == squad_id).first()
+    if not squad:
+        raise HTTPException(status_code=404, detail="Squad introuvable")
+
+    if current_user not in squad.members:
+        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
+
+    return generate_ticket_for_squad(db, current_user.id, squad_id)
 
 
 # POST : Créer une Squad
@@ -150,10 +170,12 @@ def process_beer_call_creation(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
+from services.beer_call_jobs import enqueue_beer_call_job
+
 @router.post("/{squad_id}/beer-calls/")
 async def create_beer_call(
         squad_id: int,
-        background_tasks: BackgroundTasks,
+        idempotency_key: str = Header(..., alias="Idempotency-Key"),
         file: UploadFile = File(...),
         latitude: float = Form(...),
         longitude: float = Form(...),
@@ -169,68 +191,69 @@ async def create_beer_call(
     if current_user not in squad.members:
         raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
 
-    # Définir la limite de temps pour un apéro "actif" (4 heures)
-    now = datetime.now(timezone.utc)
-    time_limit = now - timedelta(hours=4)
-
-    # --- NOUVELLE RÈGLE : L'utilisateur a-t-il déjà un apéro en cours ? ---
-    user_active_apero = db.query(Apero).filter(
-        Apero.creator_id == current_user.id,
-        Apero.status == AperoStatus.ACTIVE,
-        Apero.ended_at > now,
-    ).first()
-
-    if user_active_apero:
-        raise HTTPException(
-            status_code=400,
-            detail="Tu as déjà lancé un Beer Call il y a moins de 4 heures ! Laisse les autres profiter de celui-ci avant d'en recréer un."
-        )
-
-    # --- RÈGLE EXISTANTE (1.5) : Vérifier s'il y a déjà un apéro actif à proximité ---
-    active_aperos = db.query(Apero).filter(
-        Apero.squad_id == squad_id,
-        Apero.status == AperoStatus.ACTIVE,
-        Apero.ended_at > now,
-    ).all()
-
-    for existing_apero in active_aperos:
-        distance = calculate_geodistance(
-            latitude, longitude,
-            existing_apero.latitude, existing_apero.longitude
-        )
-        if distance <= 500:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Un Beer Call est déjà en cours tout près ({int(distance)}m) ! Rejoins-le plutôt."
-            )
-
-    # 2. Lire l'image et l'envoyer à l'IA
+    # 2. Validation fichier basique
     file_bytes = await file.read()
-    
     try:
         file_extension = validate_image_file(file_bytes)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-        
-    background_tasks.add_task(
-        process_beer_call_creation,
-        squad_id,
-        current_user.id,
-        location_name,
-        latitude,
-        longitude,
-        file_bytes,
-        file_extension,
-        db
-    )
+
+    # 3. Enqueue
+    try:
+        result = enqueue_beer_call_job(
+            db=db,
+            creator_id=current_user.id,
+            squad_id=squad_id,
+            idempotency_key=idempotency_key,
+            latitude=latitude,
+            longitude=longitude,
+            location_name=location_name,
+            file_bytes=file_bytes,
+            file_extension=file_extension
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except RuntimeError as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
     return JSONResponse(
         status_code=202,
         content={
             "message": "Photo reçue, l'IA analyse ton verre... 📸🤖",
-            "status": "processing"
+            "status": "processing",
+            "job_id": result["job_id"]
         }
     )
+
+from models.beer_call_job import BeerCallJob
+
+@router.get("/{squad_id}/beer-calls/jobs/{job_id}")
+async def get_beer_call_job(
+    squad_id: int,
+    job_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    squad = db.query(Squad).filter(Squad.id == squad_id).first()
+    if not squad:
+        raise HTTPException(status_code=404, detail="Squad introuvable")
+
+    if current_user not in squad.members:
+        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
+
+    job = db.query(BeerCallJob).filter(
+        BeerCallJob.id == job_id,
+        BeerCallJob.squad_id == squad_id
+    ).first()
+
+    if not job:
+        raise HTTPException(status_code=404, detail="Job introuvable")
+
+    return {
+        "id": str(job.id),
+        "status": job.status.value,
+        "reject_reason": "Désolé, aucune boisson détectée !" if job.status.value == "rejected" else None
+    }
 
 @router.post("/{squad_id}/scheduled-beer-calls/")
 def create_scheduled_beer_call(
