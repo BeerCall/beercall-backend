@@ -24,6 +24,7 @@ from services.apero_lifecycle import schedule_apero
 from schemas.squad import SquadResponse, SquadJoin
 from services.squads import create_squad as create_squad_service
 from services.squads import join_squad as join_squad_service
+from services.beer_call_participation import ParticipationConflict, join_beer_call as join_beer_call_service
 from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges, apply_apero_start_rewards, apply_beer_call_creation_rewards, apply_beer_call_join_rewards
 from services.notifications import send_push_notifications, notify_scheduled_apero, notify_started_scheduled_apero
 from services.photo_validation import is_drink_detected, calculate_geodistance, validate_image_file
@@ -435,69 +436,19 @@ async def join_beer_call(
 ):
     actual_apero_id = int(apero_id.replace("bc_", ""))
 
-    # 0. Vérifier si l'utilisateur a déjà répondu
-    existing_participant = db.query(AperoParticipant).filter(
-        AperoParticipant.apero_id == actual_apero_id,
-        AperoParticipant.user_id == current_user.id
-    ).first()
-
-    if existing_participant:
-        raise HTTPException(status_code=400, detail="Tu as déjà répondu à cet appel de la bière !")
-
-    # --- NOUVEAU : VÉRIFICATION GÉOGRAPHIQUE ---
-    apero_obj = db.query(Apero).filter(Apero.id == actual_apero_id).first()
-    squad = db.query(Squad).filter(Squad.id == squad_id).first()
-    if not apero_obj or apero_obj.squad_id != squad_id:
-        raise HTTPException(status_code=404, detail="Apéro introuvable dans cette squad")
-    if not squad or current_user not in squad.members:
-        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
-    if apero_obj.status != AperoStatus.ACTIVE:
-        raise HTTPException(status_code=409, detail="Cet apéro n'est pas actif")
-
-    distance = calculate_geodistance(lat, lon, apero_obj.latitude, apero_obj.longitude)
-
-    if distance > 500:
-        # TRICHERIE DISTANCE : On applique le malus IA direct (ia_fraud_count + malus points)
-        handle_ia_fraud(current_user, db)
-        db.commit()
-        raise HTTPException(
-            status_code=403,
-            detail=f"Triche détectée ! Tu es à {int(distance)}m. Malus appliqué. 📉"
-        )
-    # --------------------------------------------
-
-    # 1. Validation IA de la photo
     file_bytes = await file.read()
-    if not is_drink_detected(file_bytes):
-        handle_ia_fraud(current_user, db)
-        db.commit()
-        raise HTTPException(status_code=400, detail="Pas de boisson, pas de Bar ! -15 Caps 📉")
-
-    # 2. Sauvegarde photo
-    file_path = f"uploads/aperos/reply_{uuid.uuid4()}.jpg"
-    with open(file_path, "wb") as f:
-        f.write(file_bytes)
-
-    total_gained = apply_beer_call_join_rewards(current_user, apero_obj, db)
-
-    # 1. Enregistrement de la participation
-    participant = AperoParticipant(
-        apero_id=actual_apero_id,
-        user_id=current_user.id,
-        status=ParticipationStatus.JOINED,
-        photo_path=file_path
-    )
-
-    from sqlalchemy.exc import IntegrityError
-    import os
     try:
-        db.add(participant)
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        if os.path.exists(file_path):
-            os.remove(file_path)
-        raise HTTPException(status_code=409, detail="Tu as déjà rejoint cet apéro !")
+        total_gained = join_beer_call_service(
+            db, current_user, squad_id, actual_apero_id, lat, lon, file_bytes, is_drink_detected,
+        )
+    except ParticipationConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
     # --- VISION PRODUIT : Temps Réel (WebSockets) ---
     background_tasks.add_task(manager.broadcast_to_squad, squad_id, {"type": "REFRESH_SQUAD", "action": "JOIN"})

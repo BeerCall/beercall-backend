@@ -94,6 +94,24 @@ def test_create_and_join_beer_call(mock_push, mock_is_drink, client: TestClient,
         "lon": 2.3522
     }
     files = {"file": ("test2.jpg", b"\xff\xd8\xff_fake_image_data", "image/jpeg")}
-    response = client.post(f"/api/squads/{squad_id}/beer-calls/bc_{apero_id}/join/", data=join_data, files=files, headers=headers2)
+    from models.user import User
+    from models.apero import AperoParticipant, ParticipationStatus
+    creator = db_session.query(User).filter(User.username == "user_creator_join").one()
+    creator.push_token = "creator-token"
+    declined = User(username="declined-member", hashed_password="unused", push_token="excluded-token")
+    apero.squad.members.append(declined)
+    db_session.flush()
+    db_session.add(AperoParticipant(apero_id=apero_id, user_id=declined.id, status=ParticipationStatus.DECLINED))
+    db_session.commit()
+    mock_push.reset_mock()
+    with patch("api.v1.squads.manager.broadcast_to_squad", new_callable=AsyncMock) as broadcast:
+        response = client.post(f"/api/squads/{squad_id}/beer-calls/bc_{apero_id}/join/", data=join_data, files=files, headers=headers2)
+        broadcast.assert_awaited_once_with(squad_id, {"type": "REFRESH_SQUAD", "action": "JOIN"})
     assert response.status_code == 200
-    assert "bonus" in response.json()
+    assert set(response.json()) == {"message", "bonus"}
+    assert response.json()["message"] == "Tu es au Bar ! 🍻"
+    mock_push.assert_called_once_with(tokens=["creator-token"], title="🚀 UN SOIVARD DE PLUS !", body="user_joiner_apero a ramené sa fraise ! Tournée générale !")
+    response = client.post(f"/api/squads/{squad_id}/beer-calls/bc_{apero_id}/join/", data=join_data, files=files, headers=headers2)
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Tu as déjà répondu à cet appel de la bière !"}
+    mock_push.assert_called_once()
