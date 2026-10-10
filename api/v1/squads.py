@@ -20,6 +20,7 @@ from schemas.apero import AperoDecline, WorldsResponse, ScheduledAperoCreate
 from schemas.squad import SquadCreate, SquadDetailsResponse
 from services.apero_lifecycle import APERO_DURATION, MAX_START_DISTANCE_METERS, get_apero_for_squad, get_squad_member, start_scheduled_apero, validate_distance
 from schemas.squad import SquadResponse, SquadJoin
+from services.squads import create_squad as create_squad_service
 from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges, apply_apero_start_rewards, apply_beer_call_creation_rewards, apply_beer_call_join_rewards
 from services.notifications import send_push_notifications, notify_scheduled_apero, notify_started_scheduled_apero
 from services.photo_validation import is_drink_detected, calculate_geodistance, validate_image_file
@@ -68,21 +69,7 @@ def create_squad(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    # Création de la squad avec un code d'invitation unique
-    new_squad = Squad(
-        name=squad_data.name,
-        icon=squad_data.icon,
-        color=squad_data.color,
-        invite_code=str(uuid.uuid4())[:8].upper()
-    )
-
-    # On ajoute le créateur comme premier membre
-    new_squad.members.append(current_user)
-
-    db.add(new_squad)
-    db.commit()
-    db.refresh(new_squad)
-    return new_squad
+    return create_squad_service(db, current_user, squad_data)
 
 
 # GET : Lister mes Squads

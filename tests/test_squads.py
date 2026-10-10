@@ -30,6 +30,13 @@ def test_create_squad(client: TestClient, db_session):
     assert data["name"] == "My Test Squad"
     assert "invite_code" in data
     assert "id" in data
+    assert set(data) == {"id", "name", "icon", "color", "invite_code"}
+    assert data["icon"] == payload["icon"]
+    assert data["color"] == payload["color"]
+    assert len(data["invite_code"]) == 8
+    from models.squad import Squad
+    squad = db_session.get(Squad, data["id"])
+    assert [member.username for member in squad.members] == ["squadtestuser"]
 
 def test_get_my_squads(client: TestClient, db_session):
     token = get_auth_token(client, "squadtestuser2")
