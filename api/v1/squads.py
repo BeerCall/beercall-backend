@@ -18,7 +18,8 @@ from models.squad import Squad
 from models.user import User
 from schemas.apero import AperoDecline, WorldsResponse, ScheduledAperoCreate
 from schemas.squad import SquadCreate, SquadDetailsResponse
-from services.apero_lifecycle import APERO_DURATION, MAX_START_DISTANCE_METERS, get_apero_for_squad, get_squad_member, start_scheduled_apero, validate_distance
+from services.apero_lifecycle import APERO_DURATION, MAX_START_DISTANCE_METERS, get_apero_for_squad, get_squad_member, validate_distance
+from services.apero_lifecycle import AperoStartConflict, start_scheduled_apero_orchestrated
 from services.apero_lifecycle import schedule_apero
 from schemas.squad import SquadResponse, SquadJoin
 from services.squads import create_squad as create_squad_service
@@ -299,20 +300,17 @@ async def start_scheduled_beer_call(
         db.commit()
         raise HTTPException(status_code=403, detail=f"Tu es à {int(distance)}m, approche-toi à moins de 500m")
     file_bytes = await file.read()
-    if not is_drink_detected(file_bytes):
-        handle_ia_fraud(current_user, db)
-        db.commit()
-        raise HTTPException(status_code=400, detail="Pas de boisson, pas de démarrage")
-    os.makedirs("uploads/aperos", exist_ok=True)
-    file_path = f"uploads/aperos/{uuid.uuid4()}.{(file.filename or 'jpg').split('.')[-1]}"
-    with open(file_path, "wb") as output:
-        output.write(file_bytes)
-    started, result = start_scheduled_apero(db, apero.id, current_user.id, file_path)
-    if not started:
-        db.rollback()
-        raise HTTPException(status_code=409, detail="Cet apéro a déjà été démarré")
-    apply_apero_start_rewards(current_user, started, db)
-    db.commit()
+    try:
+        started = start_scheduled_apero_orchestrated(
+            db, apero, current_user.id, file_bytes, is_drink_detected,
+            (file.filename or 'jpg').split('.')[-1],
+        )
+    except AperoStartConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
     # --- VISION PRODUIT : Temps Réel (WebSockets) ---
     background_tasks.add_task(manager.broadcast_to_squad, squad_id, {"type": "REFRESH_SQUAD", "action": "START"})

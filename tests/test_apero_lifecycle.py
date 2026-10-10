@@ -10,6 +10,9 @@ from services.apero_lifecycle import validate_distance, APERO_DURATION, MAX_STAR
 from services.apero_lifecycle import schedule_apero
 from schemas.apero import ScheduledAperoCreate
 from sqlalchemy.orm import Session
+from pathlib import Path
+from unittest.mock import Mock
+from services.apero_lifecycle import AperoStartConflict, start_scheduled_apero_orchestrated
 
 def test_apero_lifecycle_methods(db_session):
     user = User(username="lifecycleuser", hashed_password="pw", avatar_config={})
@@ -111,3 +114,65 @@ def test_schedule_rejects_missing_squad(db_session: Session, scheduled_context: 
     user, squad = scheduled_context
     with pytest.raises(LookupError, match="^Squad introuvable$"):
         schedule_apero(db_session, user, squad.id + 1, schedule_data())
+
+
+def test_start_orchestration_commits_rewards_and_photo(db_session: Session, scheduled_context: tuple[User, Squad], monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    user, squad = scheduled_context
+    apero = schedule_apero(db_session, user, squad.id, schedule_data())
+    monkeypatch.chdir(tmp_path)
+    detector = Mock(return_value=True)
+    started = start_scheduled_apero_orchestrated(db_session, apero, user.id, b"photo", detector, "jpg")
+    detector.assert_called_once_with(b"photo")
+    assert started.status == AperoStatus.ACTIVE
+    assert Path(started.photo_path).read_bytes() == b"photo"
+    assert started.ended_at - started.started_at == APERO_DURATION
+    db_session.rollback()
+    db_session.expire_all()
+    assert user.capsules == 150
+    assert user.consecutive_joins == 1
+    assert db_session.query(AperoParticipant).count() == 1
+
+
+def test_start_orchestration_rejects_ai_without_photo(db_session: Session, scheduled_context: tuple[User, Squad], monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    user, squad = scheduled_context
+    apero = schedule_apero(db_session, user, squad.id, schedule_data())
+    monkeypatch.chdir(tmp_path)
+    with pytest.raises(ValueError, match="^Pas de boisson, pas de démarrage$"):
+        start_scheduled_apero_orchestrated(db_session, apero, user.id, b"photo", lambda _: False, "jpg")
+    db_session.expire_all()
+    assert user.capsules == 85
+    assert user.ia_fraud_count == 1
+    assert apero.status == AperoStatus.SCHEDULED
+    assert db_session.query(AperoParticipant).count() == 0
+    assert not list(tmp_path.rglob("*.jpg"))
+
+
+def test_start_orchestration_conflict_removes_only_new_photo(db_session: Session, scheduled_context: tuple[User, Squad], monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    user, squad = scheduled_context
+    apero = schedule_apero(db_session, user, squad.id, schedule_data())
+    monkeypatch.chdir(tmp_path)
+    started = start_scheduled_apero_orchestrated(db_session, apero, user.id, b"photo", lambda _: True, "jpg")
+    original_path = Path(started.photo_path)
+    with pytest.raises(AperoStartConflict, match="^Cet apéro a déjà été démarré$"):
+        start_scheduled_apero_orchestrated(db_session, apero, user.id, b"second", lambda _: True, "jpg")
+    assert list(tmp_path.rglob("*.jpg")) == [tmp_path / original_path]
+    assert user.capsules == 150
+    assert db_session.query(AperoParticipant).count() == 1
+
+
+@pytest.mark.parametrize("failure", ["rewards", "commit"])
+def test_start_orchestration_rolls_back_and_cleans_photo(db_session: Session, scheduled_context: tuple[User, Squad], monkeypatch: pytest.MonkeyPatch, tmp_path: Path, failure: str) -> None:
+    user, squad = scheduled_context
+    apero = schedule_apero(db_session, user, squad.id, schedule_data())
+    monkeypatch.chdir(tmp_path)
+    fail = Mock(side_effect=RuntimeError("storage failure"))
+    if failure == "rewards":
+        monkeypatch.setattr("services.apero_lifecycle.apply_apero_start_rewards", fail)
+    else:
+        monkeypatch.setattr(db_session, "commit", fail)
+    with pytest.raises(RuntimeError, match="storage failure"):
+        start_scheduled_apero_orchestrated(db_session, apero, user.id, b"photo", lambda _: True, "jpg")
+    assert apero.status == AperoStatus.SCHEDULED
+    assert user.capsules == 100
+    assert db_session.query(AperoParticipant).count() == 0
+    assert not list(tmp_path.rglob("*.jpg"))

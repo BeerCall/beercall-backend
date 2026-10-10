@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta, timezone
 from enum import Enum
-from typing import Optional
+from typing import Callable, Optional
+import os
+import uuid
 
 from sqlalchemy.orm import Session
 
@@ -9,6 +11,7 @@ from models.squad import Squad
 from models.user import User
 from schemas.apero import ScheduledAperoCreate
 from services.photo_validation import calculate_geodistance
+from services.gamification import apply_apero_start_rewards, handle_ia_fraud
 
 APERO_DURATION = timedelta(hours=4)
 MAX_START_DISTANCE_METERS = 500
@@ -103,3 +106,36 @@ def start_scheduled_apero(db: Session, apero_id: int, user_id: int, photo_path: 
     db.add(participant)
     db.flush()
     return apero, "started"
+
+
+class AperoStartConflict(ValueError):
+    """The scheduled apero was already started by another request."""
+
+
+def start_scheduled_apero_orchestrated(
+    db: Session, apero: Apero, user_id: int, file_bytes: bytes,
+    detector: Callable[[bytes], bool], file_extension: str,
+) -> Apero:
+    user = db.get(User, user_id)
+    if user is None:
+        raise LookupError("Utilisateur introuvable")
+    if not detector(file_bytes):
+        handle_ia_fraud(user, db)
+        db.commit()
+        raise ValueError("Pas de boisson, pas de démarrage")
+    os.makedirs("uploads/aperos", exist_ok=True)
+    file_path = f"uploads/aperos/{uuid.uuid4()}.{file_extension}"
+    try:
+        with open(file_path, "wb") as output:
+            output.write(file_bytes)
+        started, result = start_scheduled_apero(db, apero.id, user_id, file_path)
+        if started is None:
+            raise AperoStartConflict("Cet apéro a déjà été démarré")
+        apply_apero_start_rewards(user, started, db)
+        db.commit()
+        return started
+    except Exception:
+        db.rollback()
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        raise
