@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from models.apero import Apero, AperoParticipant, AperoStatus, ParticipationStatus
 from models.squad import Squad
 from models.user import User
-from services.gamification import apply_beer_call_join_rewards, handle_ia_fraud
+from services.gamification import apply_beer_call_join_rewards, award_badge, handle_ia_fraud
 from services.photo_validation import calculate_geodistance
 
 
@@ -61,4 +61,37 @@ def join_beer_call(
             os.remove(file_path)
         if isinstance(exc, IntegrityError):
             raise ParticipationConflict("Tu as déjà rejoint cet apéro !") from exc
+        raise
+
+
+def decline_beer_call(db: Session, user: User, squad_id: int, apero_id: int, excuse: str | None) -> None:
+    squad = db.get(Squad, squad_id)
+    apero = db.get(Apero, apero_id)
+    if not squad or user not in squad.members:
+        raise PermissionError("Tu ne fais pas partie de cette Squad")
+    if not apero or apero.squad_id != squad_id:
+        raise LookupError("Apéro introuvable dans cette squad")
+    if apero.status != AperoStatus.ACTIVE:
+        raise ParticipationConflict("Cet apéro n'est pas actif")
+    existing = db.query(AperoParticipant).filter(
+        AperoParticipant.apero_id == apero_id, AperoParticipant.user_id == user.id,
+    ).first()
+    if existing:
+        raise ValueError("Tu as déjà répondu à cet appel de la bière !")
+    participant = AperoParticipant(
+        apero_id=apero_id, user_id=user.id, status=ParticipationStatus.DECLINED, excuse=excuse,
+    )
+    try:
+        user.capsules += 15
+        user.consecutive_joins = 0
+        user.consecutive_piscine += 1
+        user.consecutive_declines = user.consecutive_declines + 1 if excuse else 0
+        if user.consecutive_piscine >= 5:
+            award_badge(user, "NAGEUR", db)
+        if user.consecutive_declines >= 5:
+            award_badge(user, "CASANIER", db)
+        db.add(participant)
+        db.commit()
+    except Exception:
+        db.rollback()
         raise

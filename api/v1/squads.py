@@ -25,6 +25,7 @@ from schemas.squad import SquadResponse, SquadJoin
 from services.squads import create_squad as create_squad_service
 from services.squads import join_squad as join_squad_service
 from services.beer_call_participation import ParticipationConflict, join_beer_call as join_beer_call_service
+from services.beer_call_participation import decline_beer_call as decline_beer_call_service
 from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges, apply_apero_start_rewards, apply_beer_call_creation_rewards, apply_beer_call_join_rewards
 from services.notifications import send_push_notifications, notify_scheduled_apero, notify_started_scheduled_apero
 from services.photo_validation import is_drink_detected, calculate_geodistance, validate_image_file
@@ -487,47 +488,16 @@ async def decline_beer_call(
         current_user: User = Depends(get_current_user)
 ):
     actual_apero_id = int(apero_id.replace("bc_", ""))
-    squad = db.query(Squad).filter(Squad.id == squad_id).first()
-    apero = db.query(Apero).filter(Apero.id == actual_apero_id).first()
-    if not squad or current_user not in squad.members:
-        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
-    if not apero or apero.squad_id != squad_id:
-        raise HTTPException(status_code=404, detail="Apéro introuvable dans cette squad")
-    if apero.status != AperoStatus.ACTIVE:
-        raise HTTPException(status_code=409, detail="Cet apéro n'est pas actif")
-
-    existing_participant = db.query(AperoParticipant).filter(
-        AperoParticipant.apero_id == actual_apero_id,
-        AperoParticipant.user_id == current_user.id
-    ).first()
-
-    if existing_participant:
-        raise HTTPException(status_code=400, detail="Tu as déjà répondu à cet appel de la bière !")
-
-    participant = AperoParticipant(
-        apero_id=actual_apero_id,
-        user_id=current_user.id,
-        status=ParticipationStatus.DECLINED,
-        excuse=decline_data.excuse
-    )
-
-    current_user.capsules += 15
-    current_user.consecutive_joins = 0
-    current_user.consecutive_piscine += 1
-
-    if decline_data.excuse:
-        current_user.consecutive_declines += 1
-    else:
-        current_user.consecutive_declines = 0  # Casse la série si pas d'excuse !
-
-    if current_user.consecutive_piscine >= 5:
-        award_badge(current_user, "NAGEUR", db)
-
-    if current_user.consecutive_declines >= 5:
-        award_badge(current_user, "CASANIER", db)
-
-    db.add(participant)
-    db.commit()
+    try:
+        decline_beer_call_service(db, current_user, squad_id, actual_apero_id, decline_data.excuse)
+    except ParticipationConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
     # --- VISION PRODUIT : Temps Réel (WebSockets) ---
     background_tasks.add_task(manager.broadcast_to_squad, squad_id, {"type": "REFRESH_SQUAD", "action": "DECLINE"})
