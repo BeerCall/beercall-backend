@@ -37,9 +37,13 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 @router.websocket("/{squad_id}/ws")
-async def websocket_squad_endpoint(websocket: WebSocket, squad_id: int, db: Session = Depends(get_db)):
+async def websocket_squad_endpoint(websocket: WebSocket, squad_id: int):
     """Point d'entrée WebSocket pour le Temps Réel (Vision Produit)."""
-    success = await manager.connect(websocket, squad_id, db)
+    db = SessionLocal()
+    try:
+        success = await manager.connect(websocket, squad_id, db)
+    finally:
+        db.close()
     if not success:
         return
     try:
