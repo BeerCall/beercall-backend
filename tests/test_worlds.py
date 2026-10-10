@@ -49,3 +49,12 @@ def test_beer_call_worlds(mock_push, mock_is_drink, client: TestClient, db_sessi
     assert "worlds" in res_world.json()
     assert "bar" in res_world.json()["worlds"]
     assert "piscine" in res_world.json()["worlds"]
+
+    # ✅ Les preuves photo doivent être des chemins RELATIFS (résolus par le navigateur
+    # sur l'origine courante), jamais des URL absolues construites depuis le header Host.
+    bar = res_world.json()["worlds"]["bar"]["participants"]
+    assert bar, "le créateur JOINED doit apparaître au bar"
+    url = bar[0]["proof_photo_url"]
+    assert url is not None
+    assert url.startswith("/uploads/aperos/")
+    assert not url.startswith("http")
