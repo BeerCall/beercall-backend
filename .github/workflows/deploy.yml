@@ -1,4 +1,4 @@
-name: Deploy Trigger
+name: CI
 
 on:
   push:
@@ -50,16 +50,3 @@ jobs:
         env:
           TEST_DATABASE_URL: "postgresql+psycopg://beercall:beercall@localhost:55432/beercall_test"
         run: python -m pytest tests/postgres
-
-  trigger:
-    needs: test
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger beercall-app deployment
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.PAT_FOR_DEPLOYMENT }}
-          repository: BeerCall/beercall-app
-          event-type: trigger-deploy
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
