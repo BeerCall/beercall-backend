@@ -4,6 +4,7 @@ from typing import Dict, Any
 from sqlalchemy.orm import Session
 
 from models.apero import Apero
+from core import config
 from .base import BaseMiniGame
 
 
@@ -39,7 +40,10 @@ class TurnTransitionGame(BaseMiniGame):
 
             # 1. On tire un jeu AU HASARD
             available_games = [gid for gid in GAME_REGISTRY.keys() if gid != "TURN_TRANSITION"]
-            next_game_id = random.choice(available_games)
+            if config.APP_ENV == "test" and config.BEERCALL_E2E_GAME is not None:
+                next_game_id = config.BEERCALL_E2E_GAME
+            else:
+                next_game_id = random.choice(available_games)
 
             # 2. On change l'ID du jeu
             apero.current_game_id = next_game_id

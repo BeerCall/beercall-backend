@@ -4,6 +4,12 @@ from models.user import User
 from models.squad import Squad
 from models.apero import Apero, AperoStatus, AperoParticipant, ParticipationStatus
 from services.minigames.registry import GAME_REGISTRY
+from services.minigames.transition import TurnTransitionGame
+from core import config
+from unittest.mock import Mock
+import os
+import subprocess
+import sys
 
 def test_all_minigames_generic_flows(db_session):
     # Setup users and squad
@@ -58,3 +64,48 @@ def test_all_minigames_generic_flows(db_session):
             # due to missing action params. 
             # We will at least hit the first lines of handle_action.
             pass
+
+
+def test_forced_game_in_test_environment(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(config, "APP_ENV", "test")
+    monkeypatch.setattr(config, "BEERCALL_E2E_GAME", "BRAIN_DUEL")
+    random_choice = Mock(side_effect=AssertionError("random selection must not run"))
+    monkeypatch.setattr("services.minigames.transition.random.choice", random_choice)
+    setup = Mock()
+    monkeypatch.setattr(GAME_REGISTRY["BRAIN_DUEL"], "setup_game", setup)
+    apero = Apero(current_game_state={})
+    db = Mock()
+    for _ in range(2):
+        TurnTransitionGame().handle_action(apero, db, {"action_id": "START_RANDOM_GAME"})
+        assert apero.current_game_id == "BRAIN_DUEL"
+    assert setup.call_count == 2
+    setup.assert_called_with(apero, db)
+    random_choice.assert_not_called()
+
+
+@pytest.mark.parametrize("app_env, forced", [("production", "BRAIN_DUEL"), ("development", "BRAIN_DUEL"), ("test", None)])
+def test_random_selection_outside_forced_test(monkeypatch: pytest.MonkeyPatch, app_env: str, forced: str | None) -> None:
+    monkeypatch.setattr(config, "APP_ENV", app_env)
+    monkeypatch.setattr(config, "BEERCALL_E2E_GAME", forced)
+    random_choice = Mock(return_value="HOT_POTATO")
+    monkeypatch.setattr("services.minigames.transition.random.choice", random_choice)
+    setup = Mock()
+    monkeypatch.setattr(GAME_REGISTRY["HOT_POTATO"], "setup_game", setup)
+    apero = Apero(current_game_state={})
+    db = Mock()
+    TurnTransitionGame().handle_action(apero, db, {"action_id": "START_RANDOM_GAME"})
+    assert apero.current_game_id == "HOT_POTATO"
+    random_choice.assert_called_once_with([game for game in GAME_REGISTRY if game != "TURN_TRANSITION"])
+    setup.assert_called_once_with(apero, db)
+
+
+def test_unknown_forced_game_rejected_at_startup() -> None:
+    for app_env in ("test", "production"):
+        environment = {**os.environ, "APP_ENV": app_env, "PHOTO_DETECTOR_MODE": "yolo", "BEERCALL_E2E_GAME": "UNKNOWN_GAME"}
+        result = subprocess.run([sys.executable, "-c", "import core.config"], env=environment, capture_output=True, text=True)
+        assert result.returncode != 0
+        assert "ValueError: BEERCALL_E2E_GAME" in result.stderr
+
+
+def test_config_game_ids_match_playable_registry() -> None:
+    assert config.E2E_GAME_IDS == set(GAME_REGISTRY) - {"TURN_TRANSITION"}

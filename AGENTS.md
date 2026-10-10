@@ -26,4 +26,4 @@ Ce fichier définit les directives strictes et l'architecture pour le développe
 ## 🔒 Sécurité & Gestion des Erreurs
 - **Authentification** : Gestion des tokens JWT custom (`core/security.py`) utilisant `OAuth2PasswordBearer`. Hashage avec `bcrypt` (Passlib).
 - **Gestion des Secrets** : Ne jamais hardcoder de clés. Toujours utiliser `.env` ou `os.getenv()`.
-- **Gestion des Erreurs** : En cas d'erreur métier ou de validation, toujours soulever une exception FastAPI structurée (`HTTPException(status_code=X, detail="Message")`). Ne jamais laisser fuiter des stack traces brutes (Exception globales interceptées).
+- **Gestion des Erreurs** : Les services lèvent uniquement des exceptions du domaine (`LookupError`, `ValueError`, `PermissionError`), sans dépendance FastAPI. Les routeurs les traduisent en `HTTPException(status_code=X, detail="Message")` et orchestrent les effets de bord après commit. Ne jamais laisser fuiter des stack traces brutes.

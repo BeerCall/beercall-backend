@@ -18,8 +18,14 @@ from models.squad import Squad
 from models.user import User
 from schemas.apero import AperoDecline, WorldsResponse, ScheduledAperoCreate
 from schemas.squad import SquadCreate, SquadDetailsResponse
-from services.apero_lifecycle import APERO_DURATION, MAX_START_DISTANCE_METERS, get_apero_for_squad, get_squad_member, start_scheduled_apero, validate_distance
+from services.apero_lifecycle import APERO_DURATION, MAX_START_DISTANCE_METERS, get_apero_for_squad, get_squad_member, validate_distance
+from services.apero_lifecycle import AperoStartConflict, start_scheduled_apero_orchestrated
+from services.apero_lifecycle import schedule_apero
 from schemas.squad import SquadResponse, SquadJoin
+from services.squads import create_squad as create_squad_service
+from services.squads import join_squad as join_squad_service
+from services.beer_call_participation import ParticipationConflict, join_beer_call as join_beer_call_service
+from services.beer_call_participation import decline_beer_call as decline_beer_call_service
 from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges, apply_apero_start_rewards, apply_beer_call_creation_rewards, apply_beer_call_join_rewards
 from services.notifications import send_push_notifications, notify_scheduled_apero, notify_started_scheduled_apero
 from services.photo_validation import is_drink_detected, calculate_geodistance, validate_image_file
@@ -31,9 +37,13 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 @router.websocket("/{squad_id}/ws")
-async def websocket_squad_endpoint(websocket: WebSocket, squad_id: int, db: Session = Depends(get_db)):
+async def websocket_squad_endpoint(websocket: WebSocket, squad_id: int):
     """Point d'entrée WebSocket pour le Temps Réel (Vision Produit)."""
-    success = await manager.connect(websocket, squad_id, db)
+    db = SessionLocal()
+    try:
+        success = await manager.connect(websocket, squad_id, db)
+    finally:
+        db.close()
     if not success:
         return
     try:
@@ -68,21 +78,7 @@ def create_squad(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    # Création de la squad avec un code d'invitation unique
-    new_squad = Squad(
-        name=squad_data.name,
-        icon=squad_data.icon,
-        color=squad_data.color,
-        invite_code=str(uuid.uuid4())[:8].upper()
-    )
-
-    # On ajoute le créateur comme premier membre
-    new_squad.members.append(current_user)
-
-    db.add(new_squad)
-    db.commit()
-    db.refresh(new_squad)
-    return new_squad
+    return create_squad_service(db, current_user, squad_data)
 
 
 # GET : Lister mes Squads
@@ -170,7 +166,7 @@ def process_beer_call_creation(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-from services.beer_call_jobs import enqueue_beer_call_job
+from services.beer_call_jobs import enqueue_beer_call_job, InvalidIdempotencyKey, IdempotencyConflict
 
 @router.post("/{squad_id}/beer-calls/")
 async def create_beer_call(
@@ -211,6 +207,10 @@ async def create_beer_call(
             file_bytes=file_bytes,
             file_extension=file_extension
         )
+    except InvalidIdempotencyKey as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except IdempotencyConflict as e:
+        raise HTTPException(status_code=409, detail=str(e))
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except RuntimeError as e:
@@ -264,43 +264,21 @@ def create_scheduled_beer_call(
         current_user: User = Depends(get_current_user),
 ):
     try:
-        squad = get_squad_member(db, squad_id, current_user.id)
-    except ValueError as exc:
+        apero = schedule_apero(db, current_user, squad_id, scheduled)
+    except LookupError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
     except PermissionError as exc:
         raise HTTPException(status_code=403, detail=str(exc))
-    scheduled_for = scheduled.scheduled_for.astimezone(timezone.utc)
-    if scheduled_for <= datetime.now(timezone.utc):
-        raise HTTPException(status_code=400, detail="La date doit être dans le futur")
-    existing_aperos = db.query(Apero).filter(
-        Apero.squad_id == squad_id, 
-        Apero.status.in_([AperoStatus.SCHEDULED, AperoStatus.ACTIVE])
-    ).all()
-    
-    for existing in existing_aperos:
-        existing_time = existing.scheduled_for if existing.status == AperoStatus.SCHEDULED else (existing.started_at or existing.created_at)
-        if existing_time:
-            if existing_time.tzinfo is None:
-                existing_time = existing_time.replace(tzinfo=timezone.utc)
-            
-            time_diff = abs((scheduled_for - existing_time).total_seconds())
-            if time_diff < 4 * 3600:  # Moins de 4 heures d'écart
-                if calculate_geodistance(scheduled.latitude, scheduled.longitude, existing.latitude, existing.longitude) <= 500:
-                    status_str = "programmé" if existing.status == AperoStatus.SCHEDULED else "en cours"
-                    raise HTTPException(status_code=400, detail=f"Un apéro est déjà {status_str} à cet endroit dans ce créneau horaire")
-    apero = Apero(squad_id=squad_id, creator_id=current_user.id, location_name=scheduled.location_name,
-                  latitude=scheduled.latitude, longitude=scheduled.longitude,
-                  status=AperoStatus.SCHEDULED, scheduled_for=scheduled_for)
-    db.add(apero)
-    db.commit()
-    db.refresh(apero)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    squad = db.get(Squad, squad_id)
 
     # --- VISION PRODUIT : Temps Réel (WebSockets) ---
     background_tasks.add_task(manager.broadcast_to_squad, squad_id, {"type": "REFRESH_SQUAD", "action": "SCHEDULE"})
 
     tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
     background_tasks.add_task(notify_scheduled_apero, tokens, squad_id, apero.id,
-                              apero.location_name, scheduled_for.isoformat())
+                              apero.location_name, scheduled.scheduled_for.astimezone(timezone.utc).isoformat())
     return apero
 
 
@@ -332,20 +310,17 @@ async def start_scheduled_beer_call(
         db.commit()
         raise HTTPException(status_code=403, detail=f"Tu es à {int(distance)}m, approche-toi à moins de 500m")
     file_bytes = await file.read()
-    if not is_drink_detected(file_bytes):
-        handle_ia_fraud(current_user, db)
-        db.commit()
-        raise HTTPException(status_code=400, detail="Pas de boisson, pas de démarrage")
-    os.makedirs("uploads/aperos", exist_ok=True)
-    file_path = f"uploads/aperos/{uuid.uuid4()}.{(file.filename or 'jpg').split('.')[-1]}"
-    with open(file_path, "wb") as output:
-        output.write(file_bytes)
-    started, result = start_scheduled_apero(db, apero.id, current_user.id, file_path)
-    if not started:
-        db.rollback()
-        raise HTTPException(status_code=409, detail="Cet apéro a déjà été démarré")
-    apply_apero_start_rewards(current_user, started, db)
-    db.commit()
+    try:
+        started = start_scheduled_apero_orchestrated(
+            db, apero, current_user.id, file_bytes, is_drink_detected,
+            (file.filename or 'jpg').split('.')[-1],
+        )
+    except AperoStartConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
     # --- VISION PRODUIT : Temps Réel (WebSockets) ---
     background_tasks.add_task(manager.broadcast_to_squad, squad_id, {"type": "REFRESH_SQUAD", "action": "START"})
@@ -440,20 +415,12 @@ def join_squad(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    # 1. Chercher la squad par son code d'invitation
-    # On passe le code en majuscules pour éviter les erreurs de saisie
-    squad = db.query(Squad).filter(Squad.invite_code == join_data.invite_code.upper()).first()
-
-    if not squad:
-        raise HTTPException(status_code=404, detail="Code d'invitation invalide.")
-
-    # 2. Vérifier si l'utilisateur est déjà membre
-    if current_user in squad.members:
-        raise HTTPException(status_code=400, detail="Tu fais déjà partie de cette Squad !")
-
-    # 3. Ajouter l'utilisateur à la Squad
-    squad.members.append(current_user)
-    db.commit()
+    try:
+        squad = join_squad_service(db, current_user, join_data.invite_code)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     target_tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
     background_tasks.add_task(
         send_push_notifications,
@@ -462,7 +429,6 @@ def join_squad(
         body=f"{current_user.username} vient de débarquer dans '{squad.name}'. Préparez le bizutage !"
     )
 
-    db.refresh(squad)
     return squad
 
 
@@ -479,69 +445,19 @@ async def join_beer_call(
 ):
     actual_apero_id = int(apero_id.replace("bc_", ""))
 
-    # 0. Vérifier si l'utilisateur a déjà répondu
-    existing_participant = db.query(AperoParticipant).filter(
-        AperoParticipant.apero_id == actual_apero_id,
-        AperoParticipant.user_id == current_user.id
-    ).first()
-
-    if existing_participant:
-        raise HTTPException(status_code=400, detail="Tu as déjà répondu à cet appel de la bière !")
-
-    # --- NOUVEAU : VÉRIFICATION GÉOGRAPHIQUE ---
-    apero_obj = db.query(Apero).filter(Apero.id == actual_apero_id).first()
-    squad = db.query(Squad).filter(Squad.id == squad_id).first()
-    if not apero_obj or apero_obj.squad_id != squad_id:
-        raise HTTPException(status_code=404, detail="Apéro introuvable dans cette squad")
-    if not squad or current_user not in squad.members:
-        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
-    if apero_obj.status != AperoStatus.ACTIVE:
-        raise HTTPException(status_code=409, detail="Cet apéro n'est pas actif")
-
-    distance = calculate_geodistance(lat, lon, apero_obj.latitude, apero_obj.longitude)
-
-    if distance > 500:
-        # TRICHERIE DISTANCE : On applique le malus IA direct (ia_fraud_count + malus points)
-        handle_ia_fraud(current_user, db)
-        db.commit()
-        raise HTTPException(
-            status_code=403,
-            detail=f"Triche détectée ! Tu es à {int(distance)}m. Malus appliqué. 📉"
-        )
-    # --------------------------------------------
-
-    # 1. Validation IA de la photo
     file_bytes = await file.read()
-    if not is_drink_detected(file_bytes):
-        handle_ia_fraud(current_user, db)
-        db.commit()
-        raise HTTPException(status_code=400, detail="Pas de boisson, pas de Bar ! -15 Caps 📉")
-
-    # 2. Sauvegarde photo
-    file_path = f"uploads/aperos/reply_{uuid.uuid4()}.jpg"
-    with open(file_path, "wb") as f:
-        f.write(file_bytes)
-
-    total_gained = apply_beer_call_join_rewards(current_user, apero_obj, db)
-
-    # 1. Enregistrement de la participation
-    participant = AperoParticipant(
-        apero_id=actual_apero_id,
-        user_id=current_user.id,
-        status=ParticipationStatus.JOINED,
-        photo_path=file_path
-    )
-
-    from sqlalchemy.exc import IntegrityError
-    import os
     try:
-        db.add(participant)
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        if os.path.exists(file_path):
-            os.remove(file_path)
-        raise HTTPException(status_code=409, detail="Tu as déjà rejoint cet apéro !")
+        total_gained = join_beer_call_service(
+            db, current_user, squad_id, actual_apero_id, lat, lon, file_bytes, is_drink_detected,
+        )
+    except ParticipationConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
     # --- VISION PRODUIT : Temps Réel (WebSockets) ---
     background_tasks.add_task(manager.broadcast_to_squad, squad_id, {"type": "REFRESH_SQUAD", "action": "JOIN"})
@@ -580,47 +496,16 @@ async def decline_beer_call(
         current_user: User = Depends(get_current_user)
 ):
     actual_apero_id = int(apero_id.replace("bc_", ""))
-    squad = db.query(Squad).filter(Squad.id == squad_id).first()
-    apero = db.query(Apero).filter(Apero.id == actual_apero_id).first()
-    if not squad or current_user not in squad.members:
-        raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
-    if not apero or apero.squad_id != squad_id:
-        raise HTTPException(status_code=404, detail="Apéro introuvable dans cette squad")
-    if apero.status != AperoStatus.ACTIVE:
-        raise HTTPException(status_code=409, detail="Cet apéro n'est pas actif")
-
-    existing_participant = db.query(AperoParticipant).filter(
-        AperoParticipant.apero_id == actual_apero_id,
-        AperoParticipant.user_id == current_user.id
-    ).first()
-
-    if existing_participant:
-        raise HTTPException(status_code=400, detail="Tu as déjà répondu à cet appel de la bière !")
-
-    participant = AperoParticipant(
-        apero_id=actual_apero_id,
-        user_id=current_user.id,
-        status=ParticipationStatus.DECLINED,
-        excuse=decline_data.excuse
-    )
-
-    current_user.capsules += 15
-    current_user.consecutive_joins = 0
-    current_user.consecutive_piscine += 1
-
-    if decline_data.excuse:
-        current_user.consecutive_declines += 1
-    else:
-        current_user.consecutive_declines = 0  # Casse la série si pas d'excuse !
-
-    if current_user.consecutive_piscine >= 5:
-        award_badge(current_user, "NAGEUR", db)
-
-    if current_user.consecutive_declines >= 5:
-        award_badge(current_user, "CASANIER", db)
-
-    db.add(participant)
-    db.commit()
+    try:
+        decline_beer_call_service(db, current_user, squad_id, actual_apero_id, decline_data.excuse)
+    except ParticipationConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
     # --- VISION PRODUIT : Temps Réel (WebSockets) ---
     background_tasks.add_task(manager.broadcast_to_squad, squad_id, {"type": "REFRESH_SQUAD", "action": "DECLINE"})
