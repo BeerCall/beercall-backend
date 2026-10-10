@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from db.database import SessionLocal, engine
 from models.beer_call_job import BeerCallJob, BeerCallJobStatus
 from services.beer_call_jobs import process_claimed_job
+from core import config
 
 logger = logging.getLogger("beer_call_worker")
 logging.basicConfig(level=logging.INFO)
@@ -25,6 +26,7 @@ signal.signal(signal.SIGTERM, handle_sigterm)
 
 def run_worker_loop():
     logger.info("BeerCall Worker started")
+    logger.info("Photo detector mode: %s", config.PHOTO_DETECTOR_MODE)
     while not shutdown_flag:
         job_processed = claim_and_process_job()
         

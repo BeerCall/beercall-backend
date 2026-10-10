@@ -1,17 +1,28 @@
 import io
 import math
-import os
+from typing import Callable
+from core import config
 
 from PIL import Image
 
 _model = None
 
-def get_detector():
+def get_yolo_model():
     global _model
     if _model is None:
         from ultralytics import YOLO
         _model = YOLO('yolov8n.pt')
     return _model
+
+
+def _always_accept(file_bytes: bytes) -> bool:
+    return True
+
+
+def get_detector() -> Callable[[bytes], bool]:
+    """Select a bytes-to-verdict detector without loading YOLO at import time."""
+    config.validate_photo_detector_config()
+    return _always_accept if config.PHOTO_DETECTOR_MODE == "always_accept" else _detect_with_yolo
 
 # IDs des classes dans le dataset COCO pour les boissons
 DRINK_CLASS_IDS = [39, 40, 41, 45]  # 39: bottle, 41: cup, 45: bowl (souvent confondu avec un verre large)
@@ -19,28 +30,19 @@ DRINK_CLASS_IDS = [39, 40, 41, 45]  # 39: bottle, 41: cup, 45: bowl (souvent con
 
 # On peut aussi ajouter 40: wine glass si nécessaire
 
-def is_drink_detected(file_bytes: bytes, detector=None) -> bool:
-    if os.getenv("YOLO_MOCK") == "true" and os.getenv("BEERCALL_ENV") == "e2e":
-        return True
-    try:
-        # Convertir les bytes en image PIL
-        image = Image.open(io.BytesIO(file_bytes))
-
+def _detect_with_yolo(file_bytes: bytes, detector=None) -> bool:
+    with Image.open(io.BytesIO(file_bytes)) as image:
         if detector is None:
-            detector = get_detector()
-
-        # Exécuter la détection
-        # conf=0.25 est le seuil de confiance (25%)
+            detector = get_yolo_model()
         results = detector(image, conf=0.25, verbose=False)
+        return any(int(box.cls[0]) in DRINK_CLASS_IDS for result in results for box in result.boxes)
 
-        for result in results:
-            # On vérifie si l'une des boîtes de détection appartient aux classes cibles
-            for box in result.boxes:
-                class_id = int(box.cls[0])
-                if class_id in DRINK_CLASS_IDS:
-                    return True
 
-        return False
+def is_drink_detected(file_bytes: bytes, detector=None) -> bool:
+    try:
+        if detector is not None:
+            return _detect_with_yolo(file_bytes, detector)
+        return get_detector()(file_bytes)
     except Exception as e:
         print(f"Erreur lors de l'analyse d'image : {e}")
         # En cas d'erreur technique (réseau, modèle), on lève une exception retryable
