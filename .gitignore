@@ -12,6 +12,7 @@ __pycache__/
 # Base de données locale (très important pour ne pas écraser la DB des autres)
 *.db
 *.sqlite3
+test_db.sqlite
 
 # Variables d'environnement / Secrets
 .env
@@ -25,6 +26,13 @@ runs/
 # Uploads d'images (pour ne pas versionner les photos des tests)
 uploads/aperos/*
 !uploads/aperos/.gitkeep
+uploads/jobs/
+
+# Rapports de couverture générés
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
 
 # IDE
 .idea/
