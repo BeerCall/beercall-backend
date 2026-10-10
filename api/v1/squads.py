@@ -21,6 +21,7 @@ from schemas.squad import SquadCreate, SquadDetailsResponse
 from services.apero_lifecycle import APERO_DURATION, MAX_START_DISTANCE_METERS, get_apero_for_squad, get_squad_member, start_scheduled_apero, validate_distance
 from schemas.squad import SquadResponse, SquadJoin
 from services.squads import create_squad as create_squad_service
+from services.squads import join_squad as join_squad_service
 from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges, apply_apero_start_rewards, apply_beer_call_creation_rewards, apply_beer_call_join_rewards
 from services.notifications import send_push_notifications, notify_scheduled_apero, notify_started_scheduled_apero
 from services.photo_validation import is_drink_detected, calculate_geodistance, validate_image_file
@@ -427,20 +428,12 @@ def join_squad(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    # 1. Chercher la squad par son code d'invitation
-    # On passe le code en majuscules pour éviter les erreurs de saisie
-    squad = db.query(Squad).filter(Squad.invite_code == join_data.invite_code.upper()).first()
-
-    if not squad:
-        raise HTTPException(status_code=404, detail="Code d'invitation invalide.")
-
-    # 2. Vérifier si l'utilisateur est déjà membre
-    if current_user in squad.members:
-        raise HTTPException(status_code=400, detail="Tu fais déjà partie de cette Squad !")
-
-    # 3. Ajouter l'utilisateur à la Squad
-    squad.members.append(current_user)
-    db.commit()
+    try:
+        squad = join_squad_service(db, current_user, join_data.invite_code)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     target_tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
     background_tasks.add_task(
         send_push_notifications,
@@ -449,7 +442,6 @@ def join_squad(
         body=f"{current_user.username} vient de débarquer dans '{squad.name}'. Préparez le bizutage !"
     )
 
-    db.refresh(squad)
     return squad
 
 

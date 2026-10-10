@@ -65,11 +65,22 @@ def test_join_squad(client: TestClient, db_session):
     token2 = get_auth_token(client, "user_joiner")
     headers2 = {"Authorization": f"Bearer {token2}"}
 
-    join_payload = {"invite_code": invite_code}
-    with patch("api.v1.squads.send_push_notifications"):
+    join_payload = {"invite_code": invite_code.lower()}
+    from models.user import User
+    creator = db_session.query(User).filter(User.username == "user_creator").one()
+    creator.push_token = "test-push-token"
+    db_session.commit()
+    with patch("api.v1.squads.send_push_notifications") as notify:
         response = client.post("/api/squads/join", json=join_payload, headers=headers2)
         assert response.status_code == 200
         assert "id" in response.json()
+        assert response.json() == res.json()
+        notify.assert_called_once()
+        assert notify.call_args.kwargs["tokens"] == ["test-push-token"]
+        duplicate = client.post("/api/squads/join", json=join_payload, headers=headers2)
+        assert duplicate.status_code == 400
+        assert duplicate.json() == {"detail": "Tu fais déjà partie de cette Squad !"}
+        notify.assert_called_once()
 
 def test_join_squad_invalid_code(client: TestClient, db_session):
     token = get_auth_token(client, "user_invalid_join")
@@ -78,6 +89,7 @@ def test_join_squad_invalid_code(client: TestClient, db_session):
     join_payload = {"invite_code": "INVALID1"}
     response = client.post("/api/squads/join", json=join_payload, headers=headers)
     assert response.status_code == 404
+    assert response.json() == {"detail": "Code d'invitation invalide."}
 
 def test_get_squad_details(client: TestClient, db_session):
     token = get_auth_token(client, "user_details")

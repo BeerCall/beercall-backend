@@ -19,3 +19,15 @@ def create_squad(db: Session, user: User, data: SquadCreate) -> Squad:
     db.commit()
     db.refresh(squad)
     return squad
+
+
+def join_squad(db: Session, user: User, invite_code: str) -> Squad:
+    squad = db.query(Squad).filter(Squad.invite_code == invite_code.upper()).first()
+    if not squad:
+        raise LookupError("Code d'invitation invalide.")
+    if user in squad.members:
+        raise ValueError("Tu fais déjà partie de cette Squad !")
+    squad.members.append(user)
+    db.commit()
+    db.refresh(squad)
+    return squad
