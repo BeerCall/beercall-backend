@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 
 from models.apero import Apero, AperoStatus, AperoParticipant, ParticipationStatus
 from models.squad import Squad
+from models.user import User
+from schemas.apero import ScheduledAperoCreate
 from services.photo_validation import calculate_geodistance
 
 APERO_DURATION = timedelta(hours=4)
@@ -49,6 +51,36 @@ def get_apero_for_squad(db: Session, squad_id: int, apero_id: int) -> Apero:
 
 def validate_distance(apero: Apero, latitude: float, longitude: float) -> float:
     return calculate_geodistance(latitude, longitude, apero.latitude, apero.longitude)
+
+
+def schedule_apero(db: Session, user: User, squad_id: int, data: ScheduledAperoCreate) -> Apero:
+    try:
+        get_squad_member(db, squad_id, user.id)
+    except ValueError as exc:
+        raise LookupError(str(exc)) from exc
+    scheduled_for = data.scheduled_for.astimezone(timezone.utc)
+    if scheduled_for <= utc_now():
+        raise ValueError("La date doit être dans le futur")
+    existing_aperos = db.query(Apero).filter(
+        Apero.squad_id == squad_id,
+        Apero.status.in_([AperoStatus.SCHEDULED, AperoStatus.ACTIVE]),
+    ).all()
+    for existing in existing_aperos:
+        existing_time = existing.scheduled_for if existing.status == AperoStatus.SCHEDULED else (existing.started_at or existing.created_at)
+        if existing_time is not None:
+            time_diff = abs((scheduled_for - aware(existing_time)).total_seconds())
+            if time_diff < 4 * 3600 and calculate_geodistance(data.latitude, data.longitude, existing.latitude, existing.longitude) <= 500:
+                status = "programmé" if existing.status == AperoStatus.SCHEDULED else "en cours"
+                raise ValueError(f"Un apéro est déjà {status} à cet endroit dans ce créneau horaire")
+    apero = Apero(
+        squad_id=squad_id, creator_id=user.id, location_name=data.location_name,
+        latitude=data.latitude, longitude=data.longitude,
+        status=AperoStatus.SCHEDULED, scheduled_for=scheduled_for,
+    )
+    db.add(apero)
+    db.commit()
+    db.refresh(apero)
+    return apero
 
 
 def start_scheduled_apero(db: Session, apero_id: int, user_id: int, photo_path: str, now: Optional[datetime] = None):

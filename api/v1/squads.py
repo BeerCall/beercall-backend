@@ -19,6 +19,7 @@ from models.user import User
 from schemas.apero import AperoDecline, WorldsResponse, ScheduledAperoCreate
 from schemas.squad import SquadCreate, SquadDetailsResponse
 from services.apero_lifecycle import APERO_DURATION, MAX_START_DISTANCE_METERS, get_apero_for_squad, get_squad_member, start_scheduled_apero, validate_distance
+from services.apero_lifecycle import schedule_apero
 from schemas.squad import SquadResponse, SquadJoin
 from services.squads import create_squad as create_squad_service
 from services.squads import join_squad as join_squad_service
@@ -252,43 +253,21 @@ def create_scheduled_beer_call(
         current_user: User = Depends(get_current_user),
 ):
     try:
-        squad = get_squad_member(db, squad_id, current_user.id)
-    except ValueError as exc:
+        apero = schedule_apero(db, current_user, squad_id, scheduled)
+    except LookupError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
     except PermissionError as exc:
         raise HTTPException(status_code=403, detail=str(exc))
-    scheduled_for = scheduled.scheduled_for.astimezone(timezone.utc)
-    if scheduled_for <= datetime.now(timezone.utc):
-        raise HTTPException(status_code=400, detail="La date doit être dans le futur")
-    existing_aperos = db.query(Apero).filter(
-        Apero.squad_id == squad_id, 
-        Apero.status.in_([AperoStatus.SCHEDULED, AperoStatus.ACTIVE])
-    ).all()
-    
-    for existing in existing_aperos:
-        existing_time = existing.scheduled_for if existing.status == AperoStatus.SCHEDULED else (existing.started_at or existing.created_at)
-        if existing_time:
-            if existing_time.tzinfo is None:
-                existing_time = existing_time.replace(tzinfo=timezone.utc)
-            
-            time_diff = abs((scheduled_for - existing_time).total_seconds())
-            if time_diff < 4 * 3600:  # Moins de 4 heures d'écart
-                if calculate_geodistance(scheduled.latitude, scheduled.longitude, existing.latitude, existing.longitude) <= 500:
-                    status_str = "programmé" if existing.status == AperoStatus.SCHEDULED else "en cours"
-                    raise HTTPException(status_code=400, detail=f"Un apéro est déjà {status_str} à cet endroit dans ce créneau horaire")
-    apero = Apero(squad_id=squad_id, creator_id=current_user.id, location_name=scheduled.location_name,
-                  latitude=scheduled.latitude, longitude=scheduled.longitude,
-                  status=AperoStatus.SCHEDULED, scheduled_for=scheduled_for)
-    db.add(apero)
-    db.commit()
-    db.refresh(apero)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    squad = db.get(Squad, squad_id)
 
     # --- VISION PRODUIT : Temps Réel (WebSockets) ---
     background_tasks.add_task(manager.broadcast_to_squad, squad_id, {"type": "REFRESH_SQUAD", "action": "SCHEDULE"})
 
     tokens = [m.push_token for m in squad.members if m.id != current_user.id and m.push_token]
     background_tasks.add_task(notify_scheduled_apero, tokens, squad_id, apero.id,
-                              apero.location_name, scheduled_for.isoformat())
+                              apero.location_name, scheduled.scheduled_for.astimezone(timezone.utc).isoformat())
     return apero
 
 
