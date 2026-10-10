@@ -166,7 +166,7 @@ def process_beer_call_creation(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-from services.beer_call_jobs import enqueue_beer_call_job
+from services.beer_call_jobs import enqueue_beer_call_job, InvalidIdempotencyKey, IdempotencyConflict
 
 @router.post("/{squad_id}/beer-calls/")
 async def create_beer_call(
@@ -207,6 +207,10 @@ async def create_beer_call(
             file_bytes=file_bytes,
             file_extension=file_extension
         )
+    except InvalidIdempotencyKey as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except IdempotencyConflict as e:
+        raise HTTPException(status_code=409, detail=str(e))
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except RuntimeError as e:

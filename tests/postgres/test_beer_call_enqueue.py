@@ -132,6 +132,7 @@ def test_divergent_idempotent_request_is_rejected(setup_data, field, value):
     divergent = client.post(f"/api/squads/{squad.id}/beer-calls/", headers=headers,
                             data={**data, field: value}, files=files)
     assert divergent.status_code == 409
+    assert divergent.json() == {"detail": "Idempotency key déjà utilisée pour une requête différente."}
 
 
 def test_invalid_idempotency_key_is_validation_error(setup_data):
@@ -141,3 +142,4 @@ def test_invalid_idempotency_key_is_validation_error(setup_data):
                            data={"latitude": "48.8", "longitude": "2.3", "location_name": "Bar"},
                            files={"file": ("test.jpg", b"\xff\xd8\xff image", "image/jpeg")})
     assert response.status_code == 422
+    assert response.json() == {"detail": "Format Idempotency-Key invalide, doit être un UUID."}
