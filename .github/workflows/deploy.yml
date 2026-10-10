@@ -44,7 +44,7 @@ jobs:
           pip install -r requirements-dev.txt
           
       - name: Run tests SQLite
-        run: python -m pytest
+        run: python -m pytest --cov=. --cov-report=term-missing --cov-fail-under=80
         
       - name: Run tests PostgreSQL
         env:
