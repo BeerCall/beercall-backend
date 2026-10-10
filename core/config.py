@@ -22,3 +22,12 @@ def validate_photo_detector_config() -> None:
 
 
 validate_photo_detector_config()
+
+BEERCALL_E2E_GAME = os.getenv("BEERCALL_E2E_GAME")
+E2E_GAME_IDS = frozenset({
+    "AVATAR_ROULETTE", "HOT_POTATO", "BRAIN_DUEL", "DEATH_FINGER",
+    "BARMAN_EQUILIBRISTE", "MAX_PRESSURE", "PENALTY_SHOOTOUT",
+    "PHOTO_CHALLENGE", "DRUNKEN_DRAWING",
+})
+if BEERCALL_E2E_GAME is not None and BEERCALL_E2E_GAME not in E2E_GAME_IDS:
+    raise ValueError("BEERCALL_E2E_GAME must name a playable mini-game")
