@@ -574,7 +574,7 @@ def get_beer_call_worlds(
                 "user_id": f"u_{user.id}",
                 "username": user.username,
                 "avatar_config": user.avatar_config or {},
-                "proof_photo_url": f"{request.base_url}{p.photo_path}",
+                "proof_photo_url": ("/" + p.photo_path.lstrip("/")) if p.photo_path else None,
                 "joined_at": datetime.now(timezone.utc)
             })
         elif p.status == ParticipationStatus.DECLINED:
