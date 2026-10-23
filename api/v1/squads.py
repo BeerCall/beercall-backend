@@ -48,7 +48,9 @@ async def websocket_squad_endpoint(websocket: WebSocket, squad_id: int):
         return
     try:
         while True:
-            await websocket.receive_text()
+            data = await websocket.receive_text()
+            if data == "PING":
+                await websocket.send_text("PONG")
     except WebSocketDisconnect:
         manager.disconnect(websocket, squad_id)
 

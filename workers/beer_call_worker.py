@@ -8,6 +8,7 @@ from datetime import datetime, timezone, timedelta
 from sqlalchemy.orm import Session
 from db.database import SessionLocal, engine
 from models.beer_call_job import BeerCallJob, BeerCallJobStatus
+from models.realtime_event import RealtimeEvent
 from services.beer_call_jobs import process_claimed_job
 from core import config
 
@@ -66,6 +67,11 @@ def claim_and_process_job():
         if job.attempts >= 3:
             job.status = BeerCallJobStatus.FAILED
             job.owner_id = None
+            event = RealtimeEvent(
+                squad_id=job.squad_id,
+                payload={"type": "BEER_CALL_JOB_UPDATED", "job_id": str(job.id)}
+            )
+            db.add(event)
             db.commit()
             return True
 

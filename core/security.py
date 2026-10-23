@@ -16,9 +16,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
 from core.config import SECRET_KEY
 
 ALGORITHM = "HS256"
-# A07:2021 Security Fix: Reduce Access Token TTL to 15 minutes, add Refresh Token (7 days)
+# A07:2021 Security Fix: Reduce Access Token TTL to 15 minutes, add Refresh Token (30 days)
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
-REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
+REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

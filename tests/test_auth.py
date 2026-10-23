@@ -5,7 +5,7 @@ from main import app
 from datetime import datetime, timedelta, timezone
 from jose import jwt
 from sqlalchemy.orm import Session
-from core.security import ALGORITHM, SECRET_KEY, create_access_token, create_refresh_token
+from core.security import ALGORITHM, SECRET_KEY, create_access_token, create_refresh_token, REFRESH_TOKEN_EXPIRE_MINUTES
 from models.user import User
 
 client = TestClient(app)
@@ -76,3 +76,11 @@ def test_valid_access_token(client: TestClient, auth_user: User) -> None:
     response = client.get("/api/auth/me", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert response.json()["username"] == auth_user.username
+
+
+def test_refresh_token_lifetime_is_30_days() -> None:
+    token = create_refresh_token({"sub": "jwt-user"})
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    remaining_seconds = payload["exp"] - datetime.now(timezone.utc).timestamp()
+    assert REFRESH_TOKEN_EXPIRE_MINUTES == 60 * 24 * 30
+    assert 29 * 24 * 3600 < remaining_seconds <= 30 * 24 * 3600

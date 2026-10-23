@@ -285,6 +285,13 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
                     locked_job.status = BeerCallJobStatus.PENDING
                     locked_job.owner_id = None
 
+            if locked_job.status in (BeerCallJobStatus.SUCCEEDED, BeerCallJobStatus.REJECTED, BeerCallJobStatus.FAILED):
+                job_event = RealtimeEvent(
+                    squad_id=locked_job.squad_id,
+                    payload={"type": "BEER_CALL_JOB_UPDATED", "job_id": str(locked_job.id)}
+                )
+                db_finalize.add(job_event)
+
             db_finalize.commit()
             
             # Suppression du fichier input une fois terminé terminal
