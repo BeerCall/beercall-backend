@@ -32,6 +32,7 @@ class UserResponse(BaseModel):
     capsules: int
     avatar: AvatarSchema
     access_token: str
+    refresh_token: str
     token_type: str
 
     class Config:

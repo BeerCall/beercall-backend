@@ -1,5 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
+from jose import jwt
+from core.security import ALGORITHM, SECRET_KEY
 
 def test_signup_success(client: TestClient, db_session):
     payload = {
@@ -18,6 +20,9 @@ def test_signup_success(client: TestClient, db_session):
     data = response.json()
     assert data["username"] == "testuser"
     assert "access_token" in data
+    assert set(data) == {"id", "username", "capsules", "avatar", "access_token", "refresh_token", "token_type"}
+    payload_jwt = jwt.decode(data["refresh_token"], SECRET_KEY, algorithms=[ALGORITHM])
+    assert payload_jwt.get("type") == "refresh"
 
 def test_signup_duplicate_username(client: TestClient, db_session):
     payload = {
