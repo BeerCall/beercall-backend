@@ -13,7 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: public.ecr.aws/docker/library/postgres:15-alpine
+        # Docker Hub plutôt qu'ECR Public : les runners GitHub partagent des IP
+        # et ECR renvoie régulièrement `toomanyrequests: Data limit exceeded`.
+        image: postgres:15-alpine
         env:
           POSTGRES_USER: beercall
           POSTGRES_PASSWORD: beercall
