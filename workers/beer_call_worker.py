@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from db.database import SessionLocal, engine
 from models.beer_call_job import BeerCallJob, BeerCallJobStatus
 from models.realtime_event import RealtimeEvent
-from services.beer_call_jobs import process_claimed_job
+from services.beer_call_jobs import process_claimed_job, log_job_timing
 from core import config
 
 logger = logging.getLogger("beer_call_worker")
@@ -83,6 +83,14 @@ def claim_and_process_job():
         db.commit()
         
         job_id = job.id
+        job_attempts = job.attempts
+        log_job_timing(
+            phase="claimed",
+            job_id=job_id,
+            pid=os.getpid(),
+            attempt=job_attempts,
+            status="running",
+        )
     except Exception as e:
         logger.error(f"Error claiming job: {e}")
         db.rollback()

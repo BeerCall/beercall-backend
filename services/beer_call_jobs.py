@@ -1,7 +1,10 @@
 import os
 import uuid
+import json
+import time
 import logging
 import shutil
+from typing import Optional
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from models.beer_call_job import BeerCallJob, BeerCallJobStatus
@@ -14,6 +17,38 @@ from services.photo_validation import calculate_geodistance, is_drink_detected
 from services.gamification import handle_ia_fraud, apply_beer_call_creation_rewards
 
 logger = logging.getLogger(__name__)
+job_timing_logger = logging.getLogger("beer_job_timing")
+
+
+def log_job_timing(
+    phase: str,
+    job_id: uuid.UUID | str,
+    pid: int,
+    attempt: int,
+    duration_ms: Optional[float] = None,
+    status: Optional[str] = None,
+    outcome: Optional[str] = None,
+    error: Optional[str] = None,
+) -> None:
+    utc_str = datetime.now(timezone.utc).isoformat()
+    payload = {
+        "event": "beer_job_timing",
+        "phase": phase,
+        "job_id": str(job_id),
+        "pid": pid,
+        "attempt": attempt,
+        "utc": utc_str,
+    }
+    if duration_ms is not None:
+        payload["duration_ms"] = round(max(0.0, duration_ms), 2)
+    if status is not None:
+        payload["status"] = status
+    if outcome is not None:
+        payload["outcome"] = outcome
+    if error is not None:
+        payload["error"] = error
+    job_timing_logger.info(json.dumps(payload), extra=payload)
+
 
 
 class InvalidIdempotencyKey(ValueError):
@@ -132,6 +167,14 @@ def enqueue_beer_call_job(
     new_job.status = BeerCallJobStatus.PENDING
     db.commit()
 
+    log_job_timing(
+        phase="enqueued",
+        job_id=new_job.id,
+        pid=os.getpid(),
+        attempt=new_job.attempts,
+        status="pending",
+    )
+
     return {"status": "processing", "job_id": str(new_job.id), "job_status": new_job.status.value}
 
 def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
@@ -146,19 +189,35 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
         if not job or job.owner_id != owner_id or job.status != BeerCallJobStatus.RUNNING:
             return
 
+        pid = os.getpid()
+        attempt = job.attempts
+
         # Chemins des fichiers
         input_path = f"uploads/jobs/{job.id}.input"
         
-        # 1. YOLO inference SEULE (les vérifications métier passent sous verrou à la finalisation)
+        # 1. Lecture fichier
+        t_file = time.monotonic()
         try:
             with open(input_path, "rb") as f:
                 file_bytes = f.read()
+            file_dur = (time.monotonic() - t_file) * 1000.0
+            log_job_timing("file_read", job_id, pid, attempt, duration_ms=file_dur, status="success")
+        except Exception as e:
+            file_dur = (time.monotonic() - t_file) * 1000.0
+            log_job_timing("file_read", job_id, pid, attempt, duration_ms=file_dur, status="error", error=type(e).__name__)
+            raise
 
+        # 2. YOLO inference SEULE (les vérifications métier passent sous verrou à la finalisation)
+        t_det = time.monotonic()
+        try:
             ia_validation = is_drink_detected(file_bytes)
+            det_dur = (time.monotonic() - t_det) * 1000.0
 
             if not ia_validation:
+                log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="rejected")
                 raise ValueError("Pas de boisson, pas de Bar ! -15 Caps 📉")
-                
+
+            log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="success")
             final_status = BeerCallJobStatus.SUCCEEDED
             error_message = None
 
@@ -166,19 +225,26 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
             final_status = BeerCallJobStatus.REJECTED
             error_message = str(e)
         except RuntimeError as e:
+            det_dur = (time.monotonic() - t_det) * 1000.0
+            log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="error", error=type(e).__name__)
             # IA technical error
             final_status = BeerCallJobStatus.PENDING
             error_message = str(e)
         except Exception as e:
+            det_dur = (time.monotonic() - t_det) * 1000.0
+            log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="error", error=type(e).__name__)
             final_status = BeerCallJobStatus.FAILED
             error_message = "Erreur inattendue lors du traitement."
             logger.exception("Unexpected error in process_claimed_job")
 
-        # 2. Phase de finalisation (verrou final)
+        # 3. Phase de finalisation (verrou final, commit compris)
+        t_fin = time.monotonic()
         db_finalize = db_factory()
         try:
             locked_job = db_finalize.query(BeerCallJob).with_for_update().filter(BeerCallJob.id == job_id).first()
             if not locked_job or locked_job.owner_id != owner_id or locked_job.status != BeerCallJobStatus.RUNNING:
+                fin_dur = (time.monotonic() - t_fin) * 1000.0
+                log_job_timing("finalization", job_id, pid, attempt, duration_ms=fin_dur, status="lease_lost")
                 return # Perte du lease
                 
             # Verrou sur la Squad pour éviter la création concurrente de deux apéros dans la même squad
@@ -293,6 +359,9 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
                 db_finalize.add(job_event)
 
             db_finalize.commit()
+            fin_dur = (time.monotonic() - t_fin) * 1000.0
+            log_job_timing("finalization", job_id, pid, attempt, duration_ms=fin_dur, status="success")
+            log_job_timing("result", job_id, pid, attempt, outcome=locked_job.status.value, status="success")
             
             # Suppression du fichier input une fois terminé terminal
             if locked_job.status in (BeerCallJobStatus.SUCCEEDED, BeerCallJobStatus.REJECTED, BeerCallJobStatus.FAILED):
@@ -300,6 +369,8 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
                     os.remove(input_path)
 
         except Exception as e:
+            fin_dur = (time.monotonic() - t_fin) * 1000.0
+            log_job_timing("finalization", job_id, pid, attempt, duration_ms=fin_dur, status="error", error=type(e).__name__)
             logger.exception("Finalization failed")
             db_finalize.rollback()
         finally:
