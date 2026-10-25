@@ -1,18 +1,53 @@
 import io
+import json
+import logging
 import math
-from typing import Callable
+import os
+import time
+from datetime import datetime, timezone
+from typing import Any, Callable, Optional
 from core import config
 
 from PIL import Image
 
-_model = None
+logger = logging.getLogger("photo_timing")
 
-def get_yolo_model():
+_model: Any = None
+
+
+def _log_photo_timing(phase: str, duration_ms: float, error: Optional[str] = None) -> None:
+    utc_str = datetime.now(timezone.utc).isoformat()
+    pid = os.getpid()
+    payload = {
+        "event": "photo_timing",
+        "phase": phase,
+        "pid": pid,
+        "utc": utc_str,
+        "duration_ms": round(max(0.0, duration_ms), 2),
+        "status": "error" if error else "success",
+    }
+    if error:
+        payload["error"] = error
+    logger.info(json.dumps(payload), extra=payload)
+
+
+def get_yolo_model(clock: Callable[[], float] = time.monotonic) -> Any:
     global _model
-    if _model is None:
+    if _model is not None:
+        return _model
+
+    start = clock()
+    try:
         from ultralytics import YOLO
-        _model = YOLO('yolov8n.pt')
-    return _model
+        loaded = YOLO('yolov8n.pt')
+        duration_ms = (clock() - start) * 1000.0
+        _log_photo_timing("load", duration_ms, error=None)
+        _model = loaded
+        return _model
+    except Exception as exc:
+        duration_ms = (clock() - start) * 1000.0
+        _log_photo_timing("load", duration_ms, error=type(exc).__name__)
+        raise
 
 
 def _always_accept(file_bytes: bytes) -> bool:
@@ -24,25 +59,47 @@ def get_detector() -> Callable[[bytes], bool]:
     config.validate_photo_detector_config()
     return _always_accept if config.PHOTO_DETECTOR_MODE == "always_accept" else _detect_with_yolo
 
+
 # IDs des classes dans le dataset COCO pour les boissons
 DRINK_CLASS_IDS = [39, 40, 41, 45]  # 39: bottle, 41: cup, 45: bowl (souvent confondu avec un verre large)
 
 
 # On peut aussi ajouter 40: wine glass si nécessaire
 
-def _detect_with_yolo(file_bytes: bytes, detector=None) -> bool:
-    with Image.open(io.BytesIO(file_bytes)) as image:
-        if detector is None:
-            detector = get_yolo_model()
-        results = detector(image, conf=0.25, verbose=False)
-        return any(int(box.cls[0]) in DRINK_CLASS_IDS for result in results for box in result.boxes)
+def _detect_with_yolo(
+    file_bytes: bytes,
+    detector: Any = None,
+    clock: Callable[[], float] = time.monotonic,
+) -> bool:
+    if detector is None:
+        detector = get_yolo_model(clock=clock)
+
+    start = clock()
+    try:
+        with Image.open(io.BytesIO(file_bytes)) as image:
+            results = detector(image, conf=0.25, verbose=False)
+            has_drink = any(int(box.cls[0]) in DRINK_CLASS_IDS for result in results for box in result.boxes)
+        duration_ms = (clock() - start) * 1000.0
+        _log_photo_timing("inference", duration_ms, error=None)
+        return has_drink
+    except Exception as exc:
+        duration_ms = (clock() - start) * 1000.0
+        _log_photo_timing("inference", duration_ms, error=type(exc).__name__)
+        raise
 
 
-def is_drink_detected(file_bytes: bytes, detector=None) -> bool:
+def is_drink_detected(
+    file_bytes: bytes,
+    detector: Any = None,
+    clock: Callable[[], float] = time.monotonic,
+) -> bool:
     try:
         if detector is not None:
-            return _detect_with_yolo(file_bytes, detector)
-        return get_detector()(file_bytes)
+            return _detect_with_yolo(file_bytes, detector=detector, clock=clock)
+        target = get_detector()
+        if target == _detect_with_yolo:
+            return _detect_with_yolo(file_bytes, clock=clock)
+        return target(file_bytes)
     except Exception as e:
         print(f"Erreur lors de l'analyse d'image : {e}")
         # En cas d'erreur technique (réseau, modèle), on lève une exception retryable
