@@ -10,12 +10,39 @@ Validates:
 from datetime import datetime, timezone, timedelta
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import event
 from sqlalchemy.orm import Session
 
 from models.user import User
 from models.squad import Squad
 from models.apero import Apero, AperoParticipant, ParticipationStatus, AperoStatus
 from core.security import create_access_token
+
+
+class StatementCounter:
+    """SQLAlchemy statement listener with guaranteed cleanup in finally."""
+
+    def __init__(self, engine):
+        self.engine = engine
+        self.count = 0
+        self.statements = []
+        self._listening = False
+
+    def __enter__(self):
+        self.count = 0
+        self.statements = []
+        event.listen(self.engine, "before_cursor_execute", self._hook)
+        self._listening = True
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self._listening:
+            event.remove(self.engine, "before_cursor_execute", self._hook)
+            self._listening = False
+
+    def _hook(self, conn, cursor, statement, parameters, context, executemany):
+        self.count += 1
+        self.statements.append(statement)
 
 
 def create_test_user(db: Session, username: str) -> User:
@@ -312,3 +339,134 @@ def test_squad_scheduled_and_cancelled_and_past_ordering(client: TestClient, db_
 
     for past_item in past_items:
         assert past_item["can_start"] is False
+
+
+@pytest.mark.parametrize("num_aperos,num_participants", [
+    (0, 0),
+    (1, 10),
+    (100, 30),
+])
+def test_squad_read_scale_zero_one_hundred_and_zero_participants_hydrated(
+    client: TestClient,
+    db_session: Session,
+    num_aperos: int,
+    num_participants: int,
+):
+    """Test squad read contract with 0, 1, and 100 aperos and 0, 10, and 30 participants:
+    - Verifies zero hydration of AperoParticipant ORM entities.
+    - Verifies strictly bounded SQL statement count (O(1) queries, not N+1 on aperos or participants).
+    - Verifies exact contract fields and ordering.
+    """
+    engine = db_session.get_bind()
+    now = datetime.now(timezone.utc)
+
+    creator = create_test_user(db_session, f"creator_scale_{num_aperos}_{num_participants}")
+    main_user = create_test_user(db_session, f"main_scale_{num_aperos}_{num_participants}")
+
+    squad = Squad(
+        name=f"Scale Squad {num_aperos}",
+        icon="🍻",
+        color="#001122",
+        invite_code=f"SC_{num_aperos}_{num_participants}",
+    )
+    db_session.add(squad)
+    db_session.flush()
+    squad.members.extend([creator, main_user])
+
+    # Create participant users if needed
+    participant_users = []
+    if num_participants > 0:
+        for p_idx in range(num_participants):
+            u = create_test_user(db_session, f"part_{num_aperos}_{p_idx}")
+            participant_users.append(u)
+            squad.members.append(u)
+
+    # Generate aperos and participations
+    aperos_list = []
+    for a_idx in range(num_aperos):
+        ap = create_test_apero(
+            creator_id=creator.id,
+            squad_id=squad.id,
+            location_name=f"Bar Scale {a_idx}",
+            status=AperoStatus.ENDED,
+            created_at=now - timedelta(hours=num_aperos - a_idx + 1),
+            ended_at=now - timedelta(hours=num_aperos - a_idx),
+        )
+        aperos_list.append(ap)
+
+    if aperos_list:
+        db_session.add_all(aperos_list)
+        db_session.flush()
+
+        participants_list = []
+        for a_idx, ap in enumerate(aperos_list):
+            # main_user participates in every second apero
+            if a_idx % 2 == 0:
+                participants_list.append(
+                    AperoParticipant(apero_id=ap.id, user_id=main_user.id, status=ParticipationStatus.JOINED)
+                )
+            else:
+                participants_list.append(
+                    AperoParticipant(apero_id=ap.id, user_id=main_user.id, status=ParticipationStatus.DECLINED)
+                )
+
+            # Creator always joined
+            participants_list.append(
+                AperoParticipant(apero_id=ap.id, user_id=creator.id, status=ParticipationStatus.JOINED)
+            )
+
+            # Distribute participant_users
+            for p_user in participant_users[:5]:  # 5 joined
+                participants_list.append(
+                    AperoParticipant(apero_id=ap.id, user_id=p_user.id, status=ParticipationStatus.JOINED)
+                )
+
+        db_session.add_all(participants_list)
+
+    db_session.commit()
+
+    squad_id = squad.id
+    squad_name = squad.name
+    squad_color = squad.color
+    squad_icon = squad.icon
+    squad_invite_code = squad.invite_code
+    main_user_headers = auth_headers(main_user)
+    last_apero_id = aperos_list[-1].id if aperos_list else None
+
+    # Clear identity map completely before testing the endpoint
+    db_session.expunge_all()
+
+    with StatementCounter(engine) as counter:
+        resp = client.get(f"/api/squads/{squad_id}", headers=main_user_headers)
+
+    assert resp.status_code == 200
+    data = resp.json()
+
+    # Statement count must be strictly bounded (O(1), <= 7 queries even with 100 aperos)
+    assert counter.count <= 7
+
+    # Zero AperoParticipant entities must be loaded in the identity map
+    loaded_types = {type(obj) for obj in db_session.identity_map.values()}
+    assert AperoParticipant not in loaded_types
+
+    # Contract verification
+    assert data["id"] == f"sq_{squad_id}"
+    assert data["name"] == squad_name
+    assert data["color"] == squad_color
+    assert data["icon"] == squad_icon
+    assert data["invite_code"] == squad_invite_code
+
+    if num_aperos == 0:
+        assert data["active_beer_call"] == []
+        assert data["scheduled_beer_calls"] == []
+        assert data["past_beer_calls"] == []
+    else:
+        assert len(data["past_beer_calls"]) == num_aperos
+        # Ordering check: created_at descending (latest created apero first)
+        last_apero_item = data["past_beer_calls"][0]
+        assert last_apero_item["id"] == f"bc_{last_apero_id}"
+        # Verify joined count: creator (1) + main_user (if a_idx % 2 == 0) + 5 participant users = 7 (or 6)
+        expected_joined = 1 + (1 if (num_aperos - 1) % 2 == 0 else 0) + (5 if num_participants >= 5 else 0)
+        assert last_apero_item["participants_count"] == expected_joined
+        assert last_apero_item["has_responded"] is True
+
