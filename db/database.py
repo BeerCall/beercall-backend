@@ -19,6 +19,10 @@ else:
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+# Enregistrement idempotent du hook de notification d'outbox transactionnelle
+from core.realtime_notify import register_realtime_outbox_notifier
+register_realtime_outbox_notifier()
+
 Base = declarative_base()
 
 
