@@ -11,6 +11,7 @@ Validates:
 from datetime import datetime, timezone, timedelta
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import event
 from sqlalchemy.orm import Session
 
 from models.user import User
@@ -18,6 +19,32 @@ from models.squad import Squad
 from models.apero import Apero, AperoParticipant, ParticipationStatus, AperoStatus
 from models.gamification import Skin, Badge
 from core.security import create_access_token
+
+
+class StatementCounter:
+    """SQLAlchemy statement listener with guaranteed cleanup in finally."""
+
+    def __init__(self, engine):
+        self.engine = engine
+        self.count = 0
+        self.statements = []
+        self._listening = False
+
+    def __enter__(self):
+        self.count = 0
+        self.statements = []
+        event.listen(self.engine, "before_cursor_execute", self._hook)
+        self._listening = True
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self._listening:
+            event.remove(self.engine, "before_cursor_execute", self._hook)
+            self._listening = False
+
+    def _hook(self, conn, cursor, statement, parameters, context, executemany):
+        self.count += 1
+        self.statements.append(statement)
 
 
 def create_test_user(db: Session, username: str, caps: int = 0) -> User:
@@ -338,3 +365,147 @@ def test_profile_stats_missed_contract(client: TestClient, db_session: Session):
     headers = auth_headers(user)
     res = client.get("/api/auth/profile/", headers=headers).json()
     assert res["stats"]["aperos_missed"] == 2
+
+
+def test_profile_endpoints_do_not_hydrate_apero_entities(client: TestClient, db_session: Session):
+    """Profile read endpoints (/api/auth/me, /api/auth/profile/, /api/auth/profile/{id}/)
+    must compute statistics and prestige score without loading Apero or AperoParticipant entities into session.
+    """
+    user = create_test_user(db_session, "hydrate_check_user", caps=80)
+    creator = create_test_user(db_session, "hydrate_check_creator", caps=50)
+    viewer = create_test_user(db_session, "hydrate_check_viewer", caps=10)
+
+    squad = Squad(name="Hydrate Squad", icon="🍺", color="#333333", invite_code="HYDRATE1")
+    db_session.add(squad)
+    db_session.flush()
+    squad.members.extend([user, creator, viewer])
+
+    now = datetime.now(timezone.utc)
+    # Created apero
+    a1 = create_test_apero(creator_id=user.id, squad_id=squad.id, created_at=now - timedelta(hours=5), status=AperoStatus.ENDED)
+    # Joined apero
+    a2 = create_test_apero(creator_id=creator.id, squad_id=squad.id, created_at=now - timedelta(hours=4), status=AperoStatus.ENDED)
+    # Declined apero
+    a3 = create_test_apero(creator_id=creator.id, squad_id=squad.id, created_at=now - timedelta(hours=3), status=AperoStatus.ENDED)
+    # Missed apero
+    a4 = create_test_apero(creator_id=creator.id, squad_id=squad.id, created_at=now - timedelta(hours=2), status=AperoStatus.ENDED)
+
+    db_session.add_all([a1, a2, a3, a4])
+    db_session.flush()
+
+    p_created = AperoParticipant(apero_id=a1.id, user_id=user.id, status=ParticipationStatus.JOINED)
+    p_joined = AperoParticipant(apero_id=a2.id, user_id=user.id, status=ParticipationStatus.JOINED)
+    p_declined = AperoParticipant(apero_id=a3.id, user_id=user.id, status=ParticipationStatus.DECLINED)
+    db_session.add_all([p_created, p_joined, p_declined])
+    db_session.commit()
+
+    headers_user = auth_headers(user)
+    headers_viewer = auth_headers(viewer)
+
+    # 1. Test /api/auth/me
+    db_session.expunge_all()
+    resp_me = client.get("/api/auth/me", headers=headers_user)
+    assert resp_me.status_code == 200
+    data_me = resp_me.json()
+    assert data_me["stats"]["aperos_created"] == 1
+    assert data_me["stats"]["aperos_joined"] == 2
+    assert data_me["stats"]["aperos_declined"] == 1
+    assert data_me["stats"]["aperos_missed"] == 1
+    loaded_me = {type(obj) for obj in db_session.identity_map.values()}
+    assert Apero not in loaded_me
+    assert AperoParticipant not in loaded_me
+
+    # 2. Test /api/auth/profile/
+    db_session.expunge_all()
+    resp_own = client.get("/api/auth/profile/", headers=headers_user)
+    assert resp_own.status_code == 200
+    data_own = resp_own.json()
+    assert data_own["stats"]["aperos_created"] == 1
+    assert data_own["stats"]["aperos_joined"] == 2
+    assert data_own["stats"]["aperos_declined"] == 1
+    assert data_own["stats"]["aperos_missed"] == 1
+    loaded_own = {type(obj) for obj in db_session.identity_map.values()}
+    assert Apero not in loaded_own
+    assert AperoParticipant not in loaded_own
+
+    # 3. Test /api/auth/profile/{user_id}/
+    db_session.expunge_all()
+    resp_other = client.get(f"/api/auth/profile/u_{user.id}/", headers=headers_viewer)
+    assert resp_other.status_code == 200
+    data_other = resp_other.json()
+    assert data_other["stats"]["aperos_created"] == 1
+    assert data_other["stats"]["aperos_joined"] == 2
+    assert data_other["stats"]["aperos_declined"] == 1
+    assert data_other["stats"]["aperos_missed"] == 1
+    loaded_other = {type(obj) for obj in db_session.identity_map.values()}
+    assert Apero not in loaded_other
+    assert AperoParticipant not in loaded_other
+
+
+def test_profile_endpoints_query_count_bounded_independent_of_squads_scale(client: TestClient, db_session: Session):
+    """Statement count for /api/auth/me and /api/auth/profile/{id}/ is O(1) and does not scale
+    with the number of squads or apero history.
+    """
+    engine = db_session.get_bind()
+    now = datetime.now(timezone.utc)
+    creator = create_test_user(db_session, "creator_for_scale", caps=10)
+    viewer = create_test_user(db_session, "viewer_for_scale", caps=10)
+    headers_viewer = auth_headers(viewer)
+
+    # User A: in 1 squad with 2 aperos
+    user_a = create_test_user(db_session, "user_scale_1squad", caps=20)
+    squad_a = Squad(name="Squad A1", icon="🍺", color="#111111", invite_code="SQA1_SCALE")
+    db_session.add(squad_a)
+    db_session.flush()
+    squad_a.members.extend([user_a, creator])
+
+    ap1 = create_test_apero(creator_id=user_a.id, squad_id=squad_a.id, created_at=now - timedelta(days=2), status=AperoStatus.ENDED)
+    ap2 = create_test_apero(creator_id=creator.id, squad_id=squad_a.id, created_at=now - timedelta(days=1), status=AperoStatus.ENDED)
+    db_session.add_all([ap1, ap2])
+    db_session.flush()
+    db_session.add(AperoParticipant(apero_id=ap2.id, user_id=user_a.id, status=ParticipationStatus.JOINED))
+    db_session.commit()
+
+    # User B: in 10 squads with 20 aperos
+    user_b = create_test_user(db_session, "user_scale_10squads", caps=20)
+    for i in range(10):
+        sq = Squad(name=f"Squad B{i}", icon="🍺", color="#222222", invite_code=f"SQB{i}_SCALE")
+        db_session.add(sq)
+        db_session.flush()
+        sq.members.extend([user_b, creator])
+
+        ap_c = create_test_apero(creator_id=user_b.id, squad_id=sq.id, created_at=now - timedelta(days=5, hours=i), status=AperoStatus.ENDED)
+        ap_m = create_test_apero(creator_id=creator.id, squad_id=sq.id, created_at=now - timedelta(days=2, hours=i), status=AperoStatus.ENDED)
+        db_session.add_all([ap_c, ap_m])
+    db_session.commit()
+
+    headers_a = auth_headers(user_a)
+    headers_b = auth_headers(user_b)
+
+    # 1. Measure /api/auth/me
+    with StatementCounter(engine) as counter_me_a:
+        res_me_a = client.get("/api/auth/me", headers=headers_a)
+    assert res_me_a.status_code == 200
+
+    with StatementCounter(engine) as counter_me_b:
+        res_me_b = client.get("/api/auth/me", headers=headers_b)
+    assert res_me_b.status_code == 200
+
+    # Statement counts for /api/auth/me must be identical (exactly O(1), no growth with 10 squads)
+    assert counter_me_a.count == counter_me_b.count
+
+    # 2. Measure /api/auth/profile/{user_id}/ (viewer looking at user A vs user B)
+    with StatementCounter(engine) as counter_prof_a:
+        res_p_a = client.get(f"/api/auth/profile/u_{user_a.id}/", headers=headers_viewer)
+    assert res_p_a.status_code == 200
+
+    with StatementCounter(engine) as counter_prof_b:
+        res_p_b = client.get(f"/api/auth/profile/u_{user_b.id}/", headers=headers_viewer)
+    assert res_p_b.status_code == 200
+
+    # The statement count for user B profile read must be strictly bounded
+    # (In legacy, user B would execute >= 10 additional queries just for missed count)
+    diff = counter_prof_b.count - counter_prof_a.count
+    # Any difference would only come from user_b.squads eager load (if any), but NEVER from aperos/missed N+1 queries!
+    assert diff <= 1
+

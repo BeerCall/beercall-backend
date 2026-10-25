@@ -28,6 +28,11 @@ from schemas.user import (
 )
 from services.gamification import check_and_award_ghost_badges
 from services.notifications import send_push_notifications
+from services.profile_reads import (
+    get_profile_aggregates,
+    get_guest_profile_aggregates,
+    get_owned_skin_ids,
+)
 
 router = APIRouter()
 
@@ -165,19 +170,15 @@ def read_users_me(
     # Découplage de la gamification via BackgroundTasks (Zéro blocage)
     background_tasks.add_task(background_ghost_check, current_user.id, db)
 
+    aggregates = get_profile_aggregates(db, current_user)
+
     return {
         "username": current_user.username,
         "caps": current_user.capsules,
-        "score": current_user.score,
-        "title": get_rank_title(current_user.score),
+        "score": aggregates.score,
+        "title": aggregates.title,
         "avatar": current_user.avatar_config or {},
-        "stats": {
-            "aperos_created": current_user.aperos_created_count,
-            "aperos_joined": current_user.aperos_joined_count,
-            "aperos_declined": current_user.aperos_declined_count,
-            "aperos_missed": current_user.get_aperos_missed_count(db),
-            "fraud_count": current_user.ia_fraud_count
-        }
+        "stats": aggregates.stats_dict
     }
 
 
@@ -191,6 +192,7 @@ def get_full_profile(
 
     # --- CAS 1 : Utilisateur non connecté (Signup) ---
     if not current_user:
+        guest_aggr = get_guest_profile_aggregates()
         shop_items = [
             {
                 "id": skin.id,
@@ -207,27 +209,20 @@ def get_full_profile(
             "id": 0,
             "username": "Guest",
             "caps": 0,
-            "score": 0,
-            "title": "Nouveau Venu",
+            "score": guest_aggr.score,
+            "title": guest_aggr.title,
             "avatar": {},
             "unlocked_badges": [],
             "squads": [],
             "shop_items": shop_items,
-            "stats": {
-                "aperos_created": 0,
-                "aperos_joined": 0,
-                "aperos_declined": 0,
-                "aperos_missed": 0,
-                "fraud_count": 0
-            }
+            "stats": guest_aggr.stats_dict
         }
 
     # --- CAS 2 : Utilisateur connecté (Dashboard / Boutique) ---
-    # Calcul du titre
-    title = get_rank_title(current_user.score)
+    aggregates = get_profile_aggregates(db, current_user)
 
     # Liste des IDs que l'utilisateur possède
-    owned_skin_ids = [skin.id for skin in current_user.skins]
+    owned_skin_ids = get_owned_skin_ids(db, current_user.id)
 
     shop_items = [
         {
@@ -245,19 +240,13 @@ def get_full_profile(
         "id": current_user.id,
         "username": current_user.username,
         "caps": current_user.capsules,
-        "score": current_user.score,
-        "title": title,
+        "score": aggregates.score,
+        "title": aggregates.title,
         "avatar": current_user.avatar_config or {},
         "unlocked_badges": current_user.badges,
         "squads": current_user.squads,
         "shop_items": shop_items,
-        "stats": {
-            "aperos_created": current_user.aperos_created_count,
-            "aperos_joined": current_user.aperos_joined_count,
-            "aperos_declined": current_user.aperos_declined_count,
-            "aperos_missed": current_user.get_aperos_missed_count(db),
-            "fraud_count": current_user.ia_fraud_count
-        }
+        "stats": aggregates.stats_dict
     }
 
 
@@ -284,14 +273,14 @@ def get_user_profile(
     if target_user.id == current_user.id:
         pass  # Tu pourrais lever une erreur ici si tu le souhaites, ou juste laisser passer.
 
-    # 3. Calcul dynamique du titre de CE joueur
-    title = get_rank_title(target_user.score)
+    # 3. Calcul dynamique des agrégats et du titre de CE joueur
+    aggregates = get_profile_aggregates(db, target_user)
 
     # 4. On récupère le catalogue de la boutique
     all_skins = db.query(Skin).all()
 
     # On regarde ce que le joueur ciblé possède
-    owned_skin_ids = [skin.id for skin in target_user.skins]
+    owned_skin_ids = get_owned_skin_ids(db, target_user.id)
 
     # On construit son "shop"
     shop_items = [
@@ -311,19 +300,13 @@ def get_user_profile(
         "id": target_user.id,
         "username": target_user.username,
         "caps": target_user.capsules,
-        "score": target_user.score,  # Ajoute ça
-        "title": title,
+        "score": aggregates.score,
+        "title": aggregates.title,
         "avatar": target_user.avatar_config or {},
         "unlocked_badges": target_user.badges,
         "squads": target_user.squads,
         "shop_items": shop_items,
-        "stats": {  # Et ça
-            "aperos_created": target_user.aperos_created_count,
-            "aperos_joined": target_user.aperos_joined_count,
-            "aperos_declined": target_user.aperos_declined_count,
-            "aperos_missed": target_user.get_aperos_missed_count(db),
-            "fraud_count": target_user.ia_fraud_count
-        }
+        "stats": aggregates.stats_dict
     }
 
 
