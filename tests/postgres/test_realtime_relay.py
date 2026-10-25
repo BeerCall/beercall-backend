@@ -1,5 +1,6 @@
 import pytest
 import asyncio
+import time
 from datetime import datetime, timezone, timedelta
 from unittest.mock import AsyncMock, Mock
 from models.realtime_event import RealtimeEvent
@@ -196,3 +197,119 @@ async def test_realtime_relay_loop(db_session, test_events, monkeypatch):
     for ev in test_events:
         db_session.refresh(ev)
         assert ev.dispatched_at is not None
+
+
+@pytest.mark.asyncio
+async def test_postgres_fast_wake_on_commit(db_session, monkeypatch):
+    """Real PostgreSQL pg_notify wakes the relay loop fast (<0.5s) without waiting for 1.0s fallback timeout."""
+    bind = db_session.get_bind()
+    if bind.dialect.name != "postgresql":
+        pytest.skip("Fast wake test requires PostgreSQL")
+
+    stop_event = asyncio.Event()
+    received_event = asyncio.Event()
+    broadcast_times = []
+
+    async def fast_broadcast(squad_id, payload):
+        if payload.get("msg") == "fast_wake":
+            broadcast_times.append(time.monotonic())
+            received_event.set()
+            stop_event.set()
+
+    monkeypatch.setattr("core.realtime_relay.manager.broadcast_to_squad", fast_broadcast)
+
+    loop_task = asyncio.create_task(realtime_relay_loop(stop_event))
+    # Allow listener to subscribe and initial pass to complete
+    await asyncio.sleep(0.1)
+
+    start_time = time.monotonic()
+    # Commit new event in independent transaction
+    Session = sessionmaker(bind=bind)
+    with Session() as session:
+        ev = RealtimeEvent(squad_id=1, payload={"msg": "fast_wake"})
+        session.add(ev)
+        session.commit()
+        ev_id = ev.id
+
+    try:
+        await asyncio.wait_for(received_event.wait(), timeout=2.0)
+    finally:
+        stop_event.set()
+        await loop_task
+
+    assert len(broadcast_times) == 1
+    duration = broadcast_times[0] - start_time
+    # Wake must arrive significantly faster than the 1.0s fallback polling period
+    assert duration < 0.6, f"Wake took too long: {duration:.2f}s"
+
+    with Session() as session:
+        refreshed = session.query(RealtimeEvent).filter(RealtimeEvent.id == ev_id).first()
+        assert refreshed.dispatched_at is not None
+
+
+@pytest.mark.asyncio
+async def test_postgres_rollback_no_wake_no_broadcast(db_session, monkeypatch):
+    """Rolled back RealtimeEvent transaction produces no broadcast and no false wake."""
+    bind = db_session.get_bind()
+    if bind.dialect.name != "postgresql":
+        pytest.skip("Rollback test requires PostgreSQL")
+
+    stop_event = asyncio.Event()
+    broadcast_mock = AsyncMock()
+    monkeypatch.setattr("core.realtime_relay.manager.broadcast_to_squad", broadcast_mock)
+
+    loop_task = asyncio.create_task(realtime_relay_loop(stop_event))
+    await asyncio.sleep(0.1)
+
+    Session = sessionmaker(bind=bind)
+    with Session() as session:
+        ev = RealtimeEvent(squad_id=1, payload={"msg": "rolled_back"})
+        session.add(ev)
+        session.flush()
+        session.rollback()
+
+    # Wait 0.3s - nothing should be broadcast
+    await asyncio.sleep(0.3)
+    stop_event.set()
+    await loop_task
+
+    assert broadcast_mock.await_count == 0
+
+
+@pytest.mark.asyncio
+async def test_postgres_event_committed_during_broadcast_is_drained(db_session, monkeypatch):
+    """An event committed during the broadcast of another event is caught on the next pass without 1s wait."""
+    bind = db_session.get_bind()
+    if bind.dialect.name != "postgresql":
+        pytest.skip("Concurrent event test requires PostgreSQL")
+
+    stop_event = asyncio.Event()
+    broadcast_order = []
+    Session = sessionmaker(bind=bind)
+
+    async def step_broadcast(squad_id, payload):
+        msg = payload.get("msg")
+        broadcast_order.append(msg)
+        if msg == "first":
+            # While broadcasting "first", commit "second"
+            with Session() as session:
+                ev2 = RealtimeEvent(squad_id=1, payload={"msg": "second"})
+                session.add(ev2)
+                session.commit()
+        elif msg == "second":
+            stop_event.set()
+
+    monkeypatch.setattr("core.realtime_relay.manager.broadcast_to_squad", step_broadcast)
+
+    with Session() as session:
+        ev1 = RealtimeEvent(squad_id=1, payload={"msg": "first"})
+        session.add(ev1)
+        session.commit()
+
+    start_time = time.monotonic()
+    await realtime_relay_loop(stop_event)
+    total_time = time.monotonic() - start_time
+
+    assert broadcast_order == ["first", "second"]
+    # Total time for both should be well under 1.5s because second was woken via notify
+    assert total_time < 1.0
