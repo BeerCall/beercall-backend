@@ -29,6 +29,7 @@ from services.beer_call_participation import decline_beer_call as decline_beer_c
 from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges, apply_apero_start_rewards, apply_beer_call_creation_rewards, apply_beer_call_join_rewards
 from services.notifications import send_push_notifications, notify_scheduled_apero, notify_started_scheduled_apero
 from services.photo_validation import is_drink_detected, calculate_geodistance, validate_image_file
+from services.squad_reads import get_squad_details_summary
 
 import logging
 
@@ -347,67 +348,7 @@ def get_squad_details(
     if current_user not in squad.members:
         raise HTTPException(status_code=403, detail="Tu ne fais pas partie de cette Squad")
 
-    # 2. Récupérer tous les Apéros (du plus récent au plus ancien) avec Eager Loading
-    from sqlalchemy.orm import joinedload
-    aperos = db.query(Apero).options(
-        joinedload(Apero.creator),
-        joinedload(Apero.participants)
-    ).filter(Apero.squad_id == squad_id).order_by(Apero.created_at.desc()).all()
-
-    active_beer_call, scheduled_beer_calls, past_beer_calls = [], [], []
-    for apero in aperos:
-        apero_end = apero.ended_at or (apero.created_at + timedelta(hours=4))
-        if apero_end.tzinfo is None:
-            apero_end = apero_end.replace(tzinfo=timezone.utc)
-
-        if apero.status == AperoStatus.ACTIVE and apero_end <= datetime.now(timezone.utc):
-            apero.status = AperoStatus.ENDED
-            if not apero.ended_at:
-                apero.ended_at = apero_end
-
-        joined_count = sum(1 for p in apero.participants if p.status == ParticipationStatus.JOINED)
-        user_participant = next((p for p in apero.participants if p.user_id == current_user.id), None)
-        
-        def force_utc(dt):
-            if dt and dt.tzinfo is None:
-                return dt.replace(tzinfo=timezone.utc)
-            return dt
-
-        item = {
-            "id": f"bc_{apero.id}",
-            "creator_name": apero.creator.username,
-            "creator_id": apero.creator_id,
-            "location_name": apero.location_name or "Lieu inconnu",
-            "longitude": apero.longitude,
-            "latitude": apero.latitude,
-            "status": apero.status,
-            "scheduled_for": force_utc(apero.scheduled_for),
-            "started_at": force_utc(apero.started_at),
-            "ended_at": force_utc(apero.ended_at),
-            "participants_count": joined_count,
-            "has_responded": user_participant is not None,
-            "user_status": user_participant.status if user_participant else None,
-            "can_start": apero.status == AperoStatus.SCHEDULED,
-        }
-        if apero.status == AperoStatus.SCHEDULED:
-            scheduled_beer_calls.append(item)
-        elif apero.status == AperoStatus.ACTIVE:
-            active_beer_call.append(item)
-        else:
-            past_beer_calls.append(item)
-
-    db.commit()
-
-    return {
-        "id": f"sq_{squad.id}",
-        "name": squad.name,
-        "color": squad.color,
-        "icon": squad.icon,
-        "invite_code": squad.invite_code,
-        "active_beer_call": active_beer_call,
-        "scheduled_beer_calls": scheduled_beer_calls,
-        "past_beer_calls": past_beer_calls
-    }
+    return get_squad_details_summary(db=db, squad=squad, current_user_id=current_user.id)
 
 
 @router.post("/join", response_model=SquadResponse)

@@ -16,3 +16,5 @@ uploads
 *.pt
 *-schema.json
 diff.json
+static/models/prepared
+static/models/*.fbx.gz

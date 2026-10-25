@@ -40,3 +40,7 @@ coverage.xml
 *.swp
 
 firebase-credentials.json
+
+# Reproducible model preparation (original FBX files remain the source of truth)
+static/models/prepared/
+static/models/*.fbx.gz
