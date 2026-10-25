@@ -167,9 +167,20 @@ async def test_fallback_polling_when_no_wake(db_session, monkeypatch):
     stop_event = asyncio.Event()
     wake_event = asyncio.Event()
 
-    ev = RealtimeEvent(squad_id=1, payload={"msg": "fallback_polled"})
-    db_session.add(ev)
-    db_session.commit()
+    initial_fetch = asyncio.Event()
+    fetch_count = 0
+    loop = asyncio.get_running_loop()
+
+    def tracked_fetch(excluded_ids):
+        nonlocal fetch_count
+        events = fetch_events_to_dispatch(excluded_ids)
+        fetch_count += 1
+        if fetch_count == 1:
+            assert events == []
+            loop.call_soon_threadsafe(initial_fetch.set)
+        return events
+
+    monkeypatch.setattr("core.realtime_relay.fetch_events_to_dispatch", tracked_fetch)
 
     async def mock_broadcast(squad_id, payload):
         stop_event.set()
@@ -179,12 +190,20 @@ async def test_fallback_polling_when_no_wake(db_session, monkeypatch):
     mock_listener = Mock()
     mock_listener.stop_async = AsyncMock(return_value=True)
 
-    start_time = time.monotonic()
-    # wake_event is NEVER set
-    await realtime_relay_loop(stop_event=stop_event, wake_event=wake_event, listener=mock_listener)
-    duration = time.monotonic() - start_time
+    task = asyncio.create_task(realtime_relay_loop(stop_event, wake_event, mock_listener))
+    try:
+        await asyncio.wait_for(initial_fetch.wait(), timeout=2.0)
+        # Insert AFTER the empty initial scan; no listener and no wake signal.
+        ev = RealtimeEvent(squad_id=1, payload={"msg": "fallback_polled"})
+        db_session.add(ev)
+        db_session.commit()
+        await asyncio.wait_for(asyncio.shield(task), timeout=3.0)
+    finally:
+        stop_event.set()
+        await task
 
-    # Since it was in the initial pass or poller, it was broadcast and dispatched
+    assert fetch_count >= 2
+    assert not wake_event.is_set()
     db_session.refresh(ev)
     assert ev.dispatched_at is not None
 
@@ -254,6 +273,19 @@ async def test_anti_hol_50_poison_events_unblock_51st_healthy_event(db_session, 
         db_session.refresh(p_ev)
         assert p_ev.dispatched_at is None
         assert p_ev.id in quarantined
+
+
+def test_fetch_excludes_every_quarantined_event_beyond_1000(db_session):
+    """All 4096 registry slots must be respected, not just the first SQL chunk."""
+    created_at = datetime.now(timezone.utc) - timedelta(minutes=1)
+    poisoned = [RealtimeEvent(squad_id=1, payload={"poison": True}, created_at=created_at) for _ in range(1050)]
+    healthy = RealtimeEvent(squad_id=1, payload={"healthy": True})
+    db_session.add_all(poisoned + [healthy])
+    db_session.commit()
+
+    events = fetch_events_to_dispatch([event.id for event in poisoned])
+    assert [event["id"] for event in events] == [healthy.id]
+    assert all(event.dispatched_at is None for event in poisoned)
 
 
 def test_quarantine_readmission_after_expiration():

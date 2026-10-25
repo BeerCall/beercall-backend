@@ -135,8 +135,10 @@ def fetch_events_to_dispatch(excluded_ids: Optional[List[object]] = None) -> lis
     try:
         query = db.query(RealtimeEvent).filter(RealtimeEvent.dispatched_at.is_(None))
         if excluded_ids:
-            # Bound exclusion clause to max 1000 IDs for SQL parameter safety
-            query = query.filter(~RealtimeEvent.id.in_(excluded_ids[:1000]))
+            # The caller bounds the registry at 4096. Chunk clauses, never discard
+            # exclusions: otherwise the next 50 quarantined rows block healthy work.
+            for offset in range(0, len(excluded_ids), 1000):
+                query = query.filter(~RealtimeEvent.id.in_(excluded_ids[offset:offset + 1000]))
         events = query.order_by(RealtimeEvent.created_at.asc()).limit(50).all()
 
         results = []
@@ -211,7 +213,7 @@ async def realtime_relay_loop(
     - Continuous drain without sleep when batch of 50 makes progress
     - Anti-HoL blocking quarantine registry (5 failures -> 300s quarantine, max 4096 entries)
     - Monotonic 60s purge timer
-    - Bounded clean shutdown <= 3s
+    - Listener/idle shutdown bounded to 3s; in-flight delivery has no global deadline
     """
     logger.info("Realtime relay started")
 
