@@ -195,7 +195,10 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
         # Chemins des fichiers
         input_path = f"uploads/jobs/{job.id}.input"
         
-        # 1. Lecture fichier
+        # 1. Lecture fichier : une erreur de lecture est une erreur technique attendue
+        # et doit suivre le même chemin de finalisation que l'ancienne sémantique
+        # (PENDING avec retries puis FAILED au plafond), jamais laisser le job RUNNING.
+        file_bytes: bytes | None = None
         t_file = time.monotonic()
         try:
             with open(input_path, "rb") as f:
@@ -205,37 +208,40 @@ def process_claimed_job(db_factory, job_id: uuid.UUID, owner_id: str):
         except Exception as e:
             file_dur = (time.monotonic() - t_file) * 1000.0
             log_job_timing("file_read", job_id, pid, attempt, duration_ms=file_dur, status="error", error=type(e).__name__)
-            raise
-
-        # 2. YOLO inference SEULE (les vérifications métier passent sous verrou à la finalisation)
-        t_det = time.monotonic()
-        try:
-            ia_validation = is_drink_detected(file_bytes)
-            det_dur = (time.monotonic() - t_det) * 1000.0
-
-            if not ia_validation:
-                log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="rejected")
-                raise ValueError("Pas de boisson, pas de Bar ! -15 Caps 📉")
-
-            log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="success")
-            final_status = BeerCallJobStatus.SUCCEEDED
-            error_message = None
-
-        except ValueError as e:
-            final_status = BeerCallJobStatus.REJECTED
-            error_message = str(e)
-        except RuntimeError as e:
-            det_dur = (time.monotonic() - t_det) * 1000.0
-            log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="error", error=type(e).__name__)
-            # IA technical error
-            final_status = BeerCallJobStatus.PENDING
-            error_message = str(e)
-        except Exception as e:
-            det_dur = (time.monotonic() - t_det) * 1000.0
-            log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="error", error=type(e).__name__)
+            logger.exception("Photo read failed for job %s", job_id)
             final_status = BeerCallJobStatus.FAILED
             error_message = "Erreur inattendue lors du traitement."
-            logger.exception("Unexpected error in process_claimed_job")
+
+        # 2. YOLO inference SEULE (les vérifications métier passent sous verrou à la finalisation)
+        if file_bytes is not None:
+            t_det = time.monotonic()
+            try:
+                ia_validation = is_drink_detected(file_bytes)
+                det_dur = (time.monotonic() - t_det) * 1000.0
+
+                if not ia_validation:
+                    log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="rejected")
+                    raise ValueError("Pas de boisson, pas de Bar ! -15 Caps 📉")
+
+                log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="success")
+                final_status = BeerCallJobStatus.SUCCEEDED
+                error_message = None
+
+            except ValueError as e:
+                final_status = BeerCallJobStatus.REJECTED
+                error_message = str(e)
+            except RuntimeError as e:
+                det_dur = (time.monotonic() - t_det) * 1000.0
+                log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="error", error=type(e).__name__)
+                # IA technical error
+                final_status = BeerCallJobStatus.PENDING
+                error_message = str(e)
+            except Exception as e:
+                det_dur = (time.monotonic() - t_det) * 1000.0
+                log_job_timing("detector_total", job_id, pid, attempt, duration_ms=det_dur, status="error", error=type(e).__name__)
+                final_status = BeerCallJobStatus.FAILED
+                error_message = "Erreur inattendue lors du traitement."
+                logger.exception("Unexpected error in process_claimed_job")
 
         # 3. Phase de finalisation (verrou final, commit compris)
         t_fin = time.monotonic()

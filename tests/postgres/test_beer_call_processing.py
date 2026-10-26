@@ -80,3 +80,65 @@ def test_process_claimed_job_retryable_error(setup_job, db_session):
     job = db_session.query(BeerCallJob).filter(BeerCallJob.id == job_id).first()
     assert job.status == BeerCallJobStatus.PENDING
     assert job.owner_id is None
+
+import uuid as _uuid
+from unittest.mock import Mock, patch
+
+from models.apero import Apero
+
+
+def _set_attempts(db_session, job_id, attempts):
+    job = db_session.query(BeerCallJob).filter(BeerCallJob.id == job_id).first()
+    job.attempts = attempts
+    db_session.commit()
+    return job
+
+
+def test_process_claimed_job_missing_photo_requeues_without_detector(setup_job, db_session):
+    job_id, owner_id, db_factory = setup_job
+    _set_attempts(db_session, job_id, 1)
+    os.remove(f"uploads/jobs/{job_id}.input")
+
+    detector = Mock(return_value=True)
+    with patch("services.beer_call_jobs.is_drink_detected", detector):
+        process_claimed_job(db_factory, job_id, owner_id)
+
+    db_session.expire_all()
+    job = db_session.query(BeerCallJob).filter(BeerCallJob.id == job_id).first()
+    assert job.status == BeerCallJobStatus.PENDING
+    assert job.owner_id is None
+    assert detector.call_count == 0
+    assert db_session.query(Apero).filter(Apero.source_job_id == job_id).count() == 0
+
+
+def test_process_claimed_job_missing_photo_fails_at_attempt_cap(setup_job, db_session):
+    job_id, owner_id, db_factory = setup_job
+    _set_attempts(db_session, job_id, 3)
+    os.remove(f"uploads/jobs/{job_id}.input")
+
+    detector = Mock(return_value=True)
+    with patch("services.beer_call_jobs.is_drink_detected", detector):
+        process_claimed_job(db_factory, job_id, owner_id)
+
+    db_session.expire_all()
+    job = db_session.query(BeerCallJob).filter(BeerCallJob.id == job_id).first()
+    assert job.status == BeerCallJobStatus.FAILED
+    assert detector.call_count == 0
+    assert db_session.query(Apero).filter(Apero.source_job_id == job_id).count() == 0
+
+
+def test_process_claimed_job_permission_error_requeues_without_detector(setup_job, db_session):
+    job_id, owner_id, db_factory = setup_job
+    _set_attempts(db_session, job_id, 2)
+
+    detector = Mock(return_value=True)
+    with patch("services.beer_call_jobs.is_drink_detected", detector):
+        with patch("builtins.open", side_effect=PermissionError("refusé")):
+            process_claimed_job(db_factory, job_id, owner_id)
+
+    db_session.expire_all()
+    job = db_session.query(BeerCallJob).filter(BeerCallJob.id == job_id).first()
+    assert job.status == BeerCallJobStatus.PENDING
+    assert job.owner_id is None
+    assert detector.call_count == 0
+    assert db_session.query(Apero).filter(Apero.source_job_id == job_id).count() == 0
