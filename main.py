@@ -25,6 +25,8 @@ from datetime import datetime, timezone
 
 from core.realtime_relay import realtime_relay_loop
 
+# Uvicorn configures its own loggers, not the application root logger.
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @asynccontextmanager
