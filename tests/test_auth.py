@@ -84,3 +84,39 @@ def test_refresh_token_lifetime_is_30_days() -> None:
     remaining_seconds = payload["exp"] - datetime.now(timezone.utc).timestamp()
     assert REFRESH_TOKEN_EXPIRE_MINUTES == 60 * 24 * 30
     assert 29 * 24 * 3600 < remaining_seconds <= 30 * 24 * 3600
+
+
+@pytest.mark.parametrize("kind", ["expired", "invalid", "refresh", "unknown-user"])
+def test_profile_rejects_unusable_access_token(client: TestClient, auth_user: User, kind: str) -> None:
+    """A sent-but-unusable token must yield 401, never fall back to the Guest profile."""
+    if kind == "expired":
+        token = jwt.encode(
+            {"sub": auth_user.username, "type": "access", "exp": datetime.now(timezone.utc) - timedelta(seconds=60)},
+            SECRET_KEY,
+            algorithm=ALGORITHM,
+        )
+    elif kind == "invalid":
+        token = "invalid.jwt.token"
+    elif kind == "refresh":
+        token = create_refresh_token({"sub": auth_user.username})
+    else:
+        token = create_access_token({"sub": "missing-user"})
+
+    response = client.get("/api/auth/profile/", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 401
+    assert response.json() == {"detail": "Could not validate credentials"}
+    assert response.headers["WWW-Authenticate"] == "Bearer"
+
+
+def test_profile_without_token_returns_guest(client: TestClient) -> None:
+    """No Authorization header at all stays the public Guest profile used at signup."""
+    response = client.get("/api/auth/profile/")
+    assert response.status_code == 200
+    assert response.json()["username"] == "Guest"
+
+
+def test_profile_with_valid_token_returns_user(client: TestClient, auth_user: User) -> None:
+    token = create_access_token({"sub": auth_user.username})
+    response = client.get("/api/auth/profile/", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 200
+    assert response.json()["username"] == auth_user.username
