@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, DateTime, Integer, String, JSON, func
+from sqlalchemy import Column, DateTime, Float, Integer, String, JSON, func
 from sqlalchemy.orm import relationship
 
 from db.database import Base
@@ -19,6 +19,14 @@ class User(Base):
                         default=lambda: datetime.now(timezone.utc), server_default=func.now())
     capsules = Column(Integer, default=100)
     avatar_config = Column(JSON, nullable=True)
+    # Dernière position partagée : information de secours, jamais un fix live.
+    last_latitude = Column(Float, nullable=True)
+    last_longitude = Column(Float, nullable=True)
+    last_location_at = Column(DateTime(timezone=True), nullable=True)
+    # Rendu des sprites : le statut permet au client d'arrêter le polling.
+    avatar_config_hash = Column(String(64), nullable=True, index=True)
+    avatar_sprite_hash = Column(String(64), nullable=True)
+    avatar_render_status = Column(String(16), nullable=True)
     badges = relationship("Badge", secondary=user_badges, backref="users")
     skins = relationship("Skin", secondary=user_skins, backref="users")
     squads = relationship("Squad", secondary=squad_members, back_populates="members")

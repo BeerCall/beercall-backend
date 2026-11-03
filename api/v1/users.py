@@ -26,6 +26,10 @@ from schemas.user import (
     PushTokenUpdate,
     ConnectionItem
 )
+from schemas.avatar_sprites import AvatarSprites
+from schemas.location import UserLocationUpdate
+from services.avatar_sprites import avatar_sprites_for, schedule_avatar_render
+from services.user_location import update_last_location
 from services.gamification import check_and_award_ghost_badges
 from services.notifications import send_push_notifications
 from services.profile_reads import (
@@ -53,6 +57,8 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
 
     # On ajoute en base pour générer le new_user.id
     db.add(new_user)
+    db.flush()
+    schedule_avatar_render(db, new_user)
     db.commit()
     db.refresh(new_user)
 
@@ -178,7 +184,8 @@ def read_users_me(
         "score": aggregates.score,
         "title": aggregates.title,
         "avatar": current_user.avatar_config or {},
-        "stats": aggregates.stats_dict
+        "stats": aggregates.stats_dict,
+        "avatar_sprites": avatar_sprites_for(current_user),
     }
 
 
@@ -215,7 +222,8 @@ def get_full_profile(
             "unlocked_badges": [],
             "squads": [],
             "shop_items": shop_items,
-            "stats": guest_aggr.stats_dict
+            "stats": guest_aggr.stats_dict,
+            "avatar_sprites": AvatarSprites(status="missing", pending=False),
         }
 
     # --- CAS 2 : Utilisateur connecté (Dashboard / Boutique) ---
@@ -246,7 +254,8 @@ def get_full_profile(
         "unlocked_badges": current_user.badges,
         "squads": current_user.squads,
         "shop_items": shop_items,
-        "stats": aggregates.stats_dict
+        "stats": aggregates.stats_dict,
+        "avatar_sprites": avatar_sprites_for(current_user),
     }
 
 
@@ -306,7 +315,8 @@ def get_user_profile(
         "unlocked_badges": target_user.badges,
         "squads": target_user.squads,
         "shop_items": shop_items,
-        "stats": aggregates.stats_dict
+        "stats": aggregates.stats_dict,
+        "avatar_sprites": avatar_sprites_for(target_user),
     }
 
 
@@ -361,7 +371,7 @@ def equip_avatar(
         avatar_data.feet
     ]
     # L'accessoire est optionnel, on l'ajoute seulement s'il y en a un
-    if avatar_data.accessory:
+    if avatar_data.accessory and avatar_data.accessory.lower() != "none":
         requested_skins.append(avatar_data.accessory)
 
     # 2. On récupère la liste des IDs des skins que le joueur possède VRAIMENT
@@ -378,6 +388,7 @@ def equip_avatar(
     # 4. Si tout est bon, on met à jour le JSON de l'avatar en base de données
     # .dict() (ou .model_dump() dans Pydantic v2) transforme l'objet en dictionnaire Python
     current_user.avatar_config = avatar_data.dict()
+    schedule_avatar_render(db, current_user)
 
     # 5. On sauvegarde
     db.commit()
@@ -415,7 +426,8 @@ def get_user_connections(db: Session = Depends(get_db), current_user: User = Dep
             "caps": current_user_eager.capsules,
             "score": current_user_eager.score,
             "title": get_rank_title(current_user_eager.score),
-            "avatar": current_user_eager.avatar_config or {}
+            "avatar": current_user_eager.avatar_config or {},
+            "avatar_sprites": avatar_sprites_for(current_user_eager),
         }
     }
 
@@ -429,7 +441,8 @@ def get_user_connections(db: Session = Depends(get_db), current_user: User = Dep
                     "caps": member.capsules,
                     "score": member.score,
                     "title": get_rank_title(member.score),
-                    "avatar": member.avatar_config or {}
+                    "avatar": member.avatar_config or {},
+                    "avatar_sprites": avatar_sprites_for(member),
                 }
 
     # 3. Tri par SCORE décroissant (Prestige)
@@ -445,6 +458,17 @@ def update_push_token(
     current_user.push_token = token_data.token
     db.commit()
     return {"message": "Push token mis à jour !"}
+
+
+@router.put("/location/", status_code=status.HTTP_204_NO_CONTENT)
+def update_location(
+        loc_data: UserLocationUpdate,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
+):
+    update_last_location(db, current_user, loc_data.latitude, loc_data.longitude)
+    db.commit()
+    return None
 
 
 @router.post("/test-notification/")

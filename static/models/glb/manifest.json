@@ -1,0 +1,4219 @@
+{
+  "version": 1,
+  "pipelineVersion": 1,
+  "generatedAt": "2026-11-02T00:04:05.020Z",
+  "items": [
+    {
+      "key": "acc/men/Men_accessory_Alpine_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Alpine_5000.40303f92.glb",
+      "sha256": "40851bf57e65f1c098e863bc8f3276899d8d054fe47d23e0e2dac71ae1adb0e3",
+      "bytes": 627788,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Alpine_5000.fbx",
+      "sourceId": "Men_accessory_Alpine_5000",
+      "sourceSha256": "40303f92c478a9f81c8e9e6c4600d76daa0eecd010395665b8ec4129fff92251",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_AstonMartin_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_AstonMartin_5000.e7326ef5.glb",
+      "sha256": "1cac77030800b7793a7ffe94ca7c97df37a616549121766400c9c72a07a3b9fe",
+      "bytes": 627776,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_AstonMartin_5000.fbx",
+      "sourceId": "Men_accessory_AstonMartin_5000",
+      "sourceSha256": "e7326ef561d0bce63f94cb2e74cb49453dc43e54f0b38fa0fbaf8875ee15345a",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Audi_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Audi_5000.66bcadba.glb",
+      "sha256": "e5b993dea90581db4bc81a8510bb0f90439a3697dcc4becf9be8fe8c25a9cbc7",
+      "bytes": 627868,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Audi_5000.fbx",
+      "sourceId": "Men_accessory_Audi_5000",
+      "sourceSha256": "66bcadba6a77cfb6b757846439ac1433f2eaa0416046456f566ed452ec5e9b9e",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Backpack_0",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Backpack_0.b9404416.glb",
+      "sha256": "5f55b0890214e70e35ca723ea9b67f50e36cfee435873c11ea3ec8183811e8bb",
+      "bytes": 115136,
+      "drawCalls": 4,
+      "triangles": 1748,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_accessory_Backpack_0.fbx",
+      "sourceId": "Men_accessory_Backpack_0",
+      "sourceSha256": "b94044161018597daae96a4594789bf6d5149995f07bd874a358ac8eb183facc",
+      "sourceBBox": {
+        "min": [
+          -21.90865538050552,
+          118.06741948172639,
+          -26.301617623097087
+        ],
+        "max": [
+          21.908657829246224,
+          158.95449292495942,
+          -3.419851971086679
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Beer_500",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Beer_500.7ec58a4e.glb",
+      "sha256": "386bce50ab50bd9f95417f079f1fe011f536b3cae9f7f86f422c26ad7790b4b7",
+      "bytes": 23536,
+      "drawCalls": 7,
+      "triangles": 358,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Beer_500.fbx",
+      "sourceId": "Men_accessory_Beer_500",
+      "sourceSha256": "7ec58a4e4cb3cf0aba3498aebc9da0a1ccfe48c94cea039f6d4d5adac107f7ae",
+      "sourceBBox": {
+        "min": [
+          -0.077323317527771,
+          -0.14789460599422455,
+          -0.07760906219482422
+        ],
+        "max": [
+          0.09125149250030518,
+          0.09363924711942673,
+          0.11867179721593857
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Bellsprout_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Bellsprout_2000.38c6cb91.glb",
+      "sha256": "c60fadfa9567af104265e4d77f5b86935408e7b5915f1746e711be091590d274",
+      "bytes": 34220,
+      "drawCalls": 8,
+      "triangles": 1015,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Bellsprout_2000.fbx",
+      "sourceId": "Men_accessory_Bellsprout_2000",
+      "sourceSha256": "38c6cb91eb3964e67175d3e5519e2f89208b7d8675f658e418cbd85c58663b28",
+      "sourceBBox": {
+        "min": [
+          -107.91950225830078,
+          -67.7864932438667,
+          -175.21569892973955
+        ],
+        "max": [
+          108.00149440765381,
+          83.02365054424885,
+          118.87480397461252
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Bulbasaur_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Bulbasaur_2000.8062dafe.glb",
+      "sha256": "1225c241a68986c2ac465064dbe814cc9659eba32767d0ab5404b35f3cf73ced",
+      "bytes": 27256,
+      "drawCalls": 6,
+      "triangles": 778,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Bulbasaur_2000.fbx",
+      "sourceId": "Men_accessory_Bulbasaur_2000",
+      "sourceSha256": "8062dafea66d4f5b01ef787cd8b0b2454df7e33ee961bf0bd25917c6eea1c98d",
+      "sourceBBox": {
+        "min": [
+          -42.22553074359894,
+          -35.70876815818194,
+          -62.24955723093741
+        ],
+        "max": [
+          41.529300808906555,
+          61.304800080987704,
+          21.754215514941905
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Cadillac_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Cadillac_5000.8f6d6f20.glb",
+      "sha256": "e4bf5a8d7af34a3f14d83efafc707d676dedb10905074d0cc6e5efbf97f36214",
+      "bytes": 627752,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Cadillac_5000.fbx",
+      "sourceId": "Men_accessory_Cadillac_5000",
+      "sourceSha256": "8f6d6f206f0c6a6b160017c0fd35d7b075b2c35e0a79e22d363eb3fbf7bbe10d",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Charmander_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Charmander_2000.b3306b9f.glb",
+      "sha256": "05ee9ddaa86d84cc769d8907bcad3000c2e96b4267a59b9202585aaedd38019e",
+      "bytes": 23820,
+      "drawCalls": 6,
+      "triangles": 632,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Charmander_2000.fbx",
+      "sourceId": "Men_accessory_Charmander_2000",
+      "sourceSha256": "b3306b9f8646890f21916c41de2b0a653fae66ff500216a53601f069ea482a58",
+      "sourceBBox": {
+        "min": [
+          -31.38917088508606,
+          -21.067919912080015,
+          -61.47597853119718
+        ],
+        "max": [
+          34.85912084579468,
+          65.05718057669222,
+          29.7437328231985
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Cubone_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Cubone_2000.833c03fa.glb",
+      "sha256": "c628b7dbf7e12f96f95fe4e8590bfb9fa02684d70bfd5981e93d482cbbb1ea07",
+      "bytes": 33272,
+      "drawCalls": 12,
+      "triangles": 634,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Cubone_2000.fbx",
+      "sourceId": "Men_accessory_Cubone_2000",
+      "sourceSha256": "833c03fae8faa70a5224c11ce45baba495f071efaba1a16dce7c1e80e655a0e4",
+      "sourceBBox": {
+        "min": [
+          -32.47765898704529,
+          -20.66527760437982,
+          -26.803825770647972
+        ],
+        "max": [
+          21.09113037586212,
+          45.15836643280246,
+          43.12430034343541
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Eevee_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Eevee_2000.aeb74719.glb",
+      "sha256": "4b722224bb8e262bbcd206748da68b6f6620b3759feaa6f9d94e0cfd5b33ce15",
+      "bytes": 34520,
+      "drawCalls": 11,
+      "triangles": 774,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Eevee_2000.fbx",
+      "sourceId": "Men_accessory_Eevee_2000",
+      "sourceSha256": "aeb747199aaa0bc3f1397647adbd5e975202e953d3df3f7f9f6dd58369b9335f",
+      "sourceBBox": {
+        "min": [
+          -51.591187715530396,
+          -17.75049157690819,
+          -37.61504294544523
+        ],
+        "max": [
+          45.3751802444458,
+          72.67171828104769,
+          41.94957984299238
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Ferrari_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Ferrari_5000.00371a1a.glb",
+      "sha256": "1382436096bc1e5168e4c1a7f2ca9d2cf1ffc096f400823aa2d1fca03a98f296",
+      "bytes": 627792,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Ferrari_5000.fbx",
+      "sourceId": "Men_accessory_Ferrari_5000",
+      "sourceSha256": "00371a1a6db73291b1f8832f5f4bb820c95b7b86cd0533b7d77d6d5bebc93f57",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Glalie_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Glalie_2000.13deafcd.glb",
+      "sha256": "cef85de2001f5462cd6e8028f2901e015f92dbfe7f89d917bc193c09a84699fe",
+      "bytes": 60844,
+      "drawCalls": 2,
+      "triangles": 2272,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Glalie_2000.fbx",
+      "sourceId": "Men_accessory_Glalie_2000",
+      "sourceSha256": "13deafcd4adca4fde6ef4787c5b7b85b62527708d8966926d010aebbaa9abcd9",
+      "sourceBBox": {
+        "min": [
+          -104.07689809799194,
+          -111.71302578795888,
+          -133.04461855301142
+        ],
+        "max": [
+          112.48769760131836,
+          110.88991410238674,
+          101.24091348362026
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Haas_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Haas_5000.d29fae70.glb",
+      "sha256": "f038d34f79a03dd095dbe16ce74f14845be285650a2a00b95601cc1abb07475b",
+      "bytes": 627616,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Haas_5000.fbx",
+      "sourceId": "Men_accessory_Haas_5000",
+      "sourceSha256": "d29fae7020b5f8db31b0228685d792f66b091ffba17e2b4a63560133e8cc317e",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Haunter_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Haunter_2000.12318740.glb",
+      "sha256": "72edbe26f1f4eb3e13d9719e01cbc6b0357fc6acd4718f26803e6b312afbff6e",
+      "bytes": 38108,
+      "drawCalls": 18,
+      "triangles": 420,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Haunter_2000.fbx",
+      "sourceId": "Men_accessory_Haunter_2000",
+      "sourceSha256": "1231874013cc309c6e461b95dd3aba7bf07f4affc5d965361d38185df7a7431a",
+      "sourceBBox": {
+        "min": [
+          -31.658819317817688,
+          -15.857218705157704,
+          -28.561101114354468
+        ],
+        "max": [
+          37.780991196632385,
+          59.48490319523058,
+          25.479851073343422
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Jigglypuff_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Jigglypuff_2000.db73284d.glb",
+      "sha256": "adb4fc84cb78e108c119bcabf2d0e6fa0eec43a816d6bd89d130a9d776fb3f49",
+      "bytes": 34592,
+      "drawCalls": 11,
+      "triangles": 759,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Jigglypuff_2000.fbx",
+      "sourceId": "Men_accessory_Jigglypuff_2000",
+      "sourceSha256": "db73284ddb319a8b7211038b45c67bbd0e69755cd77a27b5ead49a79d371d810",
+      "sourceBBox": {
+        "min": [
+          -58.4275484085083,
+          -28.446451708298245,
+          -78.5641466917018
+        ],
+        "max": [
+          62.8897488117218,
+          94.71962709899736,
+          65.12927958130018
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Kart_3000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Kart_3000.543d1fa1.glb",
+      "sha256": "469196d52d1b1d99ec620e2c01080b7efbe363de67778769f3800c01d3f66765",
+      "bytes": 62100,
+      "drawCalls": 4,
+      "triangles": 3828,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Kart_3000.fbx",
+      "sourceId": "Men_accessory_Kart_3000",
+      "sourceSha256": "543d1fa1e9a098dd6bea74621b180b12d9dc996b299a6414a2fae65a2f7b97ad",
+      "sourceBBox": {
+        "min": [
+          -43.013301849365234,
+          -0.271699994802475,
+          -20.572399139404297
+        ],
+        "max": [
+          29.51180076599121,
+          43.3302001953125,
+          20.468900680541992
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Magikarp_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Magikarp_2000.0730f2b8.glb",
+      "sha256": "17da1bb9a83632a28cd781c32c9fb37c9fa87cc124a19a141ae2c1967ce8da94",
+      "bytes": 23032,
+      "drawCalls": 6,
+      "triangles": 606,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Magikarp_2000.fbx",
+      "sourceId": "Men_accessory_Magikarp_2000",
+      "sourceSha256": "0730f2b876f09698d85b11bb907ea7d3b46d6f3808f23b70aa1a926fd98b38c8",
+      "sourceBBox": {
+        "min": [
+          -23.64491969347,
+          -32.108452761074496,
+          -30.209826309185278
+        ],
+        "max": [
+          63.131409883499146,
+          35.82899459105647,
+          29.74988447211977
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Magnemite_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Magnemite_2000.05896c66.glb",
+      "sha256": "5f6af72a9245dd926b34e12f6843c436f2be0e580c72b34d505166dabb8fae2b",
+      "bytes": 28760,
+      "drawCalls": 7,
+      "triangles": 808,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Magnemite_2000.fbx",
+      "sourceId": "Men_accessory_Magnemite_2000",
+      "sourceSha256": "05896c6687c0f33bd87440df37a6f0704ae2a394d63617b60462795d755d0c69",
+      "sourceBBox": {
+        "min": [
+          -70.4727292060852,
+          -25.68727417929555,
+          -47.36359513332823
+        ],
+        "max": [
+          57.79370069503784,
+          48.95368303307058,
+          31.408911580056152
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Marill_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Marill_2000.c7ece8df.glb",
+      "sha256": "2b2a7996759f4f42a5f7f7cdf5b71d34684cf7ba5c98624c5b1a1a8eb19e5224",
+      "bytes": 137708,
+      "drawCalls": 25,
+      "triangles": 4741,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Marill_2000.fbx",
+      "sourceId": "Men_accessory_Marill_2000",
+      "sourceSha256": "c7ece8dfeb0ace3bb06802de21d0df109c15ad7f520c1c3c5b3432643395b535",
+      "sourceBBox": {
+        "min": [
+          -32.46757984161377,
+          -40.708670650176465,
+          -28.211515648645335
+        ],
+        "max": [
+          14.935709536075592,
+          33.55754767472289,
+          27.53968065998369
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_McLaren_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_McLaren_5000.c84121ab.glb",
+      "sha256": "3bb76a41b0f23c55e7d339a4afc6c27a45a3bd02c1858a365f8de248b89b0339",
+      "bytes": 627828,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_McLaren_5000.fbx",
+      "sourceId": "Men_accessory_McLaren_5000",
+      "sourceSha256": "c84121abaa89e19a67f650cd20d30eacaf51de08cf2e99a1d435110b6bdb742d",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Mercedes_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Mercedes_5000.fee53cfa.glb",
+      "sha256": "97fb1c6a405bc892b82f70140e3c2b23a5bae21cd0d806f3caaada8a734a2054",
+      "bytes": 627760,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Mercedes_5000.fbx",
+      "sourceId": "Men_accessory_Mercedes_5000",
+      "sourceSha256": "fee53cfad9a62fa305186910556a2f506254724f06f83030ede304ccc10ac1eb",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Mew_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Mew_2000.c75e1472.glb",
+      "sha256": "4f08b63f7d2ed4eb2c7aa2a37067baadc4dcb05601cfed4d35c77fdfd269c4cd",
+      "bytes": 21104,
+      "drawCalls": 5,
+      "triangles": 572,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Mew_2000.fbx",
+      "sourceId": "Men_accessory_Mew_2000",
+      "sourceSha256": "c75e1472c7f93de198dd5cdfae45dff0d2936086610d54ca970e79b98573361e",
+      "sourceBBox": {
+        "min": [
+          -23.5881507396698,
+          -9.169289931027246,
+          -25.69716712584893
+        ],
+        "max": [
+          13.03585022687912,
+          45.16737491890814,
+          38.47561031954935
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Oddish_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Oddish_2000.d4e300b3.glb",
+      "sha256": "ba2c48152dfbbd312e25057de10505a5272d92d2a343a2e114a8402c7edb5ca8",
+      "bytes": 33612,
+      "drawCalls": 11,
+      "triangles": 730,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Oddish_2000.fbx",
+      "sourceId": "Men_accessory_Oddish_2000",
+      "sourceSha256": "d4e300b3e7d60d7d342d5a123fcf17da7d322e7f78381487102cfc0792cb0ae2",
+      "sourceBBox": {
+        "min": [
+          -49.1167813539505,
+          -18.943579275222103,
+          -66.061376693578
+        ],
+        "max": [
+          47.62451946735382,
+          61.76977277454816,
+          50.11873553869275
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Pikachu_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Pikachu_2000.671a4417.glb",
+      "sha256": "83964df375c78c60e623b5883f7f334f2e21ef8bb43f2ed388693529ffed35ff",
+      "bytes": 28772,
+      "drawCalls": 5,
+      "triangles": 714,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Pikachu_2000.fbx",
+      "sourceId": "Men_accessory_Pikachu_2000",
+      "sourceSha256": "671a4417ef00e9987a7e5c96fd9abca28bf6e0bb2bd01c09574a814f896463bc",
+      "sourceBBox": {
+        "min": [
+          -0.4080987870693207,
+          -0.7295113801956177,
+          -0.2277882993221283
+        ],
+        "max": [
+          0.46428099274635315,
+          0.4231398105621338,
+          0.9869155287742615
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Pistol_500",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Pistol_500.cecb3c46.glb",
+      "sha256": "3b44bc90cc977d13f42132a69d935ff7aa6ed839d69721848953f802ed183e77",
+      "bytes": 102228,
+      "drawCalls": 3,
+      "triangles": 1040,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_accessory_Pistol_500.fbx",
+      "sourceId": "Men_accessory_Pistol_500",
+      "sourceSha256": "cecb3c460ceff92ae56a0c678a66cd3d9ac8067daa524b9107c7694f3a8353b1",
+      "sourceBBox": {
+        "min": [
+          -92.05142046894758,
+          138.57074264449867,
+          2.579455278579406
+        ],
+        "max": [
+          -66.2213337885565,
+          145.33375615627787,
+          20.844318936989048
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Poliwag_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Poliwag_2000.91e65f38.glb",
+      "sha256": "d9061c7e87ff31ef224fb6d60b4eaf2652f377b5276ca88acf329c5fd3d71f3a",
+      "bytes": 37704,
+      "drawCalls": 13,
+      "triangles": 746,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Poliwag_2000.fbx",
+      "sourceId": "Men_accessory_Poliwag_2000",
+      "sourceSha256": "91e65f3872129d41be91282b9838d7fb851c3b298fc502c7e2d9bf320075c8ec",
+      "sourceBBox": {
+        "min": [
+          -24.451060593128204,
+          -20.68811729717344,
+          -25.893503438195204
+        ],
+        "max": [
+          35.77322065830231,
+          51.614810873119694,
+          21.26518377947683
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Porygon_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Porygon_2000.ca364434.glb",
+      "sha256": "44b7406b4ecae67870274933b9067a75c1a5e58e7dda178b15f04b1893babf06",
+      "bytes": 19360,
+      "drawCalls": 9,
+      "triangles": 216,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Porygon_2000.fbx",
+      "sourceId": "Men_accessory_Porygon_2000",
+      "sourceSha256": "ca364434a18af7cb7a1874d8010534f1122f2a3b89b6e351158e309c99318f0a",
+      "sourceBBox": {
+        "min": [
+          -42.616480588912964,
+          -46.44036362025906,
+          -49.9869374735728
+        ],
+        "max": [
+          38.607388734817505,
+          53.843214305582514,
+          39.31823071639785
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_RacingBulls_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_RacingBulls_5000.f2946881.glb",
+      "sha256": "c5a65776f71f8dd679da449e0ef4bcd20f35ae3b8abc4f7d4b1576b74a60b01b",
+      "bytes": 627644,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_RacingBulls_5000.fbx",
+      "sourceId": "Men_accessory_RacingBulls_5000",
+      "sourceSha256": "f2946881c7b0ce86ee946351857fc82188c96362526a0234fb698fae5e7f3304",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_RedBull_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_RedBull_5000.fcfa094a.glb",
+      "sha256": "81c132e9074e75536926558efd9a8919241a3783cf35055f9246bed6c884c1ca",
+      "bytes": 627868,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_RedBull_5000.fbx",
+      "sourceId": "Men_accessory_RedBull_5000",
+      "sourceSha256": "fcfa094a16b9a91ef22f149784a5b1d51d7afa238401c74aaed4e1de35d396aa",
+      "sourceBBox": {
+        "min": [
+          -85.0299703605826,
+          -49.62376104006387,
+          -231.5029048705235
+        ],
+        "max": [
+          85.03009379316576,
+          49.62375983059604,
+          231.50290718891452
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Snorlax_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Snorlax_2000.f4e716b4.glb",
+      "sha256": "b66bef7a33d9b8af6c335b1eee5d093067373af1aaf68f34f02d16a0851dacd4",
+      "bytes": 44104,
+      "drawCalls": 17,
+      "triangles": 820,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Snorlax_2000.fbx",
+      "sourceId": "Men_accessory_Snorlax_2000",
+      "sourceSha256": "f4e716b402e95d793916c152e05e7fd2aa2e24449311af86686ec6183bb5b24f",
+      "sourceBBox": {
+        "min": [
+          -37.06150949001312,
+          -17.42666207638448,
+          -41.54052624357054
+        ],
+        "max": [
+          33.71472954750061,
+          29.832223570601975,
+          28.336340728876035
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Soccer_500",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Soccer_500.5cb9bc12.glb",
+      "sha256": "f03fdf127d9ee8b1c56b752a05839eae8e7cb973e9fb561be3930d2882648c9a",
+      "bytes": 284848,
+      "drawCalls": 2,
+      "triangles": 13200,
+      "joints": 0,
+      "textures": 2,
+      "source": "Men_accessory_Soccer_500.fbx",
+      "sourceId": "Men_accessory_Soccer_500",
+      "sourceSha256": "5cb9bc125a68627203282909abf225ebf463fb38b6d9568c99465acfe9867f2c",
+      "sourceBBox": {
+        "min": [
+          -73.27309846878052,
+          -73.28060810106457,
+          -73.27680519790638
+        ],
+        "max": [
+          73.27309846878052,
+          73.28060810106457,
+          73.27680520240595
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Squirtle_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Squirtle_2000.ebed7433.glb",
+      "sha256": "5a889d7acbc605aaf506c0eac52b82fd1d2cba003f4021a5033696c558da77bc",
+      "bytes": 26992,
+      "drawCalls": 7,
+      "triangles": 694,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Squirtle_2000.fbx",
+      "sourceId": "Men_accessory_Squirtle_2000",
+      "sourceSha256": "ebed74337853e7bf9742c51e1f13ea8f748da101055af7c1b4d00ce91852b031",
+      "sourceBBox": {
+        "min": [
+          -25.686728954315186,
+          -15.819333394572844,
+          -17.68404192903965
+        ],
+        "max": [
+          13.109439611434937,
+          15.071792979905277,
+          18.77954263924651
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Sudowoodo",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Sudowoodo.010bc89c.glb",
+      "sha256": "e1eb00d91d0ea202d8d70860bf37275eb94f92b2b4b1a0424ff89319ca44c076",
+      "bytes": 115768,
+      "drawCalls": 30,
+      "triangles": 3306,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Sudowoodo.fbx",
+      "sourceId": "Men_accessory_Sudowoodo",
+      "sourceSha256": "010bc89ce062e314181c76a253445e06f817355ce81219911974741c23a09a8a",
+      "sourceBBox": {
+        "min": [
+          -101.16239786148071,
+          -38.36831029391823,
+          -173.28530756018623
+        ],
+        "max": [
+          117.96690225601196,
+          60.42357900770917,
+          160.2872039252766
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Sword_500",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Sword_500.e9148f0a.glb",
+      "sha256": "a6f1c5cddd42a224a032724880314fe8f0dccb6fe96efa85fea9b7a6aa91b9e7",
+      "bytes": 98456,
+      "drawCalls": 3,
+      "triangles": 872,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_accessory_Sword_500.fbx",
+      "sourceId": "Men_accessory_Sword_500",
+      "sourceSha256": "e9148f0a58a780bf4961502917f148dc4c5884bcfb8e0ed3c4caf8b0640f98a0",
+      "sourceBBox": {
+        "min": [
+          -77.5437283739295,
+          139.08838795482083,
+          -3.8230774335586357
+        ],
+        "max": [
+          -59.3888648086852,
+          143.23848712589566,
+          82.83205206613466
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Victreebel_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Victreebel_2000.60efa5a7.glb",
+      "sha256": "8dff9e58441ed09f19a72c05f6bb765e2b22b9dfd60aac8ee88c9d084671ce99",
+      "bytes": 214508,
+      "drawCalls": 7,
+      "triangles": 9307,
+      "joints": 0,
+      "textures": 4,
+      "source": "Men_accessory_Victreebel_2000.fbx",
+      "sourceId": "Men_accessory_Victreebel_2000",
+      "sourceSha256": "60efa5a7b40b25338dfc7159bd44c675f4cd9e51905887684c5da0aecae66080",
+      "sourceBBox": {
+        "min": [
+          -139.21719789505005,
+          -297.0809081397525,
+          -446.3263325187503
+        ],
+        "max": [
+          635.6175899505615,
+          384.60269743617846,
+          101.89871646737336
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/men/Men_accessory_Williams_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Williams_5000.b8a06829.glb",
+      "sha256": "a0ff4f76e3c61a9edff27c3cc373aa2e4ddd2bf7038324d6f8240642ee231a47",
+      "bytes": 627708,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Men_accessory_Williams_5000.fbx",
+      "sourceId": "Men_accessory_Williams_5000",
+      "sourceSha256": "b8a068298b524ef0dc0120b1682871fb2cbbcb1897ad429a5cf492654f3c0b92",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Alpine_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Alpine_5000.40303f92.glb",
+      "sha256": "40851bf57e65f1c098e863bc8f3276899d8d054fe47d23e0e2dac71ae1adb0e3",
+      "bytes": 627788,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Alpine_5000.fbx",
+      "sourceId": "Women_accessory_Alpine_5000",
+      "sourceSha256": "40303f92c478a9f81c8e9e6c4600d76daa0eecd010395665b8ec4129fff92251",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_AstonMartin_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_AstonMartin_5000.e7326ef5.glb",
+      "sha256": "1cac77030800b7793a7ffe94ca7c97df37a616549121766400c9c72a07a3b9fe",
+      "bytes": 627776,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_AstonMartin_5000.fbx",
+      "sourceId": "Women_accessory_AstonMartin_5000",
+      "sourceSha256": "e7326ef561d0bce63f94cb2e74cb49453dc43e54f0b38fa0fbaf8875ee15345a",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Audi_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Audi_5000.66bcadba.glb",
+      "sha256": "e5b993dea90581db4bc81a8510bb0f90439a3697dcc4becf9be8fe8c25a9cbc7",
+      "bytes": 627868,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Audi_5000.fbx",
+      "sourceId": "Women_accessory_Audi_5000",
+      "sourceSha256": "66bcadba6a77cfb6b757846439ac1433f2eaa0416046456f566ed452ec5e9b9e",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Backpack_0",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Backpack_0.17ff253e.glb",
+      "sha256": "b033e81ee91cf1f12c14d90112324f935cb391bd44fb2996dcbcad9ec20e365d",
+      "bytes": 89876,
+      "drawCalls": 3,
+      "triangles": 1208,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_accessory_Backpack_0.fbx",
+      "sourceId": "Women_accessory_Backpack_0",
+      "sourceSha256": "17ff253ef403dd609f3700ae477c31efea7f1b11d270311d90096336ad8c30cd",
+      "sourceBBox": {
+        "min": [
+          -21.09882980288105,
+          118.2787702370696,
+          -20.117789189422023
+        ],
+        "max": [
+          21.098829808820927,
+          156.8824301825088,
+          1.4860976220390543
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Beer_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Beer_500.7ec58a4e.glb",
+      "sha256": "386bce50ab50bd9f95417f079f1fe011f536b3cae9f7f86f422c26ad7790b4b7",
+      "bytes": 23536,
+      "drawCalls": 7,
+      "triangles": 358,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Beer_500.fbx",
+      "sourceId": "Women_accessory_Beer_500",
+      "sourceSha256": "7ec58a4e4cb3cf0aba3498aebc9da0a1ccfe48c94cea039f6d4d5adac107f7ae",
+      "sourceBBox": {
+        "min": [
+          -0.077323317527771,
+          -0.14789460599422455,
+          -0.07760906219482422
+        ],
+        "max": [
+          0.09125149250030518,
+          0.09363924711942673,
+          0.11867179721593857
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Bellsprout_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Bellsprout_2000.38c6cb91.glb",
+      "sha256": "c60fadfa9567af104265e4d77f5b86935408e7b5915f1746e711be091590d274",
+      "bytes": 34220,
+      "drawCalls": 8,
+      "triangles": 1015,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Bellsprout_2000.fbx",
+      "sourceId": "Women_accessory_Bellsprout_2000",
+      "sourceSha256": "38c6cb91eb3964e67175d3e5519e2f89208b7d8675f658e418cbd85c58663b28",
+      "sourceBBox": {
+        "min": [
+          -107.91950225830078,
+          -67.7864932438667,
+          -175.21569892973955
+        ],
+        "max": [
+          108.00149440765381,
+          83.02365054424885,
+          118.87480397461252
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Bulbasaur_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Bulbasaur_2000.8062dafe.glb",
+      "sha256": "1225c241a68986c2ac465064dbe814cc9659eba32767d0ab5404b35f3cf73ced",
+      "bytes": 27256,
+      "drawCalls": 6,
+      "triangles": 778,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Bulbasaur_2000.fbx",
+      "sourceId": "Women_accessory_Bulbasaur_2000",
+      "sourceSha256": "8062dafea66d4f5b01ef787cd8b0b2454df7e33ee961bf0bd25917c6eea1c98d",
+      "sourceBBox": {
+        "min": [
+          -42.22553074359894,
+          -35.70876815818194,
+          -62.24955723093741
+        ],
+        "max": [
+          41.529300808906555,
+          61.304800080987704,
+          21.754215514941905
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Cadillac_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Cadillac_5000.eaeddf74.glb",
+      "sha256": "e4bf5a8d7af34a3f14d83efafc707d676dedb10905074d0cc6e5efbf97f36214",
+      "bytes": 627752,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Cadillac_5000.fbx",
+      "sourceId": "Women_accessory_Cadillac_5000",
+      "sourceSha256": "eaeddf74c9c84f42a7cf9a5e22beb84b3aa0d60867600b8a3fb831afef75e515",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Charmander_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Charmander_2000.b3306b9f.glb",
+      "sha256": "05ee9ddaa86d84cc769d8907bcad3000c2e96b4267a59b9202585aaedd38019e",
+      "bytes": 23820,
+      "drawCalls": 6,
+      "triangles": 632,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Charmander_2000.fbx",
+      "sourceId": "Women_accessory_Charmander_2000",
+      "sourceSha256": "b3306b9f8646890f21916c41de2b0a653fae66ff500216a53601f069ea482a58",
+      "sourceBBox": {
+        "min": [
+          -31.38917088508606,
+          -21.067919912080015,
+          -61.47597853119718
+        ],
+        "max": [
+          34.85912084579468,
+          65.05718057669222,
+          29.7437328231985
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Cubone_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Cubone_2000.833c03fa.glb",
+      "sha256": "c628b7dbf7e12f96f95fe4e8590bfb9fa02684d70bfd5981e93d482cbbb1ea07",
+      "bytes": 33272,
+      "drawCalls": 12,
+      "triangles": 634,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Cubone_2000.fbx",
+      "sourceId": "Women_accessory_Cubone_2000",
+      "sourceSha256": "833c03fae8faa70a5224c11ce45baba495f071efaba1a16dce7c1e80e655a0e4",
+      "sourceBBox": {
+        "min": [
+          -32.47765898704529,
+          -20.66527760437982,
+          -26.803825770647972
+        ],
+        "max": [
+          21.09113037586212,
+          45.15836643280246,
+          43.12430034343541
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Eevee_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Eevee_2000.aeb74719.glb",
+      "sha256": "4b722224bb8e262bbcd206748da68b6f6620b3759feaa6f9d94e0cfd5b33ce15",
+      "bytes": 34520,
+      "drawCalls": 11,
+      "triangles": 774,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Eevee_2000.fbx",
+      "sourceId": "Women_accessory_Eevee_2000",
+      "sourceSha256": "aeb747199aaa0bc3f1397647adbd5e975202e953d3df3f7f9f6dd58369b9335f",
+      "sourceBBox": {
+        "min": [
+          -51.591187715530396,
+          -17.75049157690819,
+          -37.61504294544523
+        ],
+        "max": [
+          45.3751802444458,
+          72.67171828104769,
+          41.94957984299238
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Ferrari_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Ferrari_5000.00371a1a.glb",
+      "sha256": "1382436096bc1e5168e4c1a7f2ca9d2cf1ffc096f400823aa2d1fca03a98f296",
+      "bytes": 627792,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Ferrari_5000.fbx",
+      "sourceId": "Women_accessory_Ferrari_5000",
+      "sourceSha256": "00371a1a6db73291b1f8832f5f4bb820c95b7b86cd0533b7d77d6d5bebc93f57",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Glalie_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Glalie_2000.13deafcd.glb",
+      "sha256": "cef85de2001f5462cd6e8028f2901e015f92dbfe7f89d917bc193c09a84699fe",
+      "bytes": 60844,
+      "drawCalls": 2,
+      "triangles": 2272,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Glalie_2000.fbx",
+      "sourceId": "Women_accessory_Glalie_2000",
+      "sourceSha256": "13deafcd4adca4fde6ef4787c5b7b85b62527708d8966926d010aebbaa9abcd9",
+      "sourceBBox": {
+        "min": [
+          -104.07689809799194,
+          -111.71302578795888,
+          -133.04461855301142
+        ],
+        "max": [
+          112.48769760131836,
+          110.88991410238674,
+          101.24091348362026
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Gun_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Gun_500.b36721f3.glb",
+      "sha256": "0fe25060561cdd951fd2312b6c14a767129eb0e09be680f7cf7c7c0265a3f23e",
+      "bytes": 80168,
+      "drawCalls": 3,
+      "triangles": 1040,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Gun_500.fbx",
+      "sourceId": "Women_accessory_Gun_500",
+      "sourceSha256": "b36721f38e3b53bae1a376bb617f87e73ec4d2f2450bedc08e4e3d99d65349e7",
+      "sourceBBox": {
+        "min": [
+          -92.09308897708438,
+          135.19693611683405,
+          2.345899706420804
+        ],
+        "max": [
+          -65.68080260688637,
+          146.87108064391163,
+          22.32235487483743
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Haas_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Haas_5000.d29fae70.glb",
+      "sha256": "f038d34f79a03dd095dbe16ce74f14845be285650a2a00b95601cc1abb07475b",
+      "bytes": 627616,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Haas_5000.fbx",
+      "sourceId": "Women_accessory_Haas_5000",
+      "sourceSha256": "d29fae7020b5f8db31b0228685d792f66b091ffba17e2b4a63560133e8cc317e",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Haunter_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Haunter_2000.12318740.glb",
+      "sha256": "72edbe26f1f4eb3e13d9719e01cbc6b0357fc6acd4718f26803e6b312afbff6e",
+      "bytes": 38108,
+      "drawCalls": 18,
+      "triangles": 420,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Haunter_2000.fbx",
+      "sourceId": "Women_accessory_Haunter_2000",
+      "sourceSha256": "1231874013cc309c6e461b95dd3aba7bf07f4affc5d965361d38185df7a7431a",
+      "sourceBBox": {
+        "min": [
+          -31.658819317817688,
+          -15.857218705157704,
+          -28.561101114354468
+        ],
+        "max": [
+          37.780991196632385,
+          59.48490319523058,
+          25.479851073343422
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Jigglypuff_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Jigglypuff_2000.db73284d.glb",
+      "sha256": "adb4fc84cb78e108c119bcabf2d0e6fa0eec43a816d6bd89d130a9d776fb3f49",
+      "bytes": 34592,
+      "drawCalls": 11,
+      "triangles": 759,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Jigglypuff_2000.fbx",
+      "sourceId": "Women_accessory_Jigglypuff_2000",
+      "sourceSha256": "db73284ddb319a8b7211038b45c67bbd0e69755cd77a27b5ead49a79d371d810",
+      "sourceBBox": {
+        "min": [
+          -58.4275484085083,
+          -28.446451708298245,
+          -78.5641466917018
+        ],
+        "max": [
+          62.8897488117218,
+          94.71962709899736,
+          65.12927958130018
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Kart_3000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Kart_3000.543d1fa1.glb",
+      "sha256": "469196d52d1b1d99ec620e2c01080b7efbe363de67778769f3800c01d3f66765",
+      "bytes": 62100,
+      "drawCalls": 4,
+      "triangles": 3828,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Kart_3000.fbx",
+      "sourceId": "Women_accessory_Kart_3000",
+      "sourceSha256": "543d1fa1e9a098dd6bea74621b180b12d9dc996b299a6414a2fae65a2f7b97ad",
+      "sourceBBox": {
+        "min": [
+          -43.013301849365234,
+          -0.271699994802475,
+          -20.572399139404297
+        ],
+        "max": [
+          29.51180076599121,
+          43.3302001953125,
+          20.468900680541992
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Magikarp_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Magikarp_2000.0730f2b8.glb",
+      "sha256": "17da1bb9a83632a28cd781c32c9fb37c9fa87cc124a19a141ae2c1967ce8da94",
+      "bytes": 23032,
+      "drawCalls": 6,
+      "triangles": 606,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Magikarp_2000.fbx",
+      "sourceId": "Women_accessory_Magikarp_2000",
+      "sourceSha256": "0730f2b876f09698d85b11bb907ea7d3b46d6f3808f23b70aa1a926fd98b38c8",
+      "sourceBBox": {
+        "min": [
+          -23.64491969347,
+          -32.108452761074496,
+          -30.209826309185278
+        ],
+        "max": [
+          63.131409883499146,
+          35.82899459105647,
+          29.74988447211977
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Magnemite_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Magnemite_2000.05896c66.glb",
+      "sha256": "5f6af72a9245dd926b34e12f6843c436f2be0e580c72b34d505166dabb8fae2b",
+      "bytes": 28760,
+      "drawCalls": 7,
+      "triangles": 808,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Magnemite_2000.fbx",
+      "sourceId": "Women_accessory_Magnemite_2000",
+      "sourceSha256": "05896c6687c0f33bd87440df37a6f0704ae2a394d63617b60462795d755d0c69",
+      "sourceBBox": {
+        "min": [
+          -70.4727292060852,
+          -25.68727417929555,
+          -47.36359513332823
+        ],
+        "max": [
+          57.79370069503784,
+          48.95368303307058,
+          31.408911580056152
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Marill_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Marill_2000.c7ece8df.glb",
+      "sha256": "2b2a7996759f4f42a5f7f7cdf5b71d34684cf7ba5c98624c5b1a1a8eb19e5224",
+      "bytes": 137708,
+      "drawCalls": 25,
+      "triangles": 4741,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Marill_2000.fbx",
+      "sourceId": "Women_accessory_Marill_2000",
+      "sourceSha256": "c7ece8dfeb0ace3bb06802de21d0df109c15ad7f520c1c3c5b3432643395b535",
+      "sourceBBox": {
+        "min": [
+          -32.46757984161377,
+          -40.708670650176465,
+          -28.211515648645335
+        ],
+        "max": [
+          14.935709536075592,
+          33.55754767472289,
+          27.53968065998369
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_McLaren_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_McLaren_5000.c84121ab.glb",
+      "sha256": "3bb76a41b0f23c55e7d339a4afc6c27a45a3bd02c1858a365f8de248b89b0339",
+      "bytes": 627828,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_McLaren_5000.fbx",
+      "sourceId": "Women_accessory_McLaren_5000",
+      "sourceSha256": "c84121abaa89e19a67f650cd20d30eacaf51de08cf2e99a1d435110b6bdb742d",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Mercedes_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Mercedes_5000.fee53cfa.glb",
+      "sha256": "97fb1c6a405bc892b82f70140e3c2b23a5bae21cd0d806f3caaada8a734a2054",
+      "bytes": 627760,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Mercedes_5000.fbx",
+      "sourceId": "Women_accessory_Mercedes_5000",
+      "sourceSha256": "fee53cfad9a62fa305186910556a2f506254724f06f83030ede304ccc10ac1eb",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Mew_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Mew_2000.c75e1472.glb",
+      "sha256": "4f08b63f7d2ed4eb2c7aa2a37067baadc4dcb05601cfed4d35c77fdfd269c4cd",
+      "bytes": 21104,
+      "drawCalls": 5,
+      "triangles": 572,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Mew_2000.fbx",
+      "sourceId": "Women_accessory_Mew_2000",
+      "sourceSha256": "c75e1472c7f93de198dd5cdfae45dff0d2936086610d54ca970e79b98573361e",
+      "sourceBBox": {
+        "min": [
+          -23.5881507396698,
+          -9.169289931027246,
+          -25.69716712584893
+        ],
+        "max": [
+          13.03585022687912,
+          45.16737491890814,
+          38.47561031954935
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Oddish_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Oddish_2000.d4e300b3.glb",
+      "sha256": "ba2c48152dfbbd312e25057de10505a5272d92d2a343a2e114a8402c7edb5ca8",
+      "bytes": 33612,
+      "drawCalls": 11,
+      "triangles": 730,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Oddish_2000.fbx",
+      "sourceId": "Women_accessory_Oddish_2000",
+      "sourceSha256": "d4e300b3e7d60d7d342d5a123fcf17da7d322e7f78381487102cfc0792cb0ae2",
+      "sourceBBox": {
+        "min": [
+          -49.1167813539505,
+          -18.943579275222103,
+          -66.061376693578
+        ],
+        "max": [
+          47.62451946735382,
+          61.76977277454816,
+          50.11873553869275
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Pikachu_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Pikachu_2000.671a4417.glb",
+      "sha256": "83964df375c78c60e623b5883f7f334f2e21ef8bb43f2ed388693529ffed35ff",
+      "bytes": 28772,
+      "drawCalls": 5,
+      "triangles": 714,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Pikachu_2000.fbx",
+      "sourceId": "Women_accessory_Pikachu_2000",
+      "sourceSha256": "671a4417ef00e9987a7e5c96fd9abca28bf6e0bb2bd01c09574a814f896463bc",
+      "sourceBBox": {
+        "min": [
+          -0.4080987870693207,
+          -0.7295113801956177,
+          -0.2277882993221283
+        ],
+        "max": [
+          0.46428099274635315,
+          0.4231398105621338,
+          0.9869155287742615
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Poliwag_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Poliwag_2000.91e65f38.glb",
+      "sha256": "d9061c7e87ff31ef224fb6d60b4eaf2652f377b5276ca88acf329c5fd3d71f3a",
+      "bytes": 37704,
+      "drawCalls": 13,
+      "triangles": 746,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Poliwag_2000.fbx",
+      "sourceId": "Women_accessory_Poliwag_2000",
+      "sourceSha256": "91e65f3872129d41be91282b9838d7fb851c3b298fc502c7e2d9bf320075c8ec",
+      "sourceBBox": {
+        "min": [
+          -24.451060593128204,
+          -20.68811729717344,
+          -25.893503438195204
+        ],
+        "max": [
+          35.77322065830231,
+          51.614810873119694,
+          21.26518377947683
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Porygon_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Porygon_2000.ca364434.glb",
+      "sha256": "44b7406b4ecae67870274933b9067a75c1a5e58e7dda178b15f04b1893babf06",
+      "bytes": 19360,
+      "drawCalls": 9,
+      "triangles": 216,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Porygon_2000.fbx",
+      "sourceId": "Women_accessory_Porygon_2000",
+      "sourceSha256": "ca364434a18af7cb7a1874d8010534f1122f2a3b89b6e351158e309c99318f0a",
+      "sourceBBox": {
+        "min": [
+          -42.616480588912964,
+          -46.44036362025906,
+          -49.9869374735728
+        ],
+        "max": [
+          38.607388734817505,
+          53.843214305582514,
+          39.31823071639785
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_RacingBulls_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_RacingBulls_5000.f2946881.glb",
+      "sha256": "c5a65776f71f8dd679da449e0ef4bcd20f35ae3b8abc4f7d4b1576b74a60b01b",
+      "bytes": 627644,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_RacingBulls_5000.fbx",
+      "sourceId": "Women_accessory_RacingBulls_5000",
+      "sourceSha256": "f2946881c7b0ce86ee946351857fc82188c96362526a0234fb698fae5e7f3304",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_RedBull_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_RedBull_5000.fcfa094a.glb",
+      "sha256": "81c132e9074e75536926558efd9a8919241a3783cf35055f9246bed6c884c1ca",
+      "bytes": 627868,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_RedBull_5000.fbx",
+      "sourceId": "Women_accessory_RedBull_5000",
+      "sourceSha256": "fcfa094a16b9a91ef22f149784a5b1d51d7afa238401c74aaed4e1de35d396aa",
+      "sourceBBox": {
+        "min": [
+          -85.0299703605826,
+          -49.62376104006387,
+          -231.5029048705235
+        ],
+        "max": [
+          85.03009379316576,
+          49.62375983059604,
+          231.50290718891452
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Snorlax_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Snorlax_2000.f4e716b4.glb",
+      "sha256": "b66bef7a33d9b8af6c335b1eee5d093067373af1aaf68f34f02d16a0851dacd4",
+      "bytes": 44104,
+      "drawCalls": 17,
+      "triangles": 820,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Snorlax_2000.fbx",
+      "sourceId": "Women_accessory_Snorlax_2000",
+      "sourceSha256": "f4e716b402e95d793916c152e05e7fd2aa2e24449311af86686ec6183bb5b24f",
+      "sourceBBox": {
+        "min": [
+          -37.06150949001312,
+          -17.42666207638448,
+          -41.54052624357054
+        ],
+        "max": [
+          33.71472954750061,
+          29.832223570601975,
+          28.336340728876035
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Soccer_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Soccer_500.5cb9bc12.glb",
+      "sha256": "f03fdf127d9ee8b1c56b752a05839eae8e7cb973e9fb561be3930d2882648c9a",
+      "bytes": 284848,
+      "drawCalls": 2,
+      "triangles": 13200,
+      "joints": 0,
+      "textures": 2,
+      "source": "Women_accessory_Soccer_500.fbx",
+      "sourceId": "Women_accessory_Soccer_500",
+      "sourceSha256": "5cb9bc125a68627203282909abf225ebf463fb38b6d9568c99465acfe9867f2c",
+      "sourceBBox": {
+        "min": [
+          -73.27309846878052,
+          -73.28060810106457,
+          -73.27680519790638
+        ],
+        "max": [
+          73.27309846878052,
+          73.28060810106457,
+          73.27680520240595
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Squirtle_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Squirtle_2000.ebed7433.glb",
+      "sha256": "5a889d7acbc605aaf506c0eac52b82fd1d2cba003f4021a5033696c558da77bc",
+      "bytes": 26992,
+      "drawCalls": 7,
+      "triangles": 694,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Squirtle_2000.fbx",
+      "sourceId": "Women_accessory_Squirtle_2000",
+      "sourceSha256": "ebed74337853e7bf9742c51e1f13ea8f748da101055af7c1b4d00ce91852b031",
+      "sourceBBox": {
+        "min": [
+          -25.686728954315186,
+          -15.819333394572844,
+          -17.68404192903965
+        ],
+        "max": [
+          13.109439611434937,
+          15.071792979905277,
+          18.77954263924651
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Sudowoodo",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sudowoodo.010bc89c.glb",
+      "sha256": "e1eb00d91d0ea202d8d70860bf37275eb94f92b2b4b1a0424ff89319ca44c076",
+      "bytes": 115768,
+      "drawCalls": 30,
+      "triangles": 3306,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Sudowoodo.fbx",
+      "sourceId": "Women_accessory_Sudowoodo",
+      "sourceSha256": "010bc89ce062e314181c76a253445e06f817355ce81219911974741c23a09a8a",
+      "sourceBBox": {
+        "min": [
+          -101.16239786148071,
+          -38.36831029391823,
+          -173.28530756018623
+        ],
+        "max": [
+          117.96690225601196,
+          60.42357900770917,
+          160.2872039252766
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Sword_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sword_500.9827eef8.glb",
+      "sha256": "fe7c425a9842ba35758dacc51f6e19c900ceef13943a9edf527024a2c10881ae",
+      "bytes": 76436,
+      "drawCalls": 3,
+      "triangles": 872,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Sword_500.fbx",
+      "sourceId": "Women_accessory_Sword_500",
+      "sourceSha256": "9827eef8d3fdd90902032df1dc07f83cca89f5d70694663937bfe0226c6f5ade",
+      "sourceBBox": {
+        "min": [
+          -77.6373375247358,
+          139.88170197469273,
+          -3.5595872591404856
+        ],
+        "max": [
+          -59.48246812155847,
+          144.03178856240334,
+          83.09554247111488
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Victreebel_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Victreebel_2000.60efa5a7.glb",
+      "sha256": "8dff9e58441ed09f19a72c05f6bb765e2b22b9dfd60aac8ee88c9d084671ce99",
+      "bytes": 214508,
+      "drawCalls": 7,
+      "triangles": 9307,
+      "joints": 0,
+      "textures": 4,
+      "source": "Women_accessory_Victreebel_2000.fbx",
+      "sourceId": "Women_accessory_Victreebel_2000",
+      "sourceSha256": "60efa5a7b40b25338dfc7159bd44c675f4cd9e51905887684c5da0aecae66080",
+      "sourceBBox": {
+        "min": [
+          -139.21719789505005,
+          -297.0809081397525,
+          -446.3263325187503
+        ],
+        "max": [
+          635.6175899505615,
+          384.60269743617846,
+          101.89871646737336
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "acc/women/Women_accessory_Williams_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Williams_5000.b8a06829.glb",
+      "sha256": "a0ff4f76e3c61a9edff27c3cc373aa2e4ddd2bf7038324d6f8240642ee231a47",
+      "bytes": 627708,
+      "drawCalls": 16,
+      "triangles": 96205,
+      "joints": 0,
+      "textures": 0,
+      "source": "Women_accessory_Williams_5000.fbx",
+      "sourceId": "Women_accessory_Williams_5000",
+      "sourceSha256": "b8a068298b524ef0dc0120b1682871fb2cbbcb1897ad429a5cf492654f3c0b92",
+      "sourceBBox": {
+        "min": [
+          -85.03001068428848,
+          -49.62376104006508,
+          -231.50287195632396
+        ],
+        "max": [
+          85.0300249821908,
+          49.623759830597024,
+          231.50287227322156
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "decor/bar",
+      "url": "/models/glb/v1/decors/_/Bar.93485c6c.glb",
+      "sha256": "1b196cca76db57d085f2397ff7fdd719541a86244b70062660dd102d76d4230f",
+      "bytes": 271660,
+      "drawCalls": 2,
+      "triangles": 6168,
+      "joints": 0,
+      "textures": 2,
+      "source": "Bar.fbx",
+      "sourceId": "Bar",
+      "sourceSha256": "93485c6c4deb46854737a75b55ce049f7e041cd8809b1141afc41599ee082280",
+      "sourceBBox": {
+        "min": [
+          -840.9393310546875,
+          43.39645234859034,
+          -912.9125017335842
+        ],
+        "max": [
+          739.1519069671631,
+          816.0977744853947,
+          819.3815160621095
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "decor/dodo",
+      "url": "/models/glb/v1/decors/_/Floaty_Island.3f99fd87.glb",
+      "sha256": "91deab9c31f3e251f3430ea5722f63bd7d3b890936daee506088216fe8b170eb",
+      "bytes": 118336,
+      "drawCalls": 12,
+      "triangles": 8384,
+      "joints": 0,
+      "textures": 0,
+      "source": "Floaty_Island.fbx",
+      "sourceId": "Floaty_Island",
+      "sourceSha256": "3f99fd878a6b34ba74cfbfb79e42e5e80d4aa8714e1de74d32067f048a0287eb",
+      "sourceBBox": {
+        "min": [
+          -0.3473891019821167,
+          -0.4166193902492523,
+          -0.5228720903396606
+        ],
+        "max": [
+          0.28988951444625854,
+          0.24510160088539124,
+          0.2266853004693985
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "decor/piscine",
+      "url": "/models/glb/v1/decors/_/Swimming_pool.7bc79039.glb",
+      "sha256": "7274dc7c825763cf8956e945873d8648f8f4321408bf99b38d544beac61e7822",
+      "bytes": 69680,
+      "drawCalls": 1,
+      "triangles": 1427,
+      "joints": 0,
+      "textures": 1,
+      "source": "Swimming_pool.fbx",
+      "sourceId": "Swimming_pool",
+      "sourceSha256": "7bc79039351944ec88de8875862ccc8d8dcb680b98bd650290659f0e7e126a58",
+      "sourceBBox": {
+        "min": [
+          -13.496597290039062,
+          0,
+          -21.321025848388672
+        ],
+        "max": [
+          13.303546905517578,
+          8.562531471252441,
+          21.494449615478516
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_Adventurer_300",
+      "url": "/models/glb/v1/pieces/Men/Men_body_Adventurer_300.08bbed7c.glb",
+      "sha256": "3ad99d83cdd19a2827aeb6f5900460aa0d6a5d71b3cb9ec9fa077ae7b19f2844",
+      "bytes": 157596,
+      "drawCalls": 4,
+      "triangles": 2916,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_Adventurer_300.fbx",
+      "sourceId": "Men_body_Adventurer_300",
+      "sourceSha256": "08bbed7cf27467c5d3ce267325176b9db0a3484a653df7a64ea9a219f8a17c42",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250614,
+          102.0199470891095,
+          -5.969381177624632
+        ],
+        "max": [
+          83.77333210881874,
+          155.87117755887542,
+          19.356627745109524
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_Beach_300",
+      "url": "/models/glb/v1/pieces/Men/Men_body_Beach_300.917fa301.glb",
+      "sha256": "b5022b0635bec37d6ace4c9d309fe01ab71140613c308c6e8075c06611cc3f95",
+      "bytes": 148984,
+      "drawCalls": 2,
+      "triangles": 2778,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_Beach_300.fbx",
+      "sourceId": "Men_body_Beach_300",
+      "sourceSha256": "917fa30154bdb1171dd9f55d435f59add2b8923cccfdc425e0aaa27fbc552f3e",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250616,
+          102.11428201949337,
+          -6.788760888849248
+        ],
+        "max": [
+          83.77333210881874,
+          154.36830852269608,
+          19.356627729740374
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_Casual2_0",
+      "url": "/models/glb/v1/pieces/Men/Men_body_Casual2_0.164160a8.glb",
+      "sha256": "2e25a3fd53e2c3db6327f4f41c7a3be701129ec87e5c842e1139fc5f0e7af038",
+      "bytes": 149276,
+      "drawCalls": 2,
+      "triangles": 2806,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_Casual2_0.fbx",
+      "sourceId": "Men_body_Casual2_0",
+      "sourceSha256": "164160a8a8d4782e458fb26a78da24ecd9d6efeb9442263034bdb53f04bb9032",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250616,
+          102.20415019159657,
+          -5.969381452499846
+        ],
+        "max": [
+          83.77333210881874,
+          155.69402144656308,
+          19.356627715099012
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_Casual_0",
+      "url": "/models/glb/v1/pieces/Men/Men_body_Casual_0.446c8496.glb",
+      "sha256": "6ae05138e919ff9a70291214fb6564fb18e0172796b99fe8d5e43f9da20aecf0",
+      "bytes": 156200,
+      "drawCalls": 2,
+      "triangles": 3048,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_Casual_0.fbx",
+      "sourceId": "Men_body_Casual_0",
+      "sourceSha256": "446c8496c80d2b179051c3dd3e94210d6a0dadc697300c0ce0f3b8742b272dc4",
+      "sourceBBox": {
+        "min": [
+          -83.773355963016,
+          100.43068613519087,
+          -9.11374275476604
+        ],
+        "max": [
+          83.77333210830942,
+          157.3623856769276,
+          19.72981193041411
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_Farmer_300",
+      "url": "/models/glb/v1/pieces/Men/Men_body_Farmer_300.7e5af5ce.glb",
+      "sha256": "d2db94e3f6e5a6cac5f0c166a26e2361beaa0439ae0ce8fdd2a789ce33297a84",
+      "bytes": 166448,
+      "drawCalls": 4,
+      "triangles": 3358,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_Farmer_300.fbx",
+      "sourceId": "Men_body_Farmer_300",
+      "sourceSha256": "7e5af5ce3328970aed1fa4702e58f0e7a48229d81155e26b457ad007e7f468d0",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250616,
+          100.03641196031205,
+          -6.913486211904983
+        ],
+        "max": [
+          83.77333210881874,
+          155.52050103435815,
+          19.35662806826837
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_King_300",
+      "url": "/models/glb/v1/pieces/Men/Men_body_King_300.a9e00810.glb",
+      "sha256": "f51d831b5366350b5fa627264911693f3404a96755e3df014fa1b10d064f468c",
+      "bytes": 198776,
+      "drawCalls": 5,
+      "triangles": 4770,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_King_300.fbx",
+      "sourceId": "Men_body_King_300",
+      "sourceSha256": "a9e00810a21acf6d5a6ca0dd637ca9e7346109a12e28c3fcde4eaf5edcaaa83e",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250616,
+          98.64490805072938,
+          -7.474872214923241
+        ],
+        "max": [
+          83.77333210881874,
+          156.36987151963848,
+          21.289486904599553
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_Punk_300",
+      "url": "/models/glb/v1/pieces/Men/Men_body_Punk_300.8a918b61.glb",
+      "sha256": "e26f1a5d86e5dddb3e7eecd5c5e4521a20a6008c63c67efd685b8f31a3554529",
+      "bytes": 155244,
+      "drawCalls": 3,
+      "triangles": 2958,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_Punk_300.fbx",
+      "sourceId": "Men_body_Punk_300",
+      "sourceSha256": "8a918b6104d0a82681df830ea60f8194a952697718163f4c086d8902d5de2a94",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250616,
+          100.0802469552936,
+          -7.361669361723332
+        ],
+        "max": [
+          83.77333210881874,
+          159.98589888049003,
+          19.356628061126735
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_SpaceSuit_300",
+      "url": "/models/glb/v1/pieces/Men/Men_body_SpaceSuit_300.e14f62b4.glb",
+      "sha256": "50a75c5ca579dcdefa9e52de09d5318db34131fadea99af734465f9d7fb338e3",
+      "bytes": 180920,
+      "drawCalls": 4,
+      "triangles": 4022,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_SpaceSuit_300.fbx",
+      "sourceId": "Men_body_SpaceSuit_300",
+      "sourceSha256": "e14f62b4c2198631a5b387912c33324eccd9541a126a5e613175c3eb0be21aed",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250616,
+          99.38635893835934,
+          -6.589789431247231
+        ],
+        "max": [
+          83.77333210881874,
+          158.62579028924148,
+          19.356628174175462
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_Suit_300",
+      "url": "/models/glb/v1/pieces/Men/Men_body_Suit_300.73846a4c.glb",
+      "sha256": "3ad99d83cdd19a2827aeb6f5900460aa0d6a5d71b3cb9ec9fa077ae7b19f2844",
+      "bytes": 157596,
+      "drawCalls": 4,
+      "triangles": 2916,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_Suit_300.fbx",
+      "sourceId": "Men_body_Suit_300",
+      "sourceSha256": "73846a4cb0ec2fcd2829c774c69b3914c21a6ebafabf94ea8e896161fe045745",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250614,
+          102.0199470891095,
+          -5.969381177624632
+        ],
+        "max": [
+          83.77333210881874,
+          155.87117755887542,
+          19.356627745109524
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_Swat_300",
+      "url": "/models/glb/v1/pieces/Men/Men_body_Swat_300.629d3523.glb",
+      "sha256": "1265353fcbfb4172a72fb81335699789e3aeaedda13afc351ffdd6f0f01efc82",
+      "bytes": 157472,
+      "drawCalls": 3,
+      "triangles": 3106,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_Swat_300.fbx",
+      "sourceId": "Men_body_Swat_300",
+      "sourceSha256": "629d35234d4579b949d10086ddf8d938bb07a06842d8b3217b297262e6a01090",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250616,
+          103.01201871024165,
+          -6.6641690698171505
+        ],
+        "max": [
+          83.77333210881874,
+          158.00304878765184,
+          19.356627583480506
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/body/Men_body_Worker_0",
+      "url": "/models/glb/v1/pieces/Men/Men_body_Worker_0.069ab65c.glb",
+      "sha256": "b3a7b892baf927118100af74bfcab4e6232df38f76281e26e72f528c3b851078",
+      "bytes": 158564,
+      "drawCalls": 4,
+      "triangles": 3018,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_body_Worker_0.fbx",
+      "sourceId": "Men_body_Worker_0",
+      "sourceSha256": "069ab65c35f3d2ea7a46b84fbec97025d3f5312893c8061779a516836112ab48",
+      "sourceBBox": {
+        "min": [
+          -83.77335596250616,
+          100.88856454793466,
+          -5.969381178989614
+        ],
+        "max": [
+          83.77333210881874,
+          155.69402157042026,
+          19.356627929435117
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_Adventurer_100",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_Adventurer_100.2f70f717.glb",
+      "sha256": "0d7b0175aa0738658856cb522da1d66bd01261e264d1a5a87dbbf5a9fc1ecdd7",
+      "bytes": 95528,
+      "drawCalls": 2,
+      "triangles": 480,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_Adventurer_100.fbx",
+      "sourceId": "Men_feet_Adventurer_100",
+      "sourceSha256": "2f70f71761d26f2d9b673cebfe0092b2468e35132a038cd6a37d518cddc86ae0",
+      "sourceBBox": {
+        "min": [
+          -19.1556368107017,
+          -0.12233591073562865,
+          0.7776600600486993
+        ],
+        "max": [
+          19.155636324675676,
+          21.97097404782333,
+          28.668846430786676
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_Beach_100",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_Beach_100.c0982de3.glb",
+      "sha256": "f017ed73c9ede69a87a9373d986fb996fde931f4d2f3a4334cca08888c8e122e",
+      "bytes": 99984,
+      "drawCalls": 2,
+      "triangles": 680,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_Beach_100.fbx",
+      "sourceId": "Men_feet_Beach_100",
+      "sourceSha256": "c0982de32a0a0e51dc171884b2a2ce615b313f6224706b8c8c0ade29223da19a",
+      "sourceBBox": {
+        "min": [
+          -19.05438938101703,
+          -0.5412590246722367,
+          0.28479225426916094
+        ],
+        "max": [
+          19.054388894987177,
+          16.150996843241796,
+          28.79813750295955
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_Casual2_0",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_Casual2_0.eba4aa88.glb",
+      "sha256": "f664e2977790a4c37703ca18c50dbabd52d8f5889bef1e4beee8dfeaaf2bdb1f",
+      "bytes": 97664,
+      "drawCalls": 2,
+      "triangles": 552,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_Casual2_0.fbx",
+      "sourceId": "Men_feet_Casual2_0",
+      "sourceSha256": "eba4aa8849f1a705f60f5faa9547bfe9a32f58a35526b1cefbe785bf1537ebb4",
+      "sourceBBox": {
+        "min": [
+          -19.155636810701502,
+          -0.13975580268970808,
+          -0.09914039179717148
+        ],
+        "max": [
+          19.15563632467564,
+          24.379182797667433,
+          28.668846463917806
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_Casual_0",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_Casual_0.c7f2eca1.glb",
+      "sha256": "88c90aa1fdae560781939d7657e0e759d555d5e4024fb2f7b19be24c8cf990dd",
+      "bytes": 96304,
+      "drawCalls": 2,
+      "triangles": 512,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_Casual_0.fbx",
+      "sourceId": "Men_feet_Casual_0",
+      "sourceSha256": "c7f2eca1e7c6f002b568c28d2bad140164b21e5bbab8d603fd4d55e7786f1c97",
+      "sourceBBox": {
+        "min": [
+          -19.155636810702774,
+          -0.41760760154695803,
+          -0.09914086734350873
+        ],
+        "max": [
+          19.155636324675896,
+          13.424444334524727,
+          28.668846310933223
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_Farmer_100",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_Farmer_100.3c458b1b.glb",
+      "sha256": "4eb5cb71e5b96c753a3a4b787fe675ff16d29da0a414dddfd339f397430bc4d8",
+      "bytes": 94448,
+      "drawCalls": 2,
+      "triangles": 384,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_Farmer_100.fbx",
+      "sourceId": "Men_feet_Farmer_100",
+      "sourceSha256": "3c458b1b2a66830c44c7b76c123c68d63c9f9e7461362efe0c33ce4d18a276e4",
+      "sourceBBox": {
+        "min": [
+          -19.155636810701353,
+          -0.037375350679437605,
+          0.7776593579910577
+        ],
+        "max": [
+          19.155636324675612,
+          21.234375359924456,
+          28.668846471028317
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_King_100",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_King_100.63aa3b50.glb",
+      "sha256": "abc2a6be5efe6e73758ea8a702bfad9e729772309e2a84ffdba69198e85b6324",
+      "bytes": 96040,
+      "drawCalls": 1,
+      "triangles": 624,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_King_100.fbx",
+      "sourceId": "Men_feet_King_100",
+      "sourceSha256": "63aa3b50da1bc3901dd6b8ca62597290475cca3a2392c035647b145b1042a68b",
+      "sourceBBox": {
+        "min": [
+          -18.940933429983595,
+          -0.11523294257330577,
+          0.6027422453324728
+        ],
+        "max": [
+          18.940932943951665,
+          22.817041465292526,
+          28.28813993899441
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_Punk_100",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_Punk_100.84d6d219.glb",
+      "sha256": "3d9718837f701c9149ed5220f41bf0b26448bcb430fe0fe8975769608719ce71",
+      "bytes": 97512,
+      "drawCalls": 2,
+      "triangles": 552,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_Punk_100.fbx",
+      "sourceId": "Men_feet_Punk_100",
+      "sourceSha256": "84d6d2199cff1612ec6abd1fc0dc09dd6995d4ee711a783898123515d510c16b",
+      "sourceBBox": {
+        "min": [
+          -19.155636810702774,
+          -0.4176075888564837,
+          -0.09914200491783005
+        ],
+        "max": [
+          19.155636324675896,
+          20.14725297030539,
+          28.668846310933223
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_SpaceSuit_100",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_SpaceSuit_100.6a6883b6.glb",
+      "sha256": "271531838dcd645e29222b9938fc20b4032672b5a812a9053f889de706bc6ddb",
+      "bytes": 97396,
+      "drawCalls": 2,
+      "triangles": 576,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_SpaceSuit_100.fbx",
+      "sourceId": "Men_feet_SpaceSuit_100",
+      "sourceSha256": "6a6883b60a1a1e295636c963fe4e2c1995d07ea6aeada33242e1c9202e4dc4c8",
+      "sourceBBox": {
+        "min": [
+          -19.155636810705722,
+          -0.04312047146241713,
+          -0.09190851577722646
+        ],
+        "max": [
+          19.1556363246766,
+          27.286486379897045,
+          27.287579920425706
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_Suit_100",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_Suit_100.2478e405.glb",
+      "sha256": "bdd34fc8a45ba3fba33dcb8088b53f499f0407fc1ed861b8b6dd8423097e403c",
+      "bytes": 95116,
+      "drawCalls": 1,
+      "triangles": 528,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_Suit_100.fbx",
+      "sourceId": "Men_feet_Suit_100",
+      "sourceSha256": "2478e4051dd3b7f832d775d29db6cadcc23188a2401b2acacbb0e23db2af015a",
+      "sourceBBox": {
+        "min": [
+          -19.155636810702774,
+          -0.12995002871040848,
+          -0.09914169201300521
+        ],
+        "max": [
+          19.155636324675896,
+          16.890413885735494,
+          28.668846264067856
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_Swat_100",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_Swat_100.1f661377.glb",
+      "sha256": "f85dcc469f3d2a35054f321cb7f7df280801b9c6d17bebfcd15aed2cbc2703ec",
+      "bytes": 94804,
+      "drawCalls": 1,
+      "triangles": 560,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_Swat_100.fbx",
+      "sourceId": "Men_feet_Swat_100",
+      "sourceSha256": "1f6613779a2637809c7a148c12fae5fdacd262fb1707fd50ab72c2d84aa740bb",
+      "sourceBBox": {
+        "min": [
+          -19.155636810703015,
+          -0.13975827109598424,
+          -0.0919080942463662
+        ],
+        "max": [
+          19.155636324676045,
+          28.658768181884057,
+          27.79928022288935
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/feet/Men_feet_Worker_0",
+      "url": "/models/glb/v1/pieces/Men/Men_feet_Worker_0.a4fc307e.glb",
+      "sha256": "2ff5f9ca650c096b3a6ad93f9538305d5517fa6e2035b8a06a530e2de6f8279b",
+      "bytes": 95756,
+      "drawCalls": 2,
+      "triangles": 464,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_feet_Worker_0.fbx",
+      "sourceId": "Men_feet_Worker_0",
+      "sourceSha256": "a4fc307ed84819bbbedaa5a8e8226505dbe585d8f97aee2e29c3f0b1c3e9e28f",
+      "sourceBBox": {
+        "min": [
+          -19.155636810701843,
+          -0.36726648119623934,
+          0.7776594695564475
+        ],
+        "max": [
+          19.15563632467571,
+          27.31457510820552,
+          28.668846448116792
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Adventurer_150",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Adventurer_150.759f7f23.glb",
+      "sha256": "4025db574e73ed3d02f5c2a648ac376f73eeddfbccf30507beb1e21ac10b4876",
+      "bytes": 143588,
+      "drawCalls": 4,
+      "triangles": 3620,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Adventurer_150.fbx",
+      "sourceId": "Men_head_Adventurer_150",
+      "sourceSha256": "759f7f23de24d3d63005d30ad9578acedfabfa7e8a03802fa4e8d17f77ea3a43",
+      "sourceBBox": {
+        "min": [
+          -10.842342778171654,
+          144.1719474530892,
+          -9.363833543184509
+        ],
+        "max": [
+          11.161917550549282,
+          185.59408928396414,
+          17.505067080817934
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Beach_150",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Beach_150.aea5839b.glb",
+      "sha256": "a4a834cd0c2fb3cbf7ea993b4a2e64267c9234c7974a44ada35bff63c6b3eb8f",
+      "bytes": 127068,
+      "drawCalls": 5,
+      "triangles": 2288,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Beach_150.fbx",
+      "sourceId": "Men_head_Beach_150",
+      "sourceSha256": "aea5839b3334fe84796d1c4a91f097a6938ebcc05c168e4f338247331acc2450",
+      "sourceBBox": {
+        "min": [
+          -11.318436340126414,
+          144.0522014568312,
+          -8.605616339724012
+        ],
+        "max": [
+          11.297629123248354,
+          187.76534074932735,
+          18.10558826100107
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Casual2_0",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Casual2_0.409981af.glb",
+      "sha256": "91a054f1c920735cea0fb03dfeaa5c0ea14117ee79e3beaff363b402f48d8456",
+      "bytes": 119704,
+      "drawCalls": 5,
+      "triangles": 1684,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Casual2_0.fbx",
+      "sourceId": "Men_head_Casual2_0",
+      "sourceSha256": "409981af4a87542785cf2339f6770d31307f8acee9c724ed78a43a029b849497",
+      "sourceBBox": {
+        "min": [
+          -11.248209406663896,
+          150.49716543676726,
+          -16.800482004926916
+        ],
+        "max": [
+          11.227402934903523,
+          185.6579016837533,
+          17.505066050308926
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Casual_0",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Casual_0.d81b37f8.glb",
+      "sha256": "b50d562e815dc1cc3a0fc1095e74233e94e9d5a6b0d3599b066beab170d642b0",
+      "bytes": 121516,
+      "drawCalls": 4,
+      "triangles": 1888,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Casual_0.fbx",
+      "sourceId": "Men_head_Casual_0",
+      "sourceSha256": "d81b37f8b1bae73b0af09466b9c0acfcfe33745312b1746061c54f8863bccd3a",
+      "sourceBBox": {
+        "min": [
+          -11.38314760936917,
+          149.9379773736314,
+          -8.71989467203137
+        ],
+        "max": [
+          11.362342627057199,
+          186.61866507966866,
+          17.505064520912963
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Farmer_150",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Farmer_150.3a80c5e6.glb",
+      "sha256": "df7923eac71636307a31bb38e72a10367e4d277ff787069dc78c39396bcd38b6",
+      "bytes": 107268,
+      "drawCalls": 5,
+      "triangles": 816,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Farmer_150.fbx",
+      "sourceId": "Men_head_Farmer_150",
+      "sourceSha256": "3a80c5e69c425e880eab975fdaa3f8bb2a2e0746c2652a67f1870917f3f6fe41",
+      "sourceBBox": {
+        "min": [
+          -17.681150587174283,
+          145.4508256871101,
+          -11.325961666307084
+        ],
+        "max": [
+          17.681150605416395,
+          185.5603899875704,
+          24.42255412509411
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Horse_150",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Horse_150.5a6f4795.glb",
+      "sha256": "2c17da575ea4c64057688e0633bf596b4ecf5eaa22f726615ee811a43adcb85e",
+      "bytes": 107504,
+      "drawCalls": 6,
+      "triangles": 752,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Horse_150.fbx",
+      "sourceId": "Men_head_Horse_150",
+      "sourceSha256": "5a6f479538ac5a035dcd3e2a11f3f1139db9582d5269bd0ddb5b13268f4cd04f",
+      "sourceBBox": {
+        "min": [
+          -10.868993976385601,
+          150.79309520472825,
+          -8.656171436412547
+        ],
+        "max": [
+          10.868993993631756,
+          195.9810870349664,
+          34.94592566147201
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_King_150",
+      "url": "/models/glb/v1/pieces/Men/Men_head_King_150.3fdfa851.glb",
+      "sha256": "c1acd1d6a45bec8ccd58be7f9e8cd621512c0bb65efd772a78a505949d04d09f",
+      "bytes": 148492,
+      "drawCalls": 4,
+      "triangles": 3888,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_King_150.fbx",
+      "sourceId": "Men_head_King_150",
+      "sourceSha256": "3fdfa851b779da708ca685d28f438d1bfd7c678ba221688d83e7463d5c32b11a",
+      "sourceBBox": {
+        "min": [
+          -11.318435595068399,
+          146.9765359456027,
+          -8.215701266843746
+        ],
+        "max": [
+          11.297629123248354,
+          190.3040601661809,
+          19.217103307995295
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Punk_150",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Punk_150.5c6fce42.glb",
+      "sha256": "21b7e4f8fb47e321f4c43563c8fc1bc7a520e9091a2e96a7c056a3c394a55a9d",
+      "bytes": 113808,
+      "drawCalls": 6,
+      "triangles": 1244,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Punk_150.fbx",
+      "sourceId": "Men_head_Punk_150",
+      "sourceSha256": "5c6fce42215dbff15554184549a455afb709b5f954b1758b9d03a2a64938c01f",
+      "sourceBBox": {
+        "min": [
+          -10.71347605323302,
+          143.89740702853697,
+          -15.946414794173856
+        ],
+        "max": [
+          10.713476071233291,
+          196.54121929446737,
+          23.026696386513848
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_SpaceSuit_150",
+      "url": "/models/glb/v1/pieces/Men/Men_head_SpaceSuit_150.da77cb4d.glb",
+      "sha256": "797ce08b3a53ca212e79f7cc98abb440d47e928bce8a4f212b5d48e84f6a4415",
+      "bytes": 153620,
+      "drawCalls": 3,
+      "triangles": 4854,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_SpaceSuit_150.fbx",
+      "sourceId": "Men_head_SpaceSuit_150",
+      "sourceSha256": "da77cb4ddf6e6d83087c982d775755581c6385f1ec78c8043d503b8f67cf9941",
+      "sourceBBox": {
+        "min": [
+          -15.725334551264206,
+          142.7068366441212,
+          -13.995468433023618
+        ],
+        "max": [
+          15.725334570258404,
+          188.58587310269994,
+          19.72550554482954
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Suit_150",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Suit_150.8efc1f26.glb",
+      "sha256": "de7dbf0f4a2b393bc8525e7c32f05bd99d38fb2756c4c63fc65a82cc32cb343d",
+      "bytes": 127236,
+      "drawCalls": 4,
+      "triangles": 2456,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Suit_150.fbx",
+      "sourceId": "Men_head_Suit_150",
+      "sourceSha256": "8efc1f267ad198b466ab3fff04fb9f656aa6879e04b2150fe2810a27d4123430",
+      "sourceBBox": {
+        "min": [
+          -11.554693493131198,
+          150.12420976545644,
+          -8.488749876273143
+        ],
+        "max": [
+          11.030210664731921,
+          185.5628803007492,
+          17.505064620957622
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Swat_150",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Swat_150.efd79c4d.glb",
+      "sha256": "66342c582ee0ffa68565f0cc1b1bed92fa90fd816dc416e1f836d6936fe96cac",
+      "bytes": 116704,
+      "drawCalls": 3,
+      "triangles": 2308,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Swat_150.fbx",
+      "sourceId": "Men_head_Swat_150",
+      "sourceSha256": "efd79c4d709814176255eb514f9623cb172c30ffd233fee946d01a0cfd6945ac",
+      "sourceBBox": {
+        "min": [
+          -11.869791937886555,
+          148.2008056524038,
+          -8.375563178888203
+        ],
+        "max": [
+          11.869791956650685,
+          185.24497304471686,
+          19.193670282847496
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/head/Men_head_Worker_0",
+      "url": "/models/glb/v1/pieces/Men/Men_head_Worker_0.12f57b24.glb",
+      "sha256": "9273d5f49abb609c63b7e710e32b6450ded3a2539cc5ba5e6b1234c69c25eda4",
+      "bytes": 108756,
+      "drawCalls": 5,
+      "triangles": 936,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_head_Worker_0.fbx",
+      "sourceId": "Men_head_Worker_0",
+      "sourceSha256": "12f57b247785740196717060cf3d9c26cd901a79b3bc77c40bc3bf7f91cd883e",
+      "sourceBBox": {
+        "min": [
+          -11.912064294808571,
+          145.47449876950833,
+          -10.256109150851753
+        ],
+        "max": [
+          11.912064313067528,
+          186.27584802694355,
+          23.325763194731998
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_Adventurer_200",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_Adventurer_200.d9d81eca.glb",
+      "sha256": "2d24b3b6b2a5a75df62e216ff82bfdbbf095e7f646cdba5f5fdca8358ad49e48",
+      "bytes": 101272,
+      "drawCalls": 1,
+      "triangles": 734,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_Adventurer_200.fbx",
+      "sourceId": "Men_legs_Adventurer_200",
+      "sourceSha256": "d9d81eca70a7e87e40302f0785f8ae2e82b0057d94726a676ba81d12cf358651",
+      "sourceBBox": {
+        "min": [
+          -18.10537050897271,
+          14.099915335517451,
+          -6.5394119831121404
+        ],
+        "max": [
+          18.105651083565153,
+          103.85033158371647,
+          15.62028796364767
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_Beach_200",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_Beach_200.245810d6.glb",
+      "sha256": "a8dcf526cf37f2eecc8133b9fe97a157176c6609b6ad8992d170feb2cc4ae967",
+      "bytes": 106616,
+      "drawCalls": 3,
+      "triangles": 830,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_Beach_200.fbx",
+      "sourceId": "Men_legs_Beach_200",
+      "sourceSha256": "245810d64690090df011b89f0694409547e794935599534c64379ea51fb234ba",
+      "sourceBBox": {
+        "min": [
+          -19.048848496169448,
+          15.651341052658243,
+          -6.891465366200942
+        ],
+        "max": [
+          19.048957574127364,
+          103.78833855253838,
+          17.070778004479624
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_Casual2_0",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_Casual2_0.b6f2a124.glb",
+      "sha256": "61f59e0c4849b72db8a4b994b1a3dccf436d7ea71d6ca6c07622734e3ecfcfb9",
+      "bytes": 101392,
+      "drawCalls": 1,
+      "triangles": 734,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_Casual2_0.fbx",
+      "sourceId": "Men_legs_Casual2_0",
+      "sourceSha256": "b6f2a124bbd98f9c903aca5dd82caea3fd7c22a3e7debf23823b85d1cbebaba7",
+      "sourceBBox": {
+        "min": [
+          -18.105399865548897,
+          13.249707504543345,
+          -6.539580032046145
+        ],
+        "max": [
+          18.105682937672412,
+          103.59059597915402,
+          16.752265902751216
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_Casual_0",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_Casual_0.ab923176.glb",
+      "sha256": "4ccc1af55053626b230acb5e3355e7e98676934671aa1b95a70e3449856d55e5",
+      "bytes": 103128,
+      "drawCalls": 2,
+      "triangles": 758,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_Casual_0.fbx",
+      "sourceId": "Men_legs_Casual_0",
+      "sourceSha256": "ab923176e06b9b3f25caecb2f1bb441b9d3bed73d27c3fb19745f02dd1cc6da1",
+      "sourceBBox": {
+        "min": [
+          -19.04884849667821,
+          12.402905346702683,
+          -6.891464062922908
+        ],
+        "max": [
+          19.04895757360937,
+          104.54895071329706,
+          17.206664261137472
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_Farmer_200",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_Farmer_200.2adadf44.glb",
+      "sha256": "a53a3f8c4f2030d8cdbe5a75b58d061f20fba382ad512017a65f0f7453c911fe",
+      "bytes": 104208,
+      "drawCalls": 1,
+      "triangles": 918,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_Farmer_200.fbx",
+      "sourceId": "Men_legs_Farmer_200",
+      "sourceSha256": "2adadf445fc8f6ad275005f103efdc31ed1cb5429c787a35c599c313ce44c105",
+      "sourceBBox": {
+        "min": [
+          -19.887208248371415,
+          12.420562238906724,
+          -6.539408385890885
+        ],
+        "max": [
+          19.88747365871045,
+          103.71415172389192,
+          15.806963235637824
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_King_200",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_King_200.7a2813bf.glb",
+      "sha256": "e8867f4537dceb5575e1b00ccf0f1c645c11057f6443970f71d618bbf0447880",
+      "bytes": 129836,
+      "drawCalls": 3,
+      "triangles": 1822,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_King_200.fbx",
+      "sourceId": "Men_legs_King_200",
+      "sourceSha256": "7a2813bf4bf67593b2448312e41169a32f9a2ddca07717e1041156533f966d9b",
+      "sourceBBox": {
+        "min": [
+          -20.804378856784723,
+          13.926010332016315,
+          -5.784818400944635
+        ],
+        "max": [
+          20.804496231473387,
+          103.71443485918893,
+          18.207818630791024
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_Punk_200",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_Punk_200.3d055129.glb",
+      "sha256": "2b6c07207b7caa9897cf974bd2bdcbc6a4c51098ef22ef9f1cf0438f55958d2e",
+      "bytes": 103136,
+      "drawCalls": 2,
+      "triangles": 746,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_Punk_200.fbx",
+      "sourceId": "Men_legs_Punk_200",
+      "sourceSha256": "3d05512969fdccd7b83719f9b4c9d3f1ffb33299e5fa3bc4e16b667f656767e8",
+      "sourceBBox": {
+        "min": [
+          -17.09298946955991,
+          12.152306955642224,
+          -6.5394931761248705
+        ],
+        "max": [
+          17.093096963874288,
+          103.9025351992331,
+          16.27374224272948
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_SpaceSuit_200",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_SpaceSuit_200.060a248f.glb",
+      "sha256": "05b5a733dcf9891a032f497d632b033a56503080525eb019ac1f21debb4c9343",
+      "bytes": 114820,
+      "drawCalls": 4,
+      "triangles": 1106,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_SpaceSuit_200.fbx",
+      "sourceId": "Men_legs_SpaceSuit_200",
+      "sourceSha256": "060a248ffe54e279b1497572e2c2d73bb2b2fdc47a8e1ec2262faa800cf46d36",
+      "sourceBBox": {
+        "min": [
+          -18.37883812158469,
+          22.143302590283916,
+          -6.3334604042668525
+        ],
+        "max": [
+          18.378966903622043,
+          103.23449365984337,
+          16.19190458299679
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_Suit_200",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_Suit_200.74301bb3.glb",
+      "sha256": "01a90cf1b4169994978d05e8b2991efaeec292416751aebf63eb0bfaf4ef457c",
+      "bytes": 101284,
+      "drawCalls": 1,
+      "triangles": 734,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_Suit_200.fbx",
+      "sourceId": "Men_legs_Suit_200",
+      "sourceSha256": "74301bb3cbf359c5d276b4d61931aafdddb9d80f6b383608ccc1bf0c124dd5e1",
+      "sourceBBox": {
+        "min": [
+          -18.10537050897271,
+          14.09991533549014,
+          -6.53957970427254
+        ],
+        "max": [
+          18.105651083565153,
+          104.3578779603905,
+          16.75226294977164
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_Swat_200",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_Swat_200.15f0f8f5.glb",
+      "sha256": "99a220a16ea19ad769abdb5a7df240ab8c965dd78c18c2d5a7f994beeca0188b",
+      "bytes": 122672,
+      "drawCalls": 2,
+      "triangles": 1778,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_Swat_200.fbx",
+      "sourceId": "Men_legs_Swat_200",
+      "sourceSha256": "15f0f8f5270a3dca650e52f1b635c2b1e20730162314e66d463f9180935cc2db",
+      "sourceBBox": {
+        "min": [
+          -20.350947775821105,
+          22.041860945972854,
+          -6.441750366414002
+        ],
+        "max": [
+          20.351139411989905,
+          105.9385309484768,
+          17.393726270165132
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "men/legs/Men_legs_Worker_0",
+      "url": "/models/glb/v1/pieces/Men/Men_legs_Worker_0.812c4123.glb",
+      "sha256": "9ea0d6153728dd9c866f4f2396f8e1582b925a8bea0628b7dcd7053cc8c985ce",
+      "bytes": 104416,
+      "drawCalls": 2,
+      "triangles": 822,
+      "joints": 62,
+      "textures": 0,
+      "source": "Men_legs_Worker_0.fbx",
+      "sourceId": "Men_legs_Worker_0",
+      "sourceSha256": "812c4123fb4087eed0cd5d8f7df16b6a6fc678ec3b6f4edfec0e35e5f51ab464",
+      "sourceBBox": {
+        "min": [
+          -18.87830881442271,
+          13.698933398120301,
+          -6.539381858424076
+        ],
+        "max": [
+          18.878411293117942,
+          103.8733248468397,
+          15.557950637135958
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_Adventurer_300",
+      "url": "/models/glb/v1/pieces/Women/Women_body_Adventurer_300.5b8bbeb6.glb",
+      "sha256": "8c39fa32a086a1a7ac54ea2e0b47d9875ede43fe629a5dae24578bda812cf069",
+      "bytes": 141832,
+      "drawCalls": 6,
+      "triangles": 2854,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_Adventurer_300.fbx",
+      "sourceId": "Women_body_Adventurer_300",
+      "sourceSha256": "5b8bbeb6981f13aaa6c13a724c39ce2c5d04f0cdcc6a252dc09aab4f4c8fc842",
+      "sourceBBox": {
+        "min": [
+          -82.46227623250617,
+          111.86277739041627,
+          -1.6307991126147328
+        ],
+        "max": [
+          82.46227659399655,
+          154.05010152110773,
+          19.30765851916603
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_Casual_0",
+      "url": "/models/glb/v1/pieces/Women/Women_body_Casual_0.9af98b30.glb",
+      "sha256": "2e16cd6934c0c9951c032b6460357884862f8881431ed84ad15ceb261a60a8dc",
+      "bytes": 128656,
+      "drawCalls": 2,
+      "triangles": 2654,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_Casual_0.fbx",
+      "sourceId": "Women_body_Casual_0",
+      "sourceSha256": "9af98b30712dc4b7b6d88edd0625424536a9a9dd6f16e362cbcb20bdc2e8089b",
+      "sourceBBox": {
+        "min": [
+          -82.50575185498461,
+          109.38491302382434,
+          -1.1646526586897317
+        ],
+        "max": [
+          82.50575221646515,
+          154.0501014694134,
+          18.990361251475967
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_Formal_300",
+      "url": "/models/glb/v1/pieces/Women/Women_body_Formal_300.d52b875f.glb",
+      "sha256": "0efe399cf93011d55fd01db66c5e206f40824986b65d1b9e9d02470bd168e2f4",
+      "bytes": 130372,
+      "drawCalls": 3,
+      "triangles": 2594,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_Formal_300.fbx",
+      "sourceId": "Women_body_Formal_300",
+      "sourceSha256": "d52b875f04f091d7e352401790e9c5e8d8022564484797f97f198770b2cbd00e",
+      "sourceBBox": {
+        "min": [
+          -82.46227027204188,
+          112.00749704466665,
+          -1.6307985731980696
+        ],
+        "max": [
+          82.46227063353228,
+          154.05010152110805,
+          19.307660341967008
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_Medieval_300",
+      "url": "/models/glb/v1/pieces/Women/Women_body_Medieval_300.105e95ab.glb",
+      "sha256": "518ebf2f1319fcc40e4ac8534518b0c3b43a41ce72e7593b0d100b4ea27d18d8",
+      "bytes": 147852,
+      "drawCalls": 6,
+      "triangles": 3214,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_Medieval_300.fbx",
+      "sourceId": "Women_body_Medieval_300",
+      "sourceSha256": "105e95ab4f0d8e727891d6833bb65f7b13cafb0a009dd9f9ad2f00de9a55937e",
+      "sourceBBox": {
+        "min": [
+          -82.46227623250617,
+          105.86153009044234,
+          -4.769449512410577
+        ],
+        "max": [
+          82.46227659399655,
+          155.4146288500343,
+          20.54703986797537
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_Punk_300",
+      "url": "/models/glb/v1/pieces/Women/Women_body_Punk_300.49bb7874.glb",
+      "sha256": "8529c3a84c2edd63da9bb275333b8e47f8c863b401bf75dd05f964db21e8aff0",
+      "bytes": 141136,
+      "drawCalls": 3,
+      "triangles": 3118,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_Punk_300.fbx",
+      "sourceId": "Women_body_Punk_300",
+      "sourceSha256": "49bb7874c658c1cb287ac37d3e745b0f2e9d164362820ff8edd585e6089d88e5",
+      "sourceBBox": {
+        "min": [
+          -82.46227623250617,
+          111.95662378411615,
+          -2.1419552197079494
+        ],
+        "max": [
+          82.46227659399655,
+          154.0287988255088,
+          19.3076586054874
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_SciFi_300",
+      "url": "/models/glb/v1/pieces/Women/Women_body_SciFi_300.59509718.glb",
+      "sha256": "4492032a1889c923cfe0edb70d21c69d30ebe0db9c9c96c49b95c5deb800b1a0",
+      "bytes": 147416,
+      "drawCalls": 5,
+      "triangles": 3238,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_SciFi_300.fbx",
+      "sourceId": "Women_body_SciFi_300",
+      "sourceSha256": "595097187fcd89bfbf8dd2e06eecb932e2c8f9ded42864c8ce0691102c1097a1",
+      "sourceBBox": {
+        "min": [
+          -82.46227623250617,
+          112.4452779920392,
+          -3.0172717023004396
+        ],
+        "max": [
+          82.46227659399655,
+          154.2268494432943,
+          18.988684372537627
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_Soldier_300",
+      "url": "/models/glb/v1/pieces/Women/Women_body_Soldier_300.bdee34ce.glb",
+      "sha256": "321e975b24f2dfb25be93ed4697e0d19db348b5f5447379c214b5819d748cf6a",
+      "bytes": 132508,
+      "drawCalls": 3,
+      "triangles": 2708,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_Soldier_300.fbx",
+      "sourceId": "Women_body_Soldier_300",
+      "sourceSha256": "bdee34ceb8b5cda089290b2f4fa1b4ef2376628c7524d4fac3c4bf059452510f",
+      "sourceBBox": {
+        "min": [
+          -82.46227623250681,
+          113.2365929521863,
+          -1.630799199330303
+        ],
+        "max": [
+          82.46227659399719,
+          154.7617286395107,
+          19.307660320323148
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_Suit_300",
+      "url": "/models/glb/v1/pieces/Women/Women_body_Suit_300.c0ec6e3e.glb",
+      "sha256": "7dc08d1bb590192fc84f98645ca41c20cb17cca238e0673cf40e2a11443d1161",
+      "bytes": 133480,
+      "drawCalls": 3,
+      "triangles": 2738,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_Suit_300.fbx",
+      "sourceId": "Women_body_Suit_300",
+      "sourceSha256": "c0ec6e3e66ef8616c910d29eb806cde96ab587cae6020c3ca68ec9795462180f",
+      "sourceBBox": {
+        "min": [
+          -82.46227623250617,
+          113.08772181575198,
+          -2.622620138237782
+        ],
+        "max": [
+          82.46227659399655,
+          154.0501015211077,
+          19.307658153464622
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_Witch_300",
+      "url": "/models/glb/v1/pieces/Women/Women_body_Witch_300.b5964881.glb",
+      "sha256": "e0b9d01291ad1673805b8beae269e4c19eacc412e3afcb88a0338c8aedacd935",
+      "bytes": 136580,
+      "drawCalls": 4,
+      "triangles": 2782,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_Witch_300.fbx",
+      "sourceId": "Women_body_Witch_300",
+      "sourceSha256": "b59648810f1f75f2437fda5d2d42a8378611d0e0d822337ae4a014a88cbb764d",
+      "sourceBBox": {
+        "min": [
+          -82.46950627562694,
+          113.12552009623401,
+          -1.63093897243242
+        ],
+        "max": [
+          82.46950663710764,
+          154.05008957218442,
+          19.1358142835817
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/body/Women_body_Worker_0",
+      "url": "/models/glb/v1/pieces/Women/Women_body_Worker_0.322243f4.glb",
+      "sha256": "39640c704e3c601eed2c5805b52d6701c8cc6962562a1f2bd02e8113a6b83a8c",
+      "bytes": 133048,
+      "drawCalls": 4,
+      "triangles": 2610,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_body_Worker_0.fbx",
+      "sourceId": "Women_body_Worker_0",
+      "sourceSha256": "322243f4efaf264385e2b0c82e6e0b1470ddeea713d23f0544030a6b6810636b",
+      "sourceBBox": {
+        "min": [
+          -82.46227623250617,
+          114.56189023692525,
+          -1.9695545347376546
+        ],
+        "max": [
+          82.46227659399655,
+          154.0501015079074,
+          19.226634985631396
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_Adventurer_100",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_Adventurer_100.98f3a0aa.glb",
+      "sha256": "8db3a8c180294beb815df004efa45cb65866ef9bf7962733b2cd27fb46e9a14a",
+      "bytes": 84876,
+      "drawCalls": 2,
+      "triangles": 772,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_Adventurer_100.fbx",
+      "sourceId": "Women_feet_Adventurer_100",
+      "sourceSha256": "98f3a0aafc812ee6bc59adc3449ea257b450e22cb319f8dce313df3d3515fbb6",
+      "sourceBBox": {
+        "min": [
+          -16.89802073119916,
+          -0.05079167515474238,
+          -2.9019773549555836
+        ],
+        "max": [
+          16.898020015786507,
+          43.684081758536635,
+          25.92366503937637
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_Casual_0",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_Casual_0.98a23d84.glb",
+      "sha256": "773ef0b9500c017760d845e858023097645a6ee842ae24d88731a09a4d9bc427",
+      "bytes": 80524,
+      "drawCalls": 2,
+      "triangles": 538,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_Casual_0.fbx",
+      "sourceId": "Women_feet_Casual_0",
+      "sourceSha256": "98a23d840a01b466a0f7d054e53598221399bfef21332877b94af6c1515f1740",
+      "sourceBBox": {
+        "min": [
+          -14.234190762043001,
+          -0.8566960983868613,
+          -1.5244647239824216
+        ],
+        "max": [
+          14.234190762043001,
+          18.354498338103742,
+          27.08127962395897
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_Formal_100",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_Formal_100.184628fd.glb",
+      "sha256": "850cc347d4644ef754b51d41c77c91837cefe42f890ba8c6f7f447be93f52c4c",
+      "bytes": 79424,
+      "drawCalls": 2,
+      "triangles": 490,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_Formal_100.fbx",
+      "sourceId": "Women_feet_Formal_100",
+      "sourceSha256": "184628fdd1532139a49a5e49cc0d2e01a2666a6757428663cdbea6f5ed074ab7",
+      "sourceBBox": {
+        "min": [
+          -14.541321575641634,
+          0.10578700698762046,
+          0.09065101913644347
+        ],
+        "max": [
+          14.541321575641634,
+          18.213307378826954,
+          25.54730301373847
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_Medieval_100",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_Medieval_100.ee33f805.glb",
+      "sha256": "b8046c524de8731446d7b9cf686cb30588e236b3fc9a5d3bc37b552044412f63",
+      "bytes": 80492,
+      "drawCalls": 2,
+      "triangles": 570,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_Medieval_100.fbx",
+      "sourceId": "Women_feet_Medieval_100",
+      "sourceSha256": "ee33f8055945a52443600c04cb81f7cdb4c2b16091349e8858004bdd6ef0f0f5",
+      "sourceBBox": {
+        "min": [
+          -14.70744732667576,
+          0.009101937204118195,
+          -1.5310328790814116
+        ],
+        "max": [
+          14.707446316141926,
+          45.79716332922088,
+          25.547303153054266
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_Punk_100",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_Punk_100.65b2d543.glb",
+      "sha256": "5f3b5909b89bd5edf71d5540f24402fe854eabac8c4f6d6fb3a259e6d25863c8",
+      "bytes": 83824,
+      "drawCalls": 2,
+      "triangles": 720,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_Punk_100.fbx",
+      "sourceId": "Women_feet_Punk_100",
+      "sourceSha256": "65b2d54366f2a1f94f3ea09b3d1059be494b97e755824f620048aa203b7d6b32",
+      "sourceBBox": {
+        "min": [
+          -14.984225870384108,
+          0.17636175248091954,
+          -2.7285355722536706
+        ],
+        "max": [
+          14.984225135063129,
+          42.89840416199788,
+          25.88972414585657
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_SciFi_100",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_SciFi_100.7e10a8ce.glb",
+      "sha256": "bc24fa055c4a97dcc24f9093dae09c276a84d2da4cb8a1dddf6c79d577999d20",
+      "bytes": 82032,
+      "drawCalls": 2,
+      "triangles": 634,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_SciFi_100.fbx",
+      "sourceId": "Women_feet_SciFi_100",
+      "sourceSha256": "7e10a8cea954417fd3f7ad3c174ed636803e9a73d73782068aea6f3a92c8304e",
+      "sourceBBox": {
+        "min": [
+          -16.00119256070036,
+          0.009099107735625117,
+          -2.3000616298013714
+        ],
+        "max": [
+          16.00119200212357,
+          53.04671737488583,
+          25.54730315305497
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_Soldier_100",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_Soldier_100.42e153c7.glb",
+      "sha256": "aaafb1b35e6c845cb02734fcd499ef4d86734c1452d4b6010c8583c7a79d5bf2",
+      "bytes": 90136,
+      "drawCalls": 2,
+      "triangles": 1036,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_Soldier_100.fbx",
+      "sourceId": "Women_feet_Soldier_100",
+      "sourceSha256": "42e153c7d4bb6c88fa606d5e25d6b59cd00081665910d565607db6609fc3f894",
+      "sourceBBox": {
+        "min": [
+          -17.536287742360702,
+          -0.05079178722422576,
+          -3.5898548099038767
+        ],
+        "max": [
+          17.53628702353743,
+          42.89548299138638,
+          25.92366503937637
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_Suit_100",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_Suit_100.dc046113.glb",
+      "sha256": "6b72bb777b7a0f6db29cf1b8c97be35920d2690f9dc87efcfc60f598e43fd754",
+      "bytes": 80008,
+      "drawCalls": 2,
+      "triangles": 522,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_Suit_100.fbx",
+      "sourceId": "Women_feet_Suit_100",
+      "sourceSha256": "dc04611304bfd86a0520931f140c9f59c0de2280dd568653fff27cb75e9e77e0",
+      "sourceBBox": {
+        "min": [
+          -15.381346225738527,
+          -0.1869419547682085,
+          -0.5356985612255687
+        ],
+        "max": [
+          15.381346225738527,
+          19.183721855986,
+          27.146862442134868
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_Witch_100",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_Witch_100.3beb3708.glb",
+      "sha256": "c9ca031529399de9ba5033e32f24bf9ab27e73ba632192bc50c80b16ac43d035",
+      "bytes": 79032,
+      "drawCalls": 1,
+      "triangles": 592,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_Witch_100.fbx",
+      "sourceId": "Women_feet_Witch_100",
+      "sourceSha256": "3beb37087d17c262df298eb98e21b3795718c9e917d603170764e6906b821e49",
+      "sourceBBox": {
+        "min": [
+          -16.196685661501025,
+          0.009099725991372444,
+          -3.704367044549644
+        ],
+        "max": [
+          16.196684588222663,
+          45.801140793719654,
+          25.770534483349426
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/feet/Women_feet_Worker_0",
+      "url": "/models/glb/v1/pieces/Women/Women_feet_Worker_0.fc437c3b.glb",
+      "sha256": "f2c08022dd13f9dff6c4a679c288f8201f91b2c708e371713e4545f1b1b48438",
+      "bytes": 80048,
+      "drawCalls": 2,
+      "triangles": 522,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_feet_Worker_0.fbx",
+      "sourceId": "Women_feet_Worker_0",
+      "sourceSha256": "fc437c3b57b099dcbc9f6e526083ca5496446621039a1c1408b1e52ffecb988e",
+      "sourceBBox": {
+        "min": [
+          -15.381346225738527,
+          -0.18694196001744917,
+          -0.5356985805466387
+        ],
+        "max": [
+          15.381346225738527,
+          19.714875461790974,
+          27.146862442134868
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_Adventurer_150",
+      "url": "/models/glb/v1/pieces/Women/Women_head_Adventurer_150.d5a1543d.glb",
+      "sha256": "5bd127e181f77f04aabadf7d802ec48b75cf6ce5f39ac820e08fa19025a61b1c",
+      "bytes": 83700,
+      "drawCalls": 3,
+      "triangles": 646,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_Adventurer_150.fbx",
+      "sourceId": "Women_head_Adventurer_150",
+      "sourceSha256": "d5a1543da181986b91e4522f485ef7fd96c2c7a8a1bd3a7c99e32f7b39cdedd4",
+      "sourceBBox": {
+        "min": [
+          -10.976700487574151,
+          153.83845320551643,
+          -5.4377694484928485
+        ],
+        "max": [
+          10.976700481931163,
+          182.7575854374225,
+          17.733664852883457
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_Casual_0",
+      "url": "/models/glb/v1/pieces/Women/Women_head_Casual_0.a1b94fd7.glb",
+      "sha256": "cea8cae5d39aaf058346068f67074acb7a673747c4cb082db9525d945ea80fd6",
+      "bytes": 114140,
+      "drawCalls": 4,
+      "triangles": 2526,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_Casual_0.fbx",
+      "sourceId": "Women_head_Casual_0",
+      "sourceSha256": "a1b94fd7b1dbe88dab3e31529e53662b2f90062325e02975d23652df9f84500a",
+      "sourceBBox": {
+        "min": [
+          -11.819484832724145,
+          152.3218960422529,
+          -9.94629293758897
+        ],
+        "max": [
+          11.554995921412898,
+          184.34740780604946,
+          19.25285493958407
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_Formal_150",
+      "url": "/models/glb/v1/pieces/Women/Women_head_Formal_150.e24025ad.glb",
+      "sha256": "1239645b46f6205d100211b405ab3db17b7b736f5ebda204f6a6098c2101a46e",
+      "bytes": 112692,
+      "drawCalls": 3,
+      "triangles": 2542,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_Formal_150.fbx",
+      "sourceId": "Women_head_Formal_150",
+      "sourceSha256": "e24025ad2a21bdb1db316f123bb6b7cac2a1a6b556c285bc107f188f3f132fd1",
+      "sourceBBox": {
+        "min": [
+          -12.052077057798915,
+          152.47274392366654,
+          -11.697248938615092
+        ],
+        "max": [
+          12.052077052155926,
+          184.3557881564459,
+          20.068748048188233
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_Medieval_150",
+      "url": "/models/glb/v1/pieces/Women/Women_head_Medieval_150.5d751f81.glb",
+      "sha256": "80ece6fe7c5708b335cdfaadb5923358ef0b3ebf4797ae8d368becdbfc2437fd",
+      "bytes": 110216,
+      "drawCalls": 5,
+      "triangles": 2022,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_Medieval_150.fbx",
+      "sourceId": "Women_head_Medieval_150",
+      "sourceSha256": "5d751f8167c0b24f8e9e974444786c617389246d435b660a3d3a067fc076ec91",
+      "sourceBBox": {
+        "min": [
+          -17.243099576796382,
+          152.06127360210593,
+          -11.952415289327364
+        ],
+        "max": [
+          17.243099571146534,
+          187.74537242920033,
+          19.251184559760393
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_Punk_150",
+      "url": "/models/glb/v1/pieces/Women/Women_head_Punk_150.b9f55fca.glb",
+      "sha256": "c40fb09a002e70b4b814ea79d3a49905a93962fd614748ba04e2b5f2bac59c03",
+      "bytes": 98148,
+      "drawCalls": 5,
+      "triangles": 1386,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_Punk_150.fbx",
+      "sourceId": "Women_head_Punk_150",
+      "sourceSha256": "b9f55fcaf37fb2aa3e69d05a243fc8814efbb5dade4494ffbec26ab3bc039fe6",
+      "sourceBBox": {
+        "min": [
+          -10.976700732984796,
+          153.87423869094886,
+          -12.408365936906987
+        ],
+        "max": [
+          10.976700727217267,
+          195.95755617454643,
+          21.79889794185816
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_SciFi_150",
+      "url": "/models/glb/v1/pieces/Women/Women_head_SciFi_150.9f2ffe15.glb",
+      "sha256": "7d287f5c96852225726857978957d470d4c91664cd5adb379f95648107a2c050",
+      "bytes": 118696,
+      "drawCalls": 5,
+      "triangles": 2581,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_SciFi_150.fbx",
+      "sourceId": "Women_head_SciFi_150",
+      "sourceSha256": "9f2ffe15e2cc7f6b7928207937c106340469a58dc2a6d949de147865d398797b",
+      "sourceBBox": {
+        "min": [
+          -11.436916890581658,
+          153.8384524803533,
+          -9.8887893230579
+        ],
+        "max": [
+          11.656457182923747,
+          185.40730927747916,
+          19.23274287561284
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_Soldier_150",
+      "url": "/models/glb/v1/pieces/Women/Women_head_Soldier_150.695b92c5.glb",
+      "sha256": "3ab4af90b01c8b88fe13202ae8afffe0c6988aebf9dc1d56c378951cd267766d",
+      "bytes": 116892,
+      "drawCalls": 3,
+      "triangles": 2848,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_Soldier_150.fbx",
+      "sourceId": "Women_head_Soldier_150",
+      "sourceSha256": "695b92c5ba33c494cf520067196e3bce15652c062825d47c6b118913b8862d6c",
+      "sourceBBox": {
+        "min": [
+          -11.05241626783233,
+          153.83845298778783,
+          -6.774178001133264
+        ],
+        "max": [
+          11.052416262189341,
+          182.9297469965839,
+          17.733664852883457
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_Suit_150",
+      "url": "/models/glb/v1/pieces/Women/Women_head_Suit_150.1f74bea8.glb",
+      "sha256": "dbdfe86f495016e216b79b761e9c499fab255812788eeb231cefc58e203f396a",
+      "bytes": 114144,
+      "drawCalls": 4,
+      "triangles": 2526,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_Suit_150.fbx",
+      "sourceId": "Women_head_Suit_150",
+      "sourceSha256": "1f74bea8535de95e73882ca6685a1f07fe4aa0c498034ce47bb74e8cc7e29fdd",
+      "sourceBBox": {
+        "min": [
+          -11.813229325254968,
+          152.30844923263777,
+          -9.976666685609532
+        ],
+        "max": [
+          11.548881229917002,
+          184.33113574174277,
+          19.251184519490423
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_Witch_150",
+      "url": "/models/glb/v1/pieces/Women/Women_head_Witch_150.31ca2b69.glb",
+      "sha256": "448a58478b8bca15dd7c3f01b3f92e0cb31d2f9c66047f1e41a35b3f3e9be5dd",
+      "bytes": 120804,
+      "drawCalls": 5,
+      "triangles": 2946,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_Witch_150.fbx",
+      "sourceId": "Women_head_Witch_150",
+      "sourceSha256": "31ca2b69d17037253be63b597ad22728cef78b08d85079b3470a697a9028a94d",
+      "sourceBBox": {
+        "min": [
+          -25.776624682386927,
+          147.92593314546346,
+          -23.227198615936274
+        ],
+        "max": [
+          26.774841544190846,
+          204.52040773924998,
+          31.587984110052815
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/head/Women_head_Worker_0",
+      "url": "/models/glb/v1/pieces/Women/Women_head_Worker_0.38d72315.glb",
+      "sha256": "a160e17f102fc666b3bdf5678e94120ed6a02260d2ccd4e24d1f4066f8e920f4",
+      "bytes": 108808,
+      "drawCalls": 4,
+      "triangles": 2148,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_head_Worker_0.fbx",
+      "sourceId": "Women_head_Worker_0",
+      "sourceSha256": "38d723151d8d9c690b6afea854921e063da9359a6ac9bf615a98011bba9f204d",
+      "sourceBBox": {
+        "min": [
+          -11.90933063908439,
+          153.8384525941822,
+          -9.190112528825317
+        ],
+        "max": [
+          11.909330633441401,
+          185.87771024916952,
+          23.725723741897983
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_Adventurer_200",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_Adventurer_200.a8e0e5f6.glb",
+      "sha256": "0060ac704a3c34e62e51e1a4fcb67c0fa5356eef8e0a3b169cdb45bdf7d52e30",
+      "bytes": 102440,
+      "drawCalls": 6,
+      "triangles": 1328,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_Adventurer_200.fbx",
+      "sourceId": "Women_legs_Adventurer_200",
+      "sourceSha256": "a8e0e5f6f24f7ae0473ef9f04e7e78ac3e105332b43ab84e00deb0c43449f2f2",
+      "sourceBBox": {
+        "min": [
+          -20.071758286229684,
+          36.35429239935427,
+          -5.89073927737718
+        ],
+        "max": [
+          20.071757841408488,
+          118.5822878335745,
+          17.259271291030444
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_Casual_0",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_Casual_0.4c9eda4d.glb",
+      "sha256": "9a18ed66a6e60e70d891809ae39c7ddcf8180da9b75772d2caea082e3212d0b8",
+      "bytes": 82632,
+      "drawCalls": 1,
+      "triangles": 706,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_Casual_0.fbx",
+      "sourceId": "Women_legs_Casual_0",
+      "sourceSha256": "4c9eda4dd644ff450fe44d4cb3837eec1d152439e09749709a3be76754c0c9b2",
+      "sourceBBox": {
+        "min": [
+          -17.991638160532133,
+          14.61588868410523,
+          -5.891257925987435
+        ],
+        "max": [
+          17.991637731973366,
+          113.39181907220144,
+          17.26079775569949
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_Formal_200",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_Formal_200.75f5b529.glb",
+      "sha256": "7f2d19d83a6cc3404568da329cd7ef2d51113e8906f10453e0cf2417469c78b8",
+      "bytes": 79592,
+      "drawCalls": 2,
+      "triangles": 482,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_Formal_200.fbx",
+      "sourceId": "Women_legs_Formal_200",
+      "sourceSha256": "75f5b52910a6ac3188d0c35e994eb80bdf70c5f550577499710b195a5140a9c2",
+      "sourceBBox": {
+        "min": [
+          -21.365399828503325,
+          17.88543265242455,
+          -8.830555902271247
+        ],
+        "max": [
+          21.365399125050295,
+          113.19034147582875,
+          21.870824528919965
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_Medieval_200",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_Medieval_200.35d648f7.glb",
+      "sha256": "3b38f8b8cb67a6472a7fab979c0dcf0b2abd60faba38e269161bdf1bf48fa348",
+      "bytes": 81472,
+      "drawCalls": 1,
+      "triangles": 598,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_Medieval_200.fbx",
+      "sourceId": "Women_legs_Medieval_200",
+      "sourceSha256": "35d648f776695360f725d1b37d8a378a0364f46101a56ed6d5215326b9fe1590",
+      "sourceBBox": {
+        "min": [
+          -22.26101953767494,
+          34.477737081021324,
+          -6.034548101550614
+        ],
+        "max": [
+          22.261018971782754,
+          113.65841990412062,
+          18.594396750192356
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_Punk_200",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_Punk_200.93c8cb1d.glb",
+      "sha256": "00281a399281a60ee3645ec6262fc4ee1ab39dba9964f0793ff2598bafcaca64",
+      "bytes": 86108,
+      "drawCalls": 2,
+      "triangles": 732,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_Punk_200.fbx",
+      "sourceId": "Women_legs_Punk_200",
+      "sourceSha256": "93c8cb1df96777ef8d2a598c6e3c0577406cc44c7aa1e67bfd9b387b75fff33c",
+      "sourceBBox": {
+        "min": [
+          -18.79744974983585,
+          37.228081907683105,
+          -5.890738757187486
+        ],
+        "max": [
+          18.797449315093235,
+          112.46545597555468,
+          17.259270588545665
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_SciFi_200",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_SciFi_200.9700b8ac.glb",
+      "sha256": "200922f0ecd35cda57dc5ca5e2d97652dec4f15a63601cdc564b8d9a3ad4cc26",
+      "bytes": 84508,
+      "drawCalls": 3,
+      "triangles": 544,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_SciFi_200.fbx",
+      "sourceId": "Women_legs_SciFi_200",
+      "sourceSha256": "9700b8acf04e710b6eae7bf62ddc763badfb6c53b053611a5d496773e2e01dfe",
+      "sourceBBox": {
+        "min": [
+          -18.919867260058624,
+          43.28561959815194,
+          -5.890739346596375
+        ],
+        "max": [
+          18.919866823941746,
+          113.38180679848354,
+          17.259270711697283
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_Soldier_200",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_Soldier_200.cb84f723.glb",
+      "sha256": "4f32e3ba7e8e5703cd26cf3f77897abc84418e13f6467d1e92630b30483f5875",
+      "bytes": 100432,
+      "drawCalls": 3,
+      "triangles": 1308,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_Soldier_200.fbx",
+      "sourceId": "Women_legs_Soldier_200",
+      "sourceSha256": "cb84f72305a832c4f80d75b58484bb7598f2adf1c5902aa0d6dd42dae8cd7276",
+      "sourceBBox": {
+        "min": [
+          -19.804887517833045,
+          33.33507635362765,
+          -5.3708410186314515
+        ],
+        "max": [
+          19.8048873529622,
+          115.41752987782655,
+          17.80679743342642
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_Suit_200",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_Suit_200.11194ceb.glb",
+      "sha256": "2ab426256b6abeb6572fe8b2fa2853aef26334d369489628746b4025ab6e073e",
+      "bytes": 82352,
+      "drawCalls": 1,
+      "triangles": 696,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_Suit_200.fbx",
+      "sourceId": "Women_legs_Suit_200",
+      "sourceSha256": "11194ceb709a38189e0363f8c616fa20b8526bf03da79437070e4c6ba7144c49",
+      "sourceBBox": {
+        "min": [
+          -17.982158041859215,
+          14.762201605112317,
+          -5.890738962671835
+        ],
+        "max": [
+          17.982157613240602,
+          115.88451168927718,
+          17.04564710193546
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_Witch_200",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_Witch_200.c1810514.glb",
+      "sha256": "2c1ff98c210d6349a0247f3fe9dde146289e3b63d4b84bc4bae349c42984dfba",
+      "bytes": 85084,
+      "drawCalls": 3,
+      "triangles": 552,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_Witch_200.fbx",
+      "sourceId": "Women_legs_Witch_200",
+      "sourceSha256": "c181051444091027d3d218678093d085d48a6a4373616189aabf3bd3f3bcbe3e",
+      "sourceBBox": {
+        "min": [
+          -22.005502731796636,
+          38.5624383933571,
+          -13.324006070395873
+        ],
+        "max": [
+          22.005502338826403,
+          113.46672057861676,
+          20.828874713200907
+        ]
+      },
+      "pipelineVersion": 1
+    },
+    {
+      "key": "women/legs/Women_legs_Worker_0",
+      "url": "/models/glb/v1/pieces/Women/Women_legs_Worker_0.88c11cf0.glb",
+      "sha256": "4c3754a40fed3246f5907110bf9cd59d7d22f7a83ab717b66537e442bbd8dab5",
+      "bytes": 87012,
+      "drawCalls": 2,
+      "triangles": 832,
+      "joints": 62,
+      "textures": 0,
+      "source": "Women_legs_Worker_0.fbx",
+      "sourceId": "Women_legs_Worker_0",
+      "sourceSha256": "88c11cf0f35993c0a6e2bf1feeba35c044b9fa0c64529ae880bfc936bee5e29f",
+      "sourceBBox": {
+        "min": [
+          -19.500584893915075,
+          14.626422082791812,
+          -5.890739563444279
+        ],
+        "max": [
+          19.50058450415488,
+          115.41715967997176,
+          17.259275433591267
+        ]
+      },
+      "pipelineVersion": 1
+    }
+  ]
+}

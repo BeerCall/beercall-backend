@@ -1,5 +1,6 @@
 import os
 import asyncio
+import mimetypes
 from contextlib import asynccontextmanager
 from pathlib import Path
 from dotenv import load_dotenv
@@ -10,6 +11,10 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+
+# StaticFiles s'appuie sur le mimetypes standard : sans cet enregistrement,
+# un GLB est servi en application/octet-stream par certains interpréteurs.
+mimetypes.add_type("model/gltf-binary", ".glb")
 
 from api.v1.squads import router as squad_router
 from api.v1.users import router as user_router
