@@ -28,10 +28,11 @@ DEFAULT_MANIFEST_PATH = DEFAULT_MODELS_DIR / "glb" / "manifest.json"
 
 ALLOWED_URL_PREFIX = "/models/glb/v1/"
 HEX_64_RE = re.compile(r"^[0-9a-f]{64}$")
-SOURCE_RE = re.compile(
-    r"^(?P<gender>Men|Women)_(?P<category>head|body|legs|feet|accessory)_"
-    r"(?P<name>.+?)(?:_(?P<price>\d+))?$"
-)
+NUMBER_RE = re.compile(r"^-?\d+(?:d\d+)?$")
+POSITION_RE = re.compile(r"^p([xyz])(-?\d+(?:d\d+)?)$")
+ROTATION_RE = re.compile(r"^r([xyz])(-?\d+(?:d\d+)?)$")
+SCALE_RE = re.compile(r"^s(-?\d+(?:d\d+)?)$")
+BONE_RE = re.compile(r"^b([A-Za-z][A-Za-z0-9]*)$")
 
 EXCLUDED_SOURCE_IDS = frozenset(
     {"Bar", "Swimming_pool", "Floaty_Island", "Animations"}
@@ -50,6 +51,28 @@ class CatalogError(ValueError):
     """Manifeste absent ou structurellement invalide."""
 
 
+class SourceNameError(ValueError):
+    """Nom d'avatar invalide (prix, jeton ou doublon)."""
+
+
+@dataclass(frozen=True)
+class AccessoryTransform:
+    """Transform d'accessoire lu dans le nom, rotations en degrés."""
+
+    position: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    rotation: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    scale: float = 1.0
+    bone: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "position": list(self.position),
+            "rotation": list(self.rotation),
+            "scale": self.scale,
+            "bone": self.bone,
+        }
+
+
 @dataclass(frozen=True)
 class ParsedSource:
     """Métadonnées lues dans le nom d'un fichier source."""
@@ -62,6 +85,7 @@ class ParsedSource:
     key: str
     price_caps: int
     display_name: str
+    transform: AccessoryTransform | None = None
 
 
 @dataclass(frozen=True)
@@ -80,6 +104,7 @@ class CatalogItem:
     sha256: str
     bytes: int
     available: bool = True
+    transform: AccessoryTransform | None = None
 
 
 @dataclass(frozen=True)
@@ -131,11 +156,68 @@ def display_name_for(name: str, category: str) -> str:
     return f"{label} {humanize(name)}".strip()
 
 
+def _parse_number(token: str) -> float:
+    if not NUMBER_RE.fullmatch(token):
+        raise SourceNameError(f"nombre invalide : {token}")
+    return float(token.replace("d", "."))
+
+
+def _parse_transform(tokens: list[str]) -> AccessoryTransform:
+    position = [0.0, 0.0, 0.0]
+    rotation = [0.0, 0.0, 0.0]
+    scale = 1.0
+    bone: str | None = None
+    seen: set[str] = set()
+    axis = {"x": 0, "y": 1, "z": 2}
+
+    for token in tokens:
+        match = POSITION_RE.fullmatch(token)
+        if match:
+            if f"p{match.group(1)}" in seen:
+                raise SourceNameError(f"jeton en double : {token}")
+            seen.add(f"p{match.group(1)}")
+            position[axis[match.group(1)]] = _parse_number(match.group(2))
+            continue
+
+        match = ROTATION_RE.fullmatch(token)
+        if match:
+            if f"r{match.group(1)}" in seen:
+                raise SourceNameError(f"jeton en double : {token}")
+            seen.add(f"r{match.group(1)}")
+            rotation[axis[match.group(1)]] = _parse_number(match.group(2))
+            continue
+
+        match = SCALE_RE.fullmatch(token)
+        if match:
+            if "s" in seen:
+                raise SourceNameError(f"jeton en double : {token}")
+            seen.add("s")
+            scale = _parse_number(match.group(1))
+            continue
+
+        match = BONE_RE.fullmatch(token)
+        if match:
+            if "b" in seen:
+                raise SourceNameError(f"jeton en double : {token}")
+            seen.add("b")
+            bone = match.group(1)
+            continue
+
+        raise SourceNameError(f"jeton invalide : {token}")
+
+    return AccessoryTransform(
+        position=(position[0], position[1], position[2]),
+        rotation=(rotation[0], rotation[1], rotation[2]),
+        scale=scale,
+        bone=bone,
+    )
+
+
 def parse_source_name(source: str) -> ParsedSource | None:
-    """Analyse ``Men_head_Casual2_0.fbx`` sans le prix dans la clé.
+    """Analyse ``Genre_partie_Nom_[jetons]_Prix.fbx``.
 
     Retourne ``None`` pour les décors, ``Animations`` et les noms non
-    classables. Le prix absent vaut ``0`` (article gratuit).
+    classables. Lève ``SourceNameError`` pour un prix ou un jeton invalide.
     """
 
     if not source or not isinstance(source, str):
@@ -147,27 +229,33 @@ def parse_source_name(source: str) -> ParsedSource | None:
     if stem in EXCLUDED_SOURCE_IDS:
         return None
 
-    match = SOURCE_RE.fullmatch(stem)
-    if not match:
+    parts = stem.split("_")
+    if len(parts) < 3:
         return None
-
-    gender = match.group("gender")
-    category = match.group("category")
-    name = match.group("name")
-    price = match.group("price")
-    if not name:
+    gender, category, name = parts[0], parts[1], parts[2]
+    if gender not in {"Men", "Women"} or category not in CATEGORY_LABELS or not name:
         return None
+    if len(parts) < 4:
+        raise SourceNameError("prix final manquant")
+    price_token = parts[-1]
+    if not price_token.isdigit():
+        raise SourceNameError(f"prix final invalide : {price_token}")
 
-    key = f"{gender}_{category}_{name}"
+    tokens = parts[3:-1]
+    if category != "accessory" and tokens:
+        raise SourceNameError("les jetons sont réservés aux accessoires")
+    transform = _parse_transform(tokens) if tokens else None
+
     return ParsedSource(
         source_id=stem,
         source=filename,
         gender=gender,
         category=category,
         name=name,
-        key=key,
-        price_caps=int(price) if price is not None else 0,
+        key=f"{gender}_{category}_{name}",
+        price_caps=int(price_token),
         display_name=display_name_for(name, category),
+        transform=transform,
     )
 
 
@@ -256,6 +344,7 @@ def _validate_entry(
             asset_url=url,
             sha256=digest,
             bytes=size,
+            transform=parsed.transform,
         ),
         None,
     )
@@ -293,7 +382,12 @@ def build_catalog(
         stem = Path(candidate).stem
         if stem in EXCLUDED_SOURCE_IDS:
             continue
-        parsed = parse_source_name(candidate)
+        try:
+            parsed = parse_source_name(candidate)
+        except SourceNameError as error:
+            logger.warning("catalog rejected %s: %s", candidate, error)
+            result.rejected.append(RejectedItem(source=candidate, reason=str(error)))
+            continue
         if parsed is None:
             result.rejected.append(
                 RejectedItem(source=candidate, reason="nom non classable")

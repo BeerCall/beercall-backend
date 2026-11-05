@@ -7,6 +7,7 @@ import pytest
 
 from services.avatar_catalog import (
     CatalogError,
+    SourceNameError,
     build_catalog,
     humanize,
     load_manifest,
@@ -73,7 +74,55 @@ def test_parse_source_name_keeps_price_as_metadata():
     assert maclaren.display_name == "Accessoire McLaren"
     assert sudowoodo is not None and sudowoodo.price_caps == 600
     assert sudowoodo.key == "Men_accessory_Sudowoodo"
-    assert parse_source_name("Men_accessory_Sudowoodo.fbx").price_caps == 0
+    with pytest.raises(SourceNameError, match="prix final manquant"):
+        parse_source_name("Men_accessory_Sudowoodo.fbx")
+
+
+def test_parse_accessory_tokens_position_scale_rotation_and_bone():
+    parsed = parse_source_name(
+        "Men_accessory_McLaren_px68_py15_pz-30_rx90_ry-45_rz180_s0d3_bWristR_5000.fbx"
+    )
+
+    assert parsed is not None
+    assert parsed.key == "Men_accessory_McLaren"
+    assert parsed.price_caps == 5000
+    assert parsed.transform is not None
+    assert parsed.transform.position == (68.0, 15.0, -30.0)
+    assert parsed.transform.rotation == (90.0, -45.0, 180.0)
+    assert parsed.transform.scale == 0.3
+    assert parsed.transform.bone == "WristR"
+
+
+def test_parse_accessory_tokens_are_neutral_when_absent():
+    parsed = parse_source_name("Men_accessory_Beer_500.fbx")
+
+    assert parsed is not None
+    assert parsed.transform is None
+
+
+def test_parse_accessory_tokens_accept_negative_decimals():
+    parsed = parse_source_name("Women_accessory_X_px-7d5_s0d35_800.fbx")
+
+    assert parsed is not None
+    assert parsed.transform is not None
+    assert parsed.transform.position == (-7.5, 0.0, 0.0)
+    assert parsed.transform.scale == 0.35
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "Men_accessory_X_s0d3_s1_500.fbx",       # doublon
+        "Men_accessory_X_px1_px2_500.fbx",       # doublon d'axe
+        "Men_accessory_X_zz1_500.fbx",           # jeton inconnu
+        "Men_accessory_X_px1d_500.fbx",          # décimal incomplet
+        "Men_head_X_px1_0.fbx",                  # jetons sur une pièce
+        "Men_accessory_X_500d0.fbx",             # prix non entier
+    ],
+)
+def test_parse_invalid_tokens_raise_source_name_error(filename):
+    with pytest.raises(SourceNameError):
+        parse_source_name(filename)
 
 
 def test_parse_source_name_ignores_decors_animations_and_unknown_names():
@@ -222,6 +271,26 @@ def test_duplicate_key_refuses_both_files_without_crashing(tmp_path: Path, caplo
     }
     assert len(result.rejected) == 2
     assert "catalog duplicate key Men_head_Casual refused" in caplog.text
+
+
+def test_build_catalog_rejects_invalid_token_with_reason(tmp_path: Path, caplog):
+    models_dir, manifest_path = _write_manifest(tmp_path, [])
+    entry = _entry(
+        models_dir,
+        "Men_accessory_Bad_zz1_500",
+        "Men_accessory_Bad_zz1_500.fbx",
+        b"invalid-token",
+    )
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["items"] = [entry]
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    caplog.set_level(logging.WARNING)
+    result = build_catalog(manifest_path=manifest_path, models_dir=models_dir)
+
+    assert result.items == []
+    assert "jeton invalide" in result.rejected[0].reason
+    assert "catalog rejected" in caplog.text
 
 
 def test_build_catalog_ignores_decors_and_animations(tmp_path: Path):
