@@ -1,5 +1,6 @@
 import base64
 import io
+import json
 import threading
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -121,6 +122,54 @@ def test_process_one_job_success_publishes_and_updates_users(
     assert u2.avatar_render_status == "ready"
     assert u2.avatar_sprite_hash == h
     assert avatar_sprites.sprites_published(h) is True
+
+
+def test_piece_introuvable_fails_job_with_user_id_and_no_partial_image(
+    db_session: Session, tmp_path: Path, monkeypatch
+):
+    monkeypatch.setattr(avatar_sprites, "UPLOADS_DIR", str(tmp_path))
+    h = "deadbeefdeadbeef"
+
+    user = User(
+        username="missing_piece_user",
+        hashed_password="pw",
+        avatar_config_hash=h,
+        avatar_render_status="pending",
+    )
+    job = AvatarRenderJob(config_hash=h, avatar_config={"test": True}, status="queued", attempts=2)
+    db_session.add_all([user, job])
+    db_session.commit()
+
+    captured = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        captured["payload"] = json.loads(request.content)
+        return httpx.Response(
+            422,
+            json={
+                "detail": (
+                    f'Utilisateur {user.id} : Accessoire inconnu dans le catalogue : '
+                    '"Women_accessory_Fantome_500"'
+                )
+            },
+        )
+
+    mock_client = httpx.Client(transport=httpx.MockTransport(handler))
+
+    from db.database import SessionLocal
+
+    processed = process_one_job(SessionLocal, renderer_client=mock_client)
+    assert processed is True
+
+    db_session.refresh(job)
+    db_session.refresh(user)
+
+    assert captured["payload"]["userId"] == str(user.id)
+    assert job.status == "failed"
+    assert "Women_accessory_Fantome_500" in job.last_error
+    assert str(user.id) in job.last_error
+    assert user.avatar_render_status == "failed"
+    assert avatar_sprites.sprites_published(h) is False
 
 
 def test_process_one_job_already_published_finalizes_without_renderer(

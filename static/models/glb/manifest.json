@@ -1,7 +1,7 @@
 {
   "version": 1,
   "pipelineVersion": 1,
-  "generatedAt": "2026-11-05T16:37:53.850Z",
+  "generatedAt": "2026-11-05T18:02:35.003Z",
   "items": [
     {
       "key": "acc/men/Men_accessory_Alpine_px68_py15_pz-30_s0d3_5000",
@@ -1948,16 +1948,16 @@
       }
     },
     {
-      "key": "acc/women/Women_accessory_Gun_py150_pz-133_s100_500",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Gun_py150_pz-133_s100_500.b36721f3.glb",
+      "key": "acc/women/Women_accessory_Gun_px60_py-50_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Gun_px60_py-50_500.b36721f3.glb",
       "sha256": "0fe25060561cdd951fd2312b6c14a767129eb0e09be680f7cf7c7c0265a3f23e",
       "bytes": 80168,
       "drawCalls": 3,
       "triangles": 1040,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Gun_py150_pz-133_s100_500.fbx",
-      "sourceId": "Women_accessory_Gun_py150_pz-133_s100_500",
+      "source": "Women_accessory_Gun_px60_py-50_500.fbx",
+      "sourceId": "Women_accessory_Gun_px60_py-50_500",
       "sourceSha256": "b36721f38e3b53bae1a376bb617f87e73ec4d2f2450bedc08e4e3d99d65349e7",
       "sourceBBox": {
         "min": [
@@ -1974,16 +1974,16 @@
       "pipelineVersion": 1,
       "transform": {
         "position": [
-          0,
-          150,
-          -133
+          60,
+          -50,
+          0
         ],
         "rotation": [
           0,
           0,
           0
         ],
-        "scale": 100,
+        "scale": 1,
         "bone": null
       }
     },
@@ -2788,16 +2788,16 @@
       }
     },
     {
-      "key": "acc/women/Women_accessory_Sword_py150_pz-133_s100_500",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sword_py150_pz-133_s100_500.9827eef8.glb",
+      "key": "acc/women/Women_accessory_Sword_px60_py-50_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sword_px60_py-50_500.9827eef8.glb",
       "sha256": "fe7c425a9842ba35758dacc51f6e19c900ceef13943a9edf527024a2c10881ae",
       "bytes": 76436,
       "drawCalls": 3,
       "triangles": 872,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Sword_py150_pz-133_s100_500.fbx",
-      "sourceId": "Women_accessory_Sword_py150_pz-133_s100_500",
+      "source": "Women_accessory_Sword_px60_py-50_500.fbx",
+      "sourceId": "Women_accessory_Sword_px60_py-50_500",
       "sourceSha256": "9827eef8d3fdd90902032df1dc07f83cca89f5d70694663937bfe0226c6f5ade",
       "sourceBBox": {
         "min": [
@@ -2814,16 +2814,16 @@
       "pipelineVersion": 1,
       "transform": {
         "position": [
-          0,
-          150,
-          -133
+          60,
+          -50,
+          0
         ],
         "rotation": [
           0,
           0,
           0
         ],
-        "scale": 100,
+        "scale": 1,
         "bone": null
       }
     },

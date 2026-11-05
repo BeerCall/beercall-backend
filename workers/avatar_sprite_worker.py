@@ -174,10 +174,16 @@ def render_avatar_http(
     avatar_config: dict,
     config_hash: str,
     client: Optional[httpx.Client] = None,
+    user_ids: Optional[list[int]] = None,
 ) -> Dict[str, bytes]:
     """Appel HTTP vers le renderer Chromium avec contrôle strict des formats et dimensions."""
     url = f"{avatar_sprites.RENDERER_URL.rstrip('/')}/render"
-    payload = {"config": avatar_config, "hash": config_hash}
+    payload = {
+        "config": avatar_config,
+        "hash": config_hash,
+        # Le renderer doit pouvoir nommer l'utilisateur si une pièce manque.
+        "userId": ",".join(str(user_id) for user_id in user_ids) if user_ids else "inconnu",
+    }
 
     own_client = False
     if client is None:
@@ -334,9 +340,27 @@ def process_one_job(
             db.close()
         return True
 
+    # Utilisateurs concernés par cette tenue (pour nommer une pièce introuvable)
+    db = session_factory()
+    try:
+        user_ids = [
+            row[0]
+            for row in db.query(User.id)
+            .filter(User.avatar_config_hash == config_hash)
+            .order_by(User.id)
+            .all()
+        ]
+    finally:
+        db.close()
+
     # Rendu HTTP hors transaction
     try:
-        images = render_avatar_http(avatar_config, config_hash, client=renderer_client)
+        images = render_avatar_http(
+            avatar_config,
+            config_hash,
+            client=renderer_client,
+            user_ids=user_ids,
+        )
         publish_sprites_atomic(
             config_hash,
             images["head"],

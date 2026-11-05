@@ -806,12 +806,6 @@
       "bytes": 168224,
       "sourceSha256": "13deafcd4adca4fde6ef4787c5b7b85b62527708d8966926d010aebbaa9abcd9"
     },
-    "Women_accessory_Gun_py150_pz-133_s100_500.fbx": {
-      "file": "Women_accessory_Gun_py150_pz-133_s100_500.76271963ca5a6bbc5264183b1cf705f183ef6eb22620a0e98acf2935e4059793.bc3d",
-      "sha256": "76271963ca5a6bbc5264183b1cf705f183ef6eb22620a0e98acf2935e4059793",
-      "bytes": 147704,
-      "sourceSha256": "b36721f38e3b53bae1a376bb617f87e73ec4d2f2450bedc08e4e3d99d65349e7"
-    },
     "Women_accessory_Haas_px68_py15_pz-30_s0d3_5000.fbx": {
       "file": "Women_accessory_Haas_px68_py15_pz-30_s0d3_5000.950a3a26d2421db6029858a7d0d182245072def07619e46a8bf847d825b92aa5.bc3d",
       "sha256": "950a3a26d2421db6029858a7d0d182245072def07619e46a8bf847d825b92aa5",
@@ -926,17 +920,23 @@
       "bytes": 276696,
       "sourceSha256": "010bc89ce062e314181c76a253445e06f817355ce81219911974741c23a09a8a"
     },
-    "Women_accessory_Sword_py150_pz-133_s100_500.fbx": {
-      "file": "Women_accessory_Sword_py150_pz-133_s100_500.5d68da4d80a56ebb7cd53cf44dbeaf2d09119aab96069a7850079aaa171abded.bc3d",
-      "sha256": "5d68da4d80a56ebb7cd53cf44dbeaf2d09119aab96069a7850079aaa171abded",
-      "bytes": 138872,
-      "sourceSha256": "9827eef8d3fdd90902032df1dc07f83cca89f5d70694663937bfe0226c6f5ade"
-    },
     "Women_accessory_Williams_px68_py15_pz-30_s0d3_5000.fbx": {
       "file": "Women_accessory_Williams_px68_py15_pz-30_s0d3_5000.a5fec93b6a48d05b9424431e78141bdfac61d488bbdc42ff37994800d542efda.bc3d",
       "sha256": "a5fec93b6a48d05b9424431e78141bdfac61d488bbdc42ff37994800d542efda",
       "bytes": 9273312,
       "sourceSha256": "b8a068298b524ef0dc0120b1682871fb2cbbcb1897ad429a5cf492654f3c0b92"
+    },
+    "Women_accessory_Gun_px60_py-50_500.fbx": {
+      "file": "Women_accessory_Gun_px60_py-50_500.76271963ca5a6bbc5264183b1cf705f183ef6eb22620a0e98acf2935e4059793.bc3d",
+      "sha256": "76271963ca5a6bbc5264183b1cf705f183ef6eb22620a0e98acf2935e4059793",
+      "bytes": 147704,
+      "sourceSha256": "b36721f38e3b53bae1a376bb617f87e73ec4d2f2450bedc08e4e3d99d65349e7"
+    },
+    "Women_accessory_Sword_px60_py-50_500.fbx": {
+      "file": "Women_accessory_Sword_px60_py-50_500.5d68da4d80a56ebb7cd53cf44dbeaf2d09119aab96069a7850079aaa171abded.bc3d",
+      "sha256": "5d68da4d80a56ebb7cd53cf44dbeaf2d09119aab96069a7850079aaa171abded",
+      "bytes": 138872,
+      "sourceSha256": "9827eef8d3fdd90902032df1dc07f83cca89f5d70694663937bfe0226c6f5ade"
     }
   }
 }
