@@ -1,4 +1,7 @@
+import copy
 from pathlib import Path
+
+import pytest
 from sqlalchemy.orm import Session
 
 from models.avatar_render_job import AvatarRenderJob
@@ -6,6 +9,7 @@ from models.user import User
 from schemas.avatar_sprites import AvatarSprites
 from services import avatar_sprites
 from services.avatar_sprites import (
+    AvatarRenderSignatureError,
     avatar_sprites_for,
     compute_config_hash,
     has_valid_published_sprites,
@@ -59,26 +63,79 @@ def test_hash_ignores_animation_and_treats_none_identically() -> None:
     assert avatar_sprites.HEX_16_RE.match(hash1)
 
 
-def test_beer_bone_signature_invalidates_hash_and_other_accessories_do_not() -> None:
-    beer = normalize_avatar_payload(
-        dict(_valid_men_config(), accessory="Men_accessory_Beer_500")
-    )
-    assert beer is not None
-    assert beer["accessory_render"]["bone"] == "WristR"
-    base_hash = compute_config_hash(beer)
+def _manifest_copy() -> dict:
+    manifest = avatar_sprites._published_manifest()
+    assert manifest is not None
+    return copy.deepcopy(manifest)
 
-    moved = dict(beer)
-    moved["accessory_render"] = {
-        **beer["accessory_render"],
-        "position": [1, 2, 3],
+
+def _valid_women_config() -> dict:
+    return {
+        "gender": "Women",
+        "head": "Women_head_Casual_0",
+        "body": "Women_body_Casual_0",
+        "legs": "Women_legs_Casual_0",
+        "feet": "Women_feet_Casual_0",
+        "accessory": "Women_accessory_Gun_500",
+        "animation": "Idle",
     }
-    assert compute_config_hash(moved) != base_hash
 
-    sudowoodo = normalize_avatar_payload(
-        dict(_valid_men_config(), accessory="Men_accessory_Sudowoodo_600")
+
+def test_gun_transform_change_changes_hash(monkeypatch) -> None:
+    config = _valid_women_config()
+    base_hash = compute_config_hash(normalize_avatar_payload(config, user_id=1))
+
+    manifest = _manifest_copy()
+    gun = next(
+        item for item in manifest["items"]
+        if item["sourceId"].startswith("Women_accessory_Gun_")
     )
-    assert sudowoodo is not None
-    assert "accessory_render" not in sudowoodo
+    gun["transform"]["position"] = [70, -50, 0]
+    monkeypatch.setattr(avatar_sprites, "_published_manifest", lambda: manifest)
+
+    changed_hash = compute_config_hash(normalize_avatar_payload(config, user_id=1))
+    assert changed_hash != base_hash
+
+
+def test_clothing_source_sha_change_changes_hash(monkeypatch) -> None:
+    config = _valid_men_config()
+    base_hash = compute_config_hash(normalize_avatar_payload(config, user_id=1))
+
+    manifest = _manifest_copy()
+    body = next(
+        item for item in manifest["items"]
+        if item["sourceId"] == "Men_body_Casual_0"
+    )
+    body["sourceSha256"] = "f" * 64
+    monkeypatch.setattr(avatar_sprites, "_published_manifest", lambda: manifest)
+
+    changed_hash = compute_config_hash(normalize_avatar_payload(config, user_id=1))
+    assert changed_hash != base_hash
+
+
+def test_signature_is_independent_of_key_order(monkeypatch) -> None:
+    config = _valid_men_config()
+    reversed_config = {key: config[key] for key in reversed(list(config))}
+
+    manifest = _manifest_copy()
+    manifest["items"].reverse()
+    monkeypatch.setattr(avatar_sprites, "_published_manifest", lambda: manifest)
+
+    first = compute_config_hash(normalize_avatar_payload(config, user_id=5))
+    second = compute_config_hash(normalize_avatar_payload(reversed_config, user_id=5))
+    assert first == second
+
+
+def test_missing_equipped_piece_raises_explicit_error() -> None:
+    config = dict(_valid_men_config(), head="Men_head_Absent_0")
+
+    with pytest.raises(AvatarRenderSignatureError) as error:
+        normalize_avatar_payload(config, user_id=42)
+
+    message = str(error.value)
+    assert "utilisateur 42" in message
+    assert "Men_head_Absent_0" in message
+    assert "absente du manifeste" in message
 
 
 def test_pending_serves_the_old_published_sprite_until_publication(

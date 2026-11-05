@@ -51,46 +51,83 @@ def _source_key(value: str) -> Optional[str]:
     return "_".join(parts[:3])
 
 
-def accessory_bone_signature(accessory_id: str) -> Optional[Dict[str, Any]]:
-    """
-    Signature de rendu d'un accessoire attaché à un os.
+class AvatarRenderSignatureError(RuntimeError):
+    """Pièce équipée absente ou ambiguë dans le manifeste publié."""
 
-    Le hash de configuration ne dépend que des ids d'équipement : sans cette
-    signature, un sprite généré avec un ancien transform reste servi après
-    correction du manifeste. Seuls les accessoires avec ``transform.bone`` sont
-    concernés, pour ne pas invalider les autres sprites.
-    """
-    if not accessory_id or accessory_id.lower() == "none":
-        return None
+    def __init__(self, user_id, piece_id: str, slot: str, reason: str):
+        self.user_id = user_id
+        self.piece_id = piece_id
+        self.slot = slot
+        self.reason = reason
+        owner = user_id if user_id is not None else "inconnu"
+        super().__init__(
+            f"Signature de sprite impossible pour l'utilisateur {owner} : "
+            f"pièce '{piece_id}' (slot '{slot}') {reason}"
+        )
+
+
+def _manifest_item_for(piece_id: str, slot: str, user_id) -> Dict[str, Any]:
+    """Retrouve l'entrée du manifeste d'une pièce équipée, sans liste en dur."""
     manifest = _published_manifest()
     if not manifest:
-        return None
-    key = _source_key(accessory_id)
+        raise AvatarRenderSignatureError(user_id, piece_id, slot, "manifeste GLB indisponible")
+    key = _source_key(piece_id)
     if not key:
-        return None
+        raise AvatarRenderSignatureError(user_id, piece_id, slot, "nom non classable")
     matches = [
         item
         for item in manifest.get("items", [])
-        if str(item.get("key", "")).startswith("acc/")
-        and _source_key(str(item.get("source") or item.get("sourceId") or "")) == key
+        if _source_key(str(item.get("source") or item.get("sourceId") or "")) == key
     ]
-    if len(matches) != 1:
-        return None
+    if not matches:
+        raise AvatarRenderSignatureError(user_id, piece_id, slot, "absente du manifeste")
+    if len(matches) > 1:
+        raise AvatarRenderSignatureError(
+            user_id,
+            piece_id,
+            slot,
+            f"ambiguë dans le manifeste ({len(matches)} entrées)",
+        )
     item = matches[0]
+    if not isinstance(item.get("sourceSha256"), str) or not item["sourceSha256"]:
+        raise AvatarRenderSignatureError(user_id, piece_id, slot, "sans sourceSha256")
+    return item
+
+
+def _transform_signature(item: Dict[str, Any]) -> Dict[str, Any]:
     transform = item.get("transform") or {}
-    bone = transform.get("bone")
-    if not bone:
-        return None
     return {
-        "bone": bone,
-        "position": transform.get("position", [0, 0, 0]),
-        "rotation": transform.get("rotation", [0, 0, 0]),
+        "position": list(transform.get("position") or [0, 0, 0]),
+        "rotation": list(transform.get("rotation") or [0, 0, 0]),
         "scale": transform.get("scale", 1),
-        "sourceSha256": item.get("sourceSha256"),
+        "bone": transform.get("bone"),
     }
 
 
-def normalize_avatar_payload(raw_config: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+def _piece_signature(item: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "sourceSha256": item["sourceSha256"],
+        "transform": _transform_signature(item),
+    }
+
+
+def render_signature(payload: Dict[str, Any], user_id=None) -> Dict[str, Any]:
+    """Signature de toutes les pièces équipées, lue uniquement dans le manifeste."""
+    signature: Dict[str, Any] = {}
+    for slot in ("head", "body", "legs", "feet"):
+        item = _manifest_item_for(payload[slot], slot, user_id)
+        signature[slot] = _piece_signature(item)
+    accessory = payload.get("accessory", "none")
+    if accessory and accessory.lower() != "none":
+        item = _manifest_item_for(accessory, "accessory", user_id)
+        signature["accessory"] = _piece_signature(item)
+    return signature
+
+
+def normalize_avatar_payload(
+    raw_config: Optional[Dict[str, Any]],
+    user_id=None,
+) -> Optional[Dict[str, Any]]:
     """
     Normalise le payload pour le rendu des sprites.
     Contrôle les 4 pièces obligatoires et le genre, sans modifier la config en base.
@@ -144,9 +181,7 @@ def normalize_avatar_payload(raw_config: Optional[Dict[str, Any]]) -> Optional[D
         "head": head,
         "legs": legs,
     }
-    bone_signature = accessory_bone_signature(accessory)
-    if bone_signature:
-        payload["accessory_render"] = bone_signature
+    payload["renderSignature"] = render_signature(payload, user_id=user_id)
     return payload
 
 
@@ -260,7 +295,7 @@ def schedule_avatar_render(db: Session, user: User) -> AvatarSprites:
         return AvatarSprites(status="disabled", pending=False)
 
     # 2. Config incomplète ou invalide
-    normalized = normalize_avatar_payload(user.avatar_config)
+    normalized = normalize_avatar_payload(user.avatar_config, user_id=user.id)
     if not normalized:
         user.avatar_config_hash = None
         user.avatar_sprite_hash = None

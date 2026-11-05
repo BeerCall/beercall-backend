@@ -94,7 +94,7 @@ def run_backfill(
                     continue
 
                 # Config vide ou invalide
-                norm = normalize_avatar_payload(user.avatar_config)
+                norm = normalize_avatar_payload(user.avatar_config, user_id=user.id)
                 if not norm:
                     if not dry_run:
                         user.avatar_render_status = "missing"

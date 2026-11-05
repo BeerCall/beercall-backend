@@ -20,11 +20,21 @@ def _make_skin(db: Session, skin_id: str, category: str, name: str, available: b
     return skin
 
 
+PIECES = {
+    "head": ("Men_head_Casual_0", "Casual"),
+    "body": ("Men_body_Casual_0", "Casual"),
+    "legs": ("Men_legs_Casual_0", "Casual"),
+    "feet": ("Men_feet_Casual_0", "Casual"),
+}
+
+
 def _seed_pieces(db: Session, prefix: str, available: bool = True):
     ids = {}
-    for category in ("head", "body", "legs", "feet"):
-        skin_id = f"Men_{category}_{prefix}_0"
-        _make_skin(db, skin_id, category, prefix, available)
+    for category, (skin_id, name) in PIECES.items():
+        skin = db.query(Skin).filter(Skin.id == skin_id).first()
+        if not skin:
+            skin = _make_skin(db, skin_id, category, name, available)
+        skin.available = available
         ids[category] = skin_id
     db.commit()
     return ids
