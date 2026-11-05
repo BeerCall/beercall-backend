@@ -4,14 +4,36 @@ import pytest
 
 from scripts.seed_fluidite_demo import (
     assert_safe_environment,
+    ensure_skin_exists,
     generate_distinct_configs,
     seed_fluidite_demo,
 )
 from services.avatar_sprites import compute_config_hash, normalize_avatar_payload
+from models.gamification import Skin
 from models.user import User
 from models.squad import Squad
 from models.apero import Apero, AperoParticipant, ParticipationStatus
 from models.avatar_render_job import AvatarRenderJob
+
+
+def _seed_catalog_for_configs(db_session, count: int = 50) -> None:
+    seen: set[str] = set()
+    for config in generate_distinct_configs(count):
+        gender = config["gender"]
+        for category in ("head", "body", "legs", "feet", "accessory"):
+            skin_id = config.get(category)
+            if not skin_id or skin_id == "none" or skin_id in seen:
+                continue
+            seen.add(skin_id)
+            db_session.add(Skin(
+                id=skin_id,
+                name="Fixture",
+                category=category,
+                gender=gender,
+                price_caps=0,
+                available=True,
+            ))
+    db_session.commit()
 
 
 def test_assert_safe_environment_refuses_production():
@@ -64,10 +86,36 @@ def test_generate_distinct_configs_produces_50_unique_hashes():
     assert "accessory_transform" in configs[0]
 
 
+def test_ensure_skin_exists_never_creates_a_missing_article(db_session):
+    with pytest.raises(ValueError, match="absent ou indisponible"):
+        ensure_skin_exists(db_session, "Men_head_Missing_404", "head", "Men")
+
+    assert db_session.query(Skin).filter_by(id="Men_head_Missing_404").count() == 0
+
+
+def test_ensure_skin_exists_refuses_a_hidden_article(db_session):
+    hidden = Skin(
+        id="Men_head_Hidden_999",
+        name="Hidden",
+        category="head",
+        gender="Men",
+        price_caps=0,
+        available=False,
+    )
+    db_session.add(hidden)
+    db_session.commit()
+
+    with pytest.raises(ValueError, match="absent ou indisponible"):
+        ensure_skin_exists(db_session, "Men_head_Hidden_999", "head", "Men")
+
+    assert db_session.query(Skin).filter_by(id="Men_head_Hidden_999").count() == 1
+
+
 def test_seed_fluidite_demo_creates_squads_users_aperos_and_jobs(db_session, monkeypatch, tmp_path):
     # Simuler les gardes de DB pour le test local A00
     monkeypatch.setenv("APP_ENV", "test")
     monkeypatch.setattr("scripts.seed_fluidite_demo.assert_safe_environment", lambda _db: None)
+    _seed_catalog_for_configs(db_session)
 
     result = seed_fluidite_demo(db_session, uploads_dir=tmp_path)
 

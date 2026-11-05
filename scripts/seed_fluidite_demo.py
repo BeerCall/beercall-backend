@@ -206,17 +206,30 @@ def generate_distinct_configs(count: int = 50) -> List[Dict[str, Any]]:
 
 
 def ensure_skin_exists(db: Session, piece_id: str, category: str, gender: str) -> Skin:
-    skin = db.query(Skin).filter_by(id=piece_id).first()
-    if not skin:
-        skin = Skin(
-            id=piece_id,
-            name=piece_id,
-            category=category,
-            gender=gender,
-            price_caps=0,
+    """Retourne un article du catalogue disponible, sans jamais en créer.
+
+    Le seed de démonstration ne doit pas inventer d'articles : un fichier
+    manquant ou masqué doit faire échouer explicitement le seed.
+    """
+
+    skin = (
+        db.query(Skin)
+        .filter(
+            Skin.id == piece_id,
+            Skin.available.is_(True),
         )
-        db.add(skin)
-        db.flush()
+        .first()
+    )
+    if skin is None:
+        raise ValueError(
+            f"Article absent ou indisponible dans le catalogue : '{piece_id}' "
+            f"({gender}/{category}). Lance catalog:sync après avoir préparé le fichier."
+        )
+    if skin.category != category or skin.gender != gender:
+        raise ValueError(
+            f"Article incohérent : '{piece_id}' est {skin.gender}/{skin.category}, "
+            f"attendu {gender}/{category}."
+        )
     return skin
 
 
