@@ -59,6 +59,57 @@ def test_hash_ignores_animation_and_treats_none_identically() -> None:
     assert avatar_sprites.HEX_16_RE.match(hash1)
 
 
+def test_beer_bone_signature_invalidates_hash_and_other_accessories_do_not() -> None:
+    beer = normalize_avatar_payload(
+        dict(_valid_men_config(), accessory="Men_accessory_Beer_500")
+    )
+    assert beer is not None
+    assert beer["accessory_render"]["bone"] == "WristR"
+    base_hash = compute_config_hash(beer)
+
+    moved = dict(beer)
+    moved["accessory_render"] = {
+        **beer["accessory_render"],
+        "position": [1, 2, 3],
+    }
+    assert compute_config_hash(moved) != base_hash
+
+    sudowoodo = normalize_avatar_payload(
+        dict(_valid_men_config(), accessory="Men_accessory_Sudowoodo_600")
+    )
+    assert sudowoodo is not None
+    assert "accessory_render" not in sudowoodo
+
+
+def test_pending_serves_the_old_published_sprite_until_publication(
+    db_session: Session, tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setattr(avatar_sprites, "UPLOADS_DIR", str(tmp_path))
+    old_hash = "0123456789abcdef"
+    new_hash = "fedcba9876543210"
+    old_dir = tmp_path / "avatars" / "v1" / old_hash
+    old_dir.mkdir(parents=True)
+    for name in ("head.webp", "portrait.webp", "body.webp"):
+        (old_dir / name).write_bytes(b"old-sprite")
+    (old_dir / ".complete").write_bytes(b"OK\n")
+
+    user = User(
+        username="pending_beer",
+        hashed_password="pw",
+        avatar_config=_valid_men_config(),
+        avatar_config_hash=new_hash,
+        avatar_sprite_hash=old_hash,
+        avatar_render_status="pending",
+    )
+    db_session.add(user)
+    db_session.flush()
+
+    sprites = avatar_sprites_for(user)
+    assert sprites.status == "pending"
+    assert sprites.pending is True
+    assert sprites.body_url == f"/uploads/avatars/v1/{old_hash}/body.webp"
+
+
 def test_normalization_infers_gender_and_rejects_incomplete_or_invalid() -> None:
     # Déduction du genre sans champ explicite
     cfg_no_gender = {
