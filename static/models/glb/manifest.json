@@ -1,7 +1,7 @@
 {
   "version": 1,
   "pipelineVersion": 1,
-  "generatedAt": "2026-11-02T00:04:05.020Z",
+  "generatedAt": "2026-11-05T10:49:55.731Z",
   "items": [
     {
       "key": "acc/men/Men_accessory_Alpine_5000",
@@ -862,16 +862,16 @@
       "pipelineVersion": 1
     },
     {
-      "key": "acc/men/Men_accessory_Sudowoodo",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Sudowoodo.010bc89c.glb",
+      "key": "acc/men/Men_accessory_Sudowoodo_600",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Sudowoodo_600.010bc89c.glb",
       "sha256": "e1eb00d91d0ea202d8d70860bf37275eb94f92b2b4b1a0424ff89319ca44c076",
       "bytes": 115768,
       "drawCalls": 30,
       "triangles": 3306,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Sudowoodo.fbx",
-      "sourceId": "Men_accessory_Sudowoodo",
+      "source": "Men_accessory_Sudowoodo_600.fbx",
+      "sourceId": "Men_accessory_Sudowoodo_600",
       "sourceSha256": "010bc89ce062e314181c76a253445e06f817355ce81219911974741c23a09a8a",
       "sourceBBox": {
         "min": [
@@ -1824,16 +1824,16 @@
       "pipelineVersion": 1
     },
     {
-      "key": "acc/women/Women_accessory_Sudowoodo",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sudowoodo.010bc89c.glb",
+      "key": "acc/women/Women_accessory_Sudowoodo_600",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sudowoodo_600.010bc89c.glb",
       "sha256": "e1eb00d91d0ea202d8d70860bf37275eb94f92b2b4b1a0424ff89319ca44c076",
       "bytes": 115768,
       "drawCalls": 30,
       "triangles": 3306,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Sudowoodo.fbx",
-      "sourceId": "Women_accessory_Sudowoodo",
+      "source": "Women_accessory_Sudowoodo_600.fbx",
+      "sourceId": "Women_accessory_Sudowoodo_600",
       "sourceSha256": "010bc89ce062e314181c76a253445e06f817355ce81219911974741c23a09a8a",
       "sourceBBox": {
         "min": [
