@@ -21,7 +21,9 @@ from typing import Any, Callable
 from sqlalchemy.orm import Session
 
 from models.gamification import Skin
+from models.user import User
 from services.avatar_catalog import DEFAULT_MODELS_DIR, CatalogItem, CatalogResult
+from services.avatar_sprites import schedule_avatar_render
 
 logger = logging.getLogger("avatar_catalog")
 
@@ -78,6 +80,74 @@ def source_file_exists(
 
 def _row_key(row: Skin) -> str:
     return f"{row.gender}_{row.category}_{row.name}"
+
+
+class CatalogRemovalError(RuntimeError):
+    """Réattribution impossible après le retrait d'une pièce du catalogue."""
+
+
+def _free_replacement(db: Session, removed: Skin) -> Skin | None:
+    return (
+        db.query(Skin)
+        .filter(
+            Skin.category == removed.category,
+            Skin.gender == removed.gender,
+            Skin.price_caps == 0,
+            Skin.available.is_(True),
+            Skin.id != removed.id,
+        )
+        .order_by(Skin.id.asc())
+        .first()
+    )
+
+
+def _reassign_users_for_removed_skin(db: Session, removed: Skin) -> int:
+    """Réattribue la pièce retirée à tous ses porteurs et replanifie leur sprite."""
+    wearers: list[tuple[User, list[str]]] = []
+    for user in db.query(User).all():
+        config = user.avatar_config
+        if not isinstance(config, dict):
+            continue
+        slots = [
+            slot
+            for slot in ("head", "body", "legs", "feet", "accessory")
+            if config.get(slot) == removed.id
+        ]
+        if slots:
+            wearers.append((user, slots))
+
+    if not wearers:
+        return 0
+
+    needs_clothing = any(slot != "accessory" for _, slots in wearers for slot in slots)
+    replacement: Skin | None = None
+    if needs_clothing:
+        replacement = _free_replacement(db, removed)
+        if replacement is None:
+            raise CatalogRemovalError(
+                f"Aucune pièce gratuite disponible pour {removed.gender}/{removed.category} "
+                f"(pièce retirée {removed.id})"
+            )
+
+    reassigned = 0
+    for user, slots in wearers:
+        config = dict(user.avatar_config)
+        for slot in slots:
+            new_id = "none" if slot == "accessory" else replacement.id
+            config[slot] = new_id
+            logger.info(
+                "catalog removal reassign user=%s removed=%s slot=%s replacement=%s",
+                user.id,
+                removed.id,
+                slot,
+                new_id,
+            )
+        user.avatar_config = config
+        if replacement is not None and not any(skin.id == replacement.id for skin in user.skins):
+            user.skins.append(replacement)
+        schedule_avatar_render(db, user)
+        reassigned += len(slots)
+    return reassigned
 
 
 def _update_row(row: Skin, item: CatalogItem, now: datetime) -> None:
@@ -187,6 +257,8 @@ def sync_catalog(
             continue
         report.hidden.append(row.id)
         if not dry_run:
+            logger.info("catalog removal: sourceId=%s", row.id)
+            _reassign_users_for_removed_skin(db, row)
             row.available = False
             row.updated_at = timestamp
 
