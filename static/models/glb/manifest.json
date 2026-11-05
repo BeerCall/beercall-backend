@@ -41,6 +41,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Alpine_px68_py15_pz-30_s0d3_5000.b99597f7.webp",
+        "sha256": "b99597f79b1802895350ed7d3396c9cde64628c52e1b92a858657cbdfd1c6a20",
+        "bytes": 1456,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -81,6 +88,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000.8ea4eb32.webp",
+        "sha256": "8ea4eb32a581d545c683cfa6395819e6a861f63b470bd4a6d69ec73f6532aa45",
+        "bytes": 1126,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -121,6 +135,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Audi_px68_py15_pz-30_s0d3_5000.eeb90161.webp",
+        "sha256": "eeb901612ba30857cf173ee531d576cafc67fcf5c5a9ed3f87b704ac28236a8a",
+        "bytes": 1282,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -147,7 +168,14 @@
           -3.419851971086679
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Backpack_0.c6c0cbd5.webp",
+        "sha256": "c6c0cbd5af8120646d81cec21d3797b0408efaa576f9cd2db5b6040afb759f3c",
+        "bytes": 3148,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "acc/men/Men_accessory_Beer_bWristR_s100_500",
@@ -187,6 +215,13 @@
         ],
         "scale": 100,
         "bone": "WristR"
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Beer_bWristR_s100_500.21b3eec4.webp",
+        "sha256": "21b3eec4a27253a0903edd76f9d952fb31bbf808c61585e607aabd7a88d44cf5",
+        "bytes": 1650,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -227,6 +262,13 @@
         ],
         "scale": 0.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000.f74b3fa1.webp",
+        "sha256": "f74b3fa1e47140beba155a76331f2138207c21672be3af625c06aa39be3b2f01",
+        "bytes": 4100,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -267,6 +309,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000.39c1edbd.webp",
+        "sha256": "39c1edbdd9eac4462dcb14691c0e79ec092eab4a7eba90787e4180ae696e2996",
+        "bytes": 5888,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -307,6 +356,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Cadillac_px68_py15_pz-30_s0d3_5000.74266e83.webp",
+        "sha256": "74266e8356e525d0bf67209c6ef15c8e6d5bafd156f210669f9dd83b42699919",
+        "bytes": 1296,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -347,6 +403,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000.b1ded273.webp",
+        "sha256": "b1ded2732c0eadb7f2af4a1cab9cf75c16a2824dbeda48445e2d6bb3d6c94b99",
+        "bytes": 4602,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -387,6 +450,13 @@
         ],
         "scale": 1.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000.f522fc8c.webp",
+        "sha256": "f522fc8cfc6ca7de2e7daa9933f39f81b31ad16fe44e258ac8dc29cd60bf563d",
+        "bytes": 5402,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -427,6 +497,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.bf46e4f6.webp",
+        "sha256": "bf46e4f666050e34382e6bcd37a775b702f5bdef9d08961bc1c9ed446f61047b",
+        "bytes": 4888,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -467,6 +544,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Ferrari_px68_py15_pz-30_s0d3_5000.4ed90c99.webp",
+        "sha256": "4ed90c99eb17d22a7c2fc543d601d2e6acd5f5e9860c9926afb7b4bb14262a30",
+        "bytes": 1408,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -507,6 +591,13 @@
         ],
         "scale": 0.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000.cf61630c.webp",
+        "sha256": "cf61630c10cb00514c1d63605a4b33f391d66f6a7d1747a8e28818b161451468",
+        "bytes": 4294,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -547,6 +638,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Haas_px68_py15_pz-30_s0d3_5000.15d5e15b.webp",
+        "sha256": "15d5e15b50aef4c3c27fa64f1d48a4cf68386a5dfc7771531c4abb26a3900aea",
+        "bytes": 1428,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -587,6 +685,13 @@
         ],
         "scale": 1.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000.968777ba.webp",
+        "sha256": "968777ba77cfe0153d8b3426c719d2eaed41c7830f37f311c1ef92d823ea58e2",
+        "bytes": 5624,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -627,6 +732,13 @@
         ],
         "scale": 0.8,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000.bc36485e.webp",
+        "sha256": "bc36485e6d29e209171e772f7e94eeabb8aa98f3d44f4805b9a42d8b18c2f586",
+        "bytes": 4480,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -667,6 +779,13 @@
         ],
         "scale": 2,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Kart_ry50d704566_s2_3000.c52b2a73.webp",
+        "sha256": "c52b2a7368ec9030efc5754c0875120b8c93dc7f887b1734298771e7a83450d2",
+        "bytes": 3608,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -707,6 +826,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Magikarp_px75_py30_rz329d577951_2000.c70243db.webp",
+        "sha256": "c70243db6f40eda3c2ee7ba620f63e7d59d100d847599d047bfcd0ca5b068192",
+        "bytes": 6750,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -747,6 +873,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.936a3519.webp",
+        "sha256": "936a351980095ee884023f738b5627cbecc40ea254d43ddef38905843be8b982",
+        "bytes": 4184,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -787,6 +920,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.3f8498c5.webp",
+        "sha256": "3f8498c567c833f4dfce430229e78f9fc4333140a7b305f98dbacb3ade39969c",
+        "bytes": 4764,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -827,6 +967,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_McLaren_px68_py15_pz-30_s0d3_5000.96bb8646.webp",
+        "sha256": "96bb86460407217bda7c5cb2791f2ac21c1fb05d4ce038d7d5af2451e3a37482",
+        "bytes": 1454,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -867,6 +1014,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Mercedes_px68_py15_pz-30_s0d3_5000.fc301636.webp",
+        "sha256": "fc301636d13060318a98fb8b04b6b4de5ac7327bb4f87bf2e72d37fa2cb6eb8c",
+        "bytes": 1332,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -907,6 +1061,13 @@
         ],
         "scale": 2,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000.40b3201c.webp",
+        "sha256": "40b3201ca05a129ef3e92911947d18c34c63054830f5c714e2d18afaad4c50c8",
+        "bytes": 3638,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -947,6 +1108,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000.a16ac10e.webp",
+        "sha256": "a16ac10ef5e16537e97aa38aaf5c125a138194f864cdaeb5ff24ff94036e4e21",
+        "bytes": 4614,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -987,6 +1155,13 @@
         ],
         "scale": 50,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000.d1766ac0.webp",
+        "sha256": "d1766ac0cb84860e888b9967a914c79b89e71561b173c908c833d19c2f1caa2f",
+        "bytes": 5574,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1013,7 +1188,14 @@
           20.844318936989048
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Pistol_500.f59b5562.webp",
+        "sha256": "f59b55625a5b456fcceece11fcf2c41fa9fefa6cbb27f8cf68e16c7650bdac83",
+        "bytes": 1806,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "acc/men/Men_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
@@ -1053,6 +1235,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.b05eaab8.webp",
+        "sha256": "b05eaab8b5ba11dca479c0a8f9543ab4586443055bca45005fc7aeb7b860697a",
+        "bytes": 5174,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1093,6 +1282,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.5bd77985.webp",
+        "sha256": "5bd779850245bcbabfeddfaacd39002ef51ecf1a7ac35ad20c8f74f2ab158eff",
+        "bytes": 5890,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1133,6 +1329,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000.db91c405.webp",
+        "sha256": "db91c4056f1aec121b800ac9d7ee64ff600bf5d8d80c63049e1875dc50c5ed87",
+        "bytes": 1544,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1173,6 +1376,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_RedBull_px68_py15_pz-30_s0d3_5000.f8f69bd0.webp",
+        "sha256": "f8f69bd05ba2ff4ccbdf27b3a659574613c05ab1ce69148f1e1338aa6f05494a",
+        "bytes": 1522,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1213,6 +1423,13 @@
         ],
         "scale": 2.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000.377687fe.webp",
+        "sha256": "377687fea8bfcba5c3a6bc317f42fda9b60f4ab4bbcf42fe52049a4dee337746",
+        "bytes": 5296,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1253,6 +1470,13 @@
         ],
         "scale": 0.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Soccer_px50_s0d5_500.6956f3fd.webp",
+        "sha256": "6956f3fd37ca6f78c49e449e79ddbe8224adbf263c2b98a63332b58267b4c85e",
+        "bytes": 5298,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1293,6 +1517,13 @@
         ],
         "scale": 2,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000.40d50cff.webp",
+        "sha256": "40d50cff6e257c0d0001899d97be9d76597a0e4857d6d8f6acd844aac34d9547",
+        "bytes": 5816,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1333,6 +1564,13 @@
         ],
         "scale": 0.21,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Sudowoodo_px75_py8_s0d21_600.9f883e41.webp",
+        "sha256": "9f883e415652890cd0b8283e6a2cad91f54e797046cba74f5af67fba11199918",
+        "bytes": 2384,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1359,7 +1597,14 @@
           82.83205206613466
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Sword_500.c639ed58.webp",
+        "sha256": "c639ed5853971f132fe088abf02083ae6c50ff1eb240101237eb98fbb7ab0c1e",
+        "bytes": 1344,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "acc/men/Men_accessory_Victreebel_px50_py30_pz20_s0d1_2000",
@@ -1399,6 +1644,13 @@
         ],
         "scale": 0.1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Victreebel_px50_py30_pz20_s0d1_2000.00cd723a.webp",
+        "sha256": "00cd723a0c1d2514c57b8fb15b615d214fdd36d35e07546bb7ee776890e85227",
+        "bytes": 7520,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1439,6 +1691,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_accessory_Williams_px68_py15_pz-30_s0d3_5000.d5c49986.webp",
+        "sha256": "d5c499869770d3435f6cb0c979071209e9089f96396a01068a623ffa23b3adfd",
+        "bytes": 1408,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1479,6 +1738,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Alpine_px68_py15_pz-30_s0d3_5000.b99597f7.webp",
+        "sha256": "b99597f79b1802895350ed7d3396c9cde64628c52e1b92a858657cbdfd1c6a20",
+        "bytes": 1456,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1519,6 +1785,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000.8ea4eb32.webp",
+        "sha256": "8ea4eb32a581d545c683cfa6395819e6a861f63b470bd4a6d69ec73f6532aa45",
+        "bytes": 1126,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1559,6 +1832,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Audi_px68_py15_pz-30_s0d3_5000.eeb90161.webp",
+        "sha256": "eeb901612ba30857cf173ee531d576cafc67fcf5c5a9ed3f87b704ac28236a8a",
+        "bytes": 1282,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1585,7 +1865,14 @@
           1.4860976220390543
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Backpack_0.00ab1dff.webp",
+        "sha256": "00ab1dff8b1e80d78c0c64da7fd571afefe1420e598dbc1935cfe4600985d883",
+        "bytes": 2096,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "acc/women/Women_accessory_Beer_bWristR_s100_500",
@@ -1625,6 +1912,13 @@
         ],
         "scale": 100,
         "bone": "WristR"
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Beer_bWristR_s100_500.21b3eec4.webp",
+        "sha256": "21b3eec4a27253a0903edd76f9d952fb31bbf808c61585e607aabd7a88d44cf5",
+        "bytes": 1650,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1665,6 +1959,13 @@
         ],
         "scale": 0.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000.f74b3fa1.webp",
+        "sha256": "f74b3fa1e47140beba155a76331f2138207c21672be3af625c06aa39be3b2f01",
+        "bytes": 4100,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1705,6 +2006,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000.39c1edbd.webp",
+        "sha256": "39c1edbdd9eac4462dcb14691c0e79ec092eab4a7eba90787e4180ae696e2996",
+        "bytes": 5888,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1745,6 +2053,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Cadillac_px68_py15_pz-30_s0d3_5000.74266e83.webp",
+        "sha256": "74266e8356e525d0bf67209c6ef15c8e6d5bafd156f210669f9dd83b42699919",
+        "bytes": 1296,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1785,6 +2100,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000.b1ded273.webp",
+        "sha256": "b1ded2732c0eadb7f2af4a1cab9cf75c16a2824dbeda48445e2d6bb3d6c94b99",
+        "bytes": 4602,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1825,6 +2147,13 @@
         ],
         "scale": 1.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000.f522fc8c.webp",
+        "sha256": "f522fc8cfc6ca7de2e7daa9933f39f81b31ad16fe44e258ac8dc29cd60bf563d",
+        "bytes": 5402,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1865,6 +2194,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.bf46e4f6.webp",
+        "sha256": "bf46e4f666050e34382e6bcd37a775b702f5bdef9d08961bc1c9ed446f61047b",
+        "bytes": 4888,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1905,6 +2241,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Ferrari_px68_py15_pz-30_s0d3_5000.4ed90c99.webp",
+        "sha256": "4ed90c99eb17d22a7c2fc543d601d2e6acd5f5e9860c9926afb7b4bb14262a30",
+        "bytes": 1408,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1945,6 +2288,13 @@
         ],
         "scale": 0.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000.cf61630c.webp",
+        "sha256": "cf61630c10cb00514c1d63605a4b33f391d66f6a7d1747a8e28818b161451468",
+        "bytes": 4294,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -1985,6 +2335,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Gun_px60_py-50_500.01fcc968.webp",
+        "sha256": "01fcc96822fe47baefcefc2b0666fa98e01e453297add75f65dbb848d6a7da46",
+        "bytes": 996,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2025,6 +2382,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Haas_px68_py15_pz-30_s0d3_5000.15d5e15b.webp",
+        "sha256": "15d5e15b50aef4c3c27fa64f1d48a4cf68386a5dfc7771531c4abb26a3900aea",
+        "bytes": 1428,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2065,6 +2429,13 @@
         ],
         "scale": 1.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000.968777ba.webp",
+        "sha256": "968777ba77cfe0153d8b3426c719d2eaed41c7830f37f311c1ef92d823ea58e2",
+        "bytes": 5624,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2105,6 +2476,13 @@
         ],
         "scale": 0.8,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000.bc36485e.webp",
+        "sha256": "bc36485e6d29e209171e772f7e94eeabb8aa98f3d44f4805b9a42d8b18c2f586",
+        "bytes": 4480,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2145,6 +2523,13 @@
         ],
         "scale": 2,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Kart_ry50d704566_s2_3000.c52b2a73.webp",
+        "sha256": "c52b2a7368ec9030efc5754c0875120b8c93dc7f887b1734298771e7a83450d2",
+        "bytes": 3608,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2185,6 +2570,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Magikarp_px75_py30_rz329d577951_2000.c70243db.webp",
+        "sha256": "c70243db6f40eda3c2ee7ba620f63e7d59d100d847599d047bfcd0ca5b068192",
+        "bytes": 6750,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2225,6 +2617,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.936a3519.webp",
+        "sha256": "936a351980095ee884023f738b5627cbecc40ea254d43ddef38905843be8b982",
+        "bytes": 4184,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2265,6 +2664,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.3f8498c5.webp",
+        "sha256": "3f8498c567c833f4dfce430229e78f9fc4333140a7b305f98dbacb3ade39969c",
+        "bytes": 4764,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2305,6 +2711,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_McLaren_px68_py15_pz-30_s0d3_5000.96bb8646.webp",
+        "sha256": "96bb86460407217bda7c5cb2791f2ac21c1fb05d4ce038d7d5af2451e3a37482",
+        "bytes": 1454,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2345,6 +2758,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Mercedes_px68_py15_pz-30_s0d3_5000.fc301636.webp",
+        "sha256": "fc301636d13060318a98fb8b04b6b4de5ac7327bb4f87bf2e72d37fa2cb6eb8c",
+        "bytes": 1332,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2385,6 +2805,13 @@
         ],
         "scale": 2,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000.40b3201c.webp",
+        "sha256": "40b3201ca05a129ef3e92911947d18c34c63054830f5c714e2d18afaad4c50c8",
+        "bytes": 3638,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2425,6 +2852,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000.a16ac10e.webp",
+        "sha256": "a16ac10ef5e16537e97aa38aaf5c125a138194f864cdaeb5ff24ff94036e4e21",
+        "bytes": 4614,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2465,6 +2899,13 @@
         ],
         "scale": 50,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000.d1766ac0.webp",
+        "sha256": "d1766ac0cb84860e888b9967a914c79b89e71561b173c908c833d19c2f1caa2f",
+        "bytes": 5574,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2505,6 +2946,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.b05eaab8.webp",
+        "sha256": "b05eaab8b5ba11dca479c0a8f9543ab4586443055bca45005fc7aeb7b860697a",
+        "bytes": 5174,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2545,6 +2993,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.5bd77985.webp",
+        "sha256": "5bd779850245bcbabfeddfaacd39002ef51ecf1a7ac35ad20c8f74f2ab158eff",
+        "bytes": 5890,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2585,6 +3040,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000.db91c405.webp",
+        "sha256": "db91c4056f1aec121b800ac9d7ee64ff600bf5d8d80c63049e1875dc50c5ed87",
+        "bytes": 1544,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2625,6 +3087,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_RedBull_px68_py15_pz-30_s0d3_5000.f8f69bd0.webp",
+        "sha256": "f8f69bd05ba2ff4ccbdf27b3a659574613c05ab1ce69148f1e1338aa6f05494a",
+        "bytes": 1522,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2665,6 +3134,13 @@
         ],
         "scale": 2.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000.377687fe.webp",
+        "sha256": "377687fea8bfcba5c3a6bc317f42fda9b60f4ab4bbcf42fe52049a4dee337746",
+        "bytes": 5296,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2705,6 +3181,13 @@
         ],
         "scale": 0.5,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Soccer_px50_s0d5_500.6956f3fd.webp",
+        "sha256": "6956f3fd37ca6f78c49e449e79ddbe8224adbf263c2b98a63332b58267b4c85e",
+        "bytes": 5298,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2745,6 +3228,13 @@
         ],
         "scale": 2,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000.40d50cff.webp",
+        "sha256": "40d50cff6e257c0d0001899d97be9d76597a0e4857d6d8f6acd844aac34d9547",
+        "bytes": 5816,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2785,6 +3275,13 @@
         ],
         "scale": 0.21,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Sudowoodo_px75_py8_s0d21_600.9f883e41.webp",
+        "sha256": "9f883e415652890cd0b8283e6a2cad91f54e797046cba74f5af67fba11199918",
+        "bytes": 2384,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2825,6 +3322,13 @@
         ],
         "scale": 1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Sword_px60_py-50_500.ded34e1c.webp",
+        "sha256": "ded34e1c17f8ccb2cec881d92e474eb9dc9647107c580577ae66b56d5523970e",
+        "bytes": 512,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2865,6 +3369,13 @@
         ],
         "scale": 0.1,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Victreebel_px50_py30_pz20_s0d1_2000.00cd723a.webp",
+        "sha256": "00cd723a0c1d2514c57b8fb15b615d214fdd36d35e07546bb7ee776890e85227",
+        "bytes": 7520,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -2905,6 +3416,13 @@
         ],
         "scale": 0.3,
         "bone": null
+      },
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_accessory_Williams_px68_py15_pz-30_s0d3_5000.d5c49986.webp",
+        "sha256": "d5c499869770d3435f6cb0c979071209e9089f96396a01068a623ffa23b3adfd",
+        "bytes": 1408,
+        "width": 192,
+        "height": 192
       }
     },
     {
@@ -3009,7 +3527,14 @@
           19.356627745109524
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_Adventurer_300.1188190d.webp",
+        "sha256": "1188190d9764acc2a8f40def199c3ebed8ec6e164de30e27dacb7b1f1ce74aea",
+        "bytes": 5190,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_Beach_300",
@@ -3035,7 +3560,14 @@
           19.356627729740374
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_Beach_300.856dc6c6.webp",
+        "sha256": "856dc6c61582bd9b62369e36005b61d36e8fd4bbd8cecbe32aa15a520f7642e5",
+        "bytes": 6438,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_Casual2_0",
@@ -3061,7 +3593,14 @@
           19.356627715099012
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_Casual2_0.faf6d692.webp",
+        "sha256": "faf6d692389a6742dd9844962b01cb0bc9b6b5c3aef5de215214dc9491babbe7",
+        "bytes": 6386,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_Casual_0",
@@ -3087,7 +3626,14 @@
           19.72981193041411
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_Casual_0.b18685b9.webp",
+        "sha256": "b18685b9f75fec4ff5c5d774fd891ff0541977cd569c51dd30dddffd9e627c12",
+        "bytes": 4784,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_Farmer_300",
@@ -3113,7 +3659,14 @@
           19.35662806826837
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_Farmer_300.6cd9e77b.webp",
+        "sha256": "6cd9e77bb9716d1add7340a1f2edd25719e80f9f3dfe59a25061f0e239b379f6",
+        "bytes": 5782,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_King_300",
@@ -3139,7 +3692,14 @@
           21.289486904599553
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_King_300.880d864c.webp",
+        "sha256": "880d864c5bc9eb00448f0b43266c3ec7e212a943d70d12a84f95e3ce76e22120",
+        "bytes": 5764,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_Punk_300",
@@ -3165,7 +3725,14 @@
           19.356628061126735
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_Punk_300.d858e431.webp",
+        "sha256": "d858e4315b38c443cb4b65911aa274427318b0d106cd7ee4abae3eabc21e745e",
+        "bytes": 6078,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_SpaceSuit_300",
@@ -3191,7 +3758,14 @@
           19.356628174175462
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_SpaceSuit_300.e19f78b6.webp",
+        "sha256": "e19f78b69ceaa855029c4ca9527addd0d553b0491fc2d005ea1b85ad2910c66c",
+        "bytes": 6432,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_Suit_300",
@@ -3217,7 +3791,14 @@
           19.356627745109524
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_Suit_300.1188190d.webp",
+        "sha256": "1188190d9764acc2a8f40def199c3ebed8ec6e164de30e27dacb7b1f1ce74aea",
+        "bytes": 5190,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_Swat_300",
@@ -3243,7 +3824,14 @@
           19.356627583480506
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_Swat_300.e4657d29.webp",
+        "sha256": "e4657d29a50abeb2dbe28d7b087ecff3f414a35b7cb1dd2be413c51a391cb22d",
+        "bytes": 4722,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/body/Men_body_Worker_0",
@@ -3269,7 +3857,14 @@
           19.356627929435117
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_body_Worker_0.ddaa3656.webp",
+        "sha256": "ddaa365683817adac9a31c1edfe9af915854469627e8bcebeb55da17bd05aee6",
+        "bytes": 6748,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_Adventurer_100",
@@ -3295,7 +3890,14 @@
           28.668846430786676
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_Adventurer_100.7824865f.webp",
+        "sha256": "7824865fb0d0fdb47e402942c457f0cd310b69d5aaaa08e81555e2c3bb35dd3f",
+        "bytes": 1616,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_Beach_100",
@@ -3321,7 +3923,14 @@
           28.79813750295955
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_Beach_100.62692425.webp",
+        "sha256": "62692425c7edfa448d20aa00e7f971538ae886d3cfeff9e0b118f52d22cf8a8d",
+        "bytes": 2722,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_Casual2_0",
@@ -3347,7 +3956,14 @@
           28.668846463917806
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_Casual2_0.bea3bf2f.webp",
+        "sha256": "bea3bf2f3184dc309f110ce7284286c680fef2d0374c71141df57e19f7f93a79",
+        "bytes": 2794,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_Casual_0",
@@ -3373,7 +3989,14 @@
           28.668846310933223
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_Casual_0.879d6700.webp",
+        "sha256": "879d6700b16f2f8040b30af78d1fc51ee60f04b5fc9a694b4da0a80c0b876ad1",
+        "bytes": 2054,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_Farmer_100",
@@ -3399,7 +4022,14 @@
           28.668846471028317
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_Farmer_100.044d6b91.webp",
+        "sha256": "044d6b917bdf716b9df8919ff9f065f5cfe7f2744c82b833265bc123050a1410",
+        "bytes": 2034,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_King_100",
@@ -3425,7 +4055,14 @@
           28.28813993899441
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_King_100.a62bf431.webp",
+        "sha256": "a62bf4311eaa9cab0d49ac8dab633255556ed05a57cdf5a096b9dcaf28ccd5ca",
+        "bytes": 1948,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_Punk_100",
@@ -3451,7 +4088,14 @@
           28.668846310933223
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_Punk_100.b427c187.webp",
+        "sha256": "b427c1870152c94c45efde0e893514cff7159d958b3e8068e8587014683e0561",
+        "bytes": 2098,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_SpaceSuit_100",
@@ -3477,7 +4121,14 @@
           27.287579920425706
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_SpaceSuit_100.a6fd418e.webp",
+        "sha256": "a6fd418e74d45e3e33c0d0fb1fbaffd3e60bfd69ba17fb5da7d2565da8cd0f7f",
+        "bytes": 3058,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_Suit_100",
@@ -3503,7 +4154,14 @@
           28.668846264067856
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_Suit_100.67c8b2c1.webp",
+        "sha256": "67c8b2c1a3e5c6f52cdeb495004490c2693e7b9be4223b3822761c0bf3e9cd95",
+        "bytes": 1370,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_Swat_100",
@@ -3529,7 +4187,14 @@
           27.79928022288935
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_Swat_100.0fa04f23.webp",
+        "sha256": "0fa04f23dda0bee1de395e07b99076b28d6e523b29878274ce0da3b9f179d390",
+        "bytes": 1790,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/feet/Men_feet_Worker_0",
@@ -3555,7 +4220,14 @@
           28.668846448116792
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_feet_Worker_0.c096e4c6.webp",
+        "sha256": "c096e4c6e051f54bfe98557f5c5b9d1b1aefeb5121d8c919d83ec438264412a9",
+        "bytes": 1830,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Adventurer_150",
@@ -3581,7 +4253,14 @@
           17.505067080817934
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Adventurer_150.350dec6c.webp",
+        "sha256": "350dec6c53f2550a43e3d3bbb680a3f36b1eae798cdd4278ec5d07c48173ee5d",
+        "bytes": 3612,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Beach_150",
@@ -3607,7 +4286,14 @@
           18.10558826100107
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Beach_150.3b703c1b.webp",
+        "sha256": "3b703c1bd16ef9d512dffdb3564e84889672cb243e6af76c79b5e4c61c810044",
+        "bytes": 3818,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Casual2_0",
@@ -3633,7 +4319,14 @@
           17.505066050308926
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Casual2_0.9d447cd6.webp",
+        "sha256": "9d447cd639f96b6f6d5fd374c3e87b7e99aab60f4f944be583d51ca64a57db75",
+        "bytes": 3860,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Casual_0",
@@ -3659,7 +4352,14 @@
           17.505064520912963
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Casual_0.ba9257a5.webp",
+        "sha256": "ba9257a5a7c9c970945b60214ca9976d4be8b87afd4fae8ecc1b0ae228435d66",
+        "bytes": 3732,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Farmer_150",
@@ -3685,7 +4385,14 @@
           24.42255412509411
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Farmer_150.2540c2c5.webp",
+        "sha256": "2540c2c5aa99b1b3bf1ddfa6ab04a255d484bdb9b30e9774f0f70b18f093c59c",
+        "bytes": 5080,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Horse_150",
@@ -3711,7 +4418,14 @@
           34.94592566147201
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Horse_150.69169006.webp",
+        "sha256": "69169006c3a26ab91b7c1e710ef5f5336af090973e403365921533282d453caf",
+        "bytes": 3134,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_King_150",
@@ -3737,7 +4451,14 @@
           19.217103307995295
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_King_150.abf94a9b.webp",
+        "sha256": "abf94a9b6c20b354f9e10f686e61fd18f81dd9e03d34435fcf2b2805a72627c5",
+        "bytes": 5572,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Punk_150",
@@ -3763,7 +4484,14 @@
           23.026696386513848
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Punk_150.9b913312.webp",
+        "sha256": "9b913312d575f50fa4248a948224eacca560f3486cf53a82b2777af29253c0f9",
+        "bytes": 3436,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_SpaceSuit_150",
@@ -3789,7 +4517,14 @@
           19.72550554482954
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_SpaceSuit_150.b538574f.webp",
+        "sha256": "b538574f7750a3d5800f165f0899baf18cc0d9aa95a9d724c9baf1c774007347",
+        "bytes": 4398,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Suit_150",
@@ -3815,7 +4550,14 @@
           17.505064620957622
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Suit_150.594ddf60.webp",
+        "sha256": "594ddf60828dbb0f333dc6eb72a5dafd8095e1a1a6165024fec09ea78aae7875",
+        "bytes": 3952,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Swat_150",
@@ -3841,7 +4583,14 @@
           19.193670282847496
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Swat_150.e2da774c.webp",
+        "sha256": "e2da774c8e01c49778bac0a08d26b233c796d57e146f5929b275423a3d349bbb",
+        "bytes": 2252,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/head/Men_head_Worker_0",
@@ -3867,7 +4616,14 @@
           23.325763194731998
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_head_Worker_0.73ca285e.webp",
+        "sha256": "73ca285e243245be66abe2af55ee59bf1c23a58cab7a3c712ad49f2e65548554",
+        "bytes": 4190,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_Adventurer_200",
@@ -3893,7 +4649,14 @@
           15.62028796364767
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_Adventurer_200.6c024cfa.webp",
+        "sha256": "6c024cfa204dffccd7c4e5acd7da61556bc24ce01341ffe3ef57815d57c8634c",
+        "bytes": 2518,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_Beach_200",
@@ -3919,7 +4682,14 @@
           17.070778004479624
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_Beach_200.8b7ffa81.webp",
+        "sha256": "8b7ffa81f13a1172d831d06341e1538262c80d63c678c8f6c53601012f2cd24b",
+        "bytes": 5190,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_Casual2_0",
@@ -3945,7 +4715,14 @@
           16.752265902751216
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_Casual2_0.499402be.webp",
+        "sha256": "499402be63f21b11c339ce080647ba608e2da79278838a85edafbb234fde2408",
+        "bytes": 2782,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_Casual_0",
@@ -3971,7 +4748,14 @@
           17.206664261137472
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_Casual_0.29de0b63.webp",
+        "sha256": "29de0b634f2149b432154378eed506a167b5018c020af8f9bf0e231b7d061859",
+        "bytes": 4334,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_Farmer_200",
@@ -3997,7 +4781,14 @@
           15.806963235637824
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_Farmer_200.b30e0291.webp",
+        "sha256": "b30e02914df5016de205900a70b114dcbb2dde215f60204fad2d6e03f1f90be9",
+        "bytes": 2860,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_King_200",
@@ -4023,7 +4814,14 @@
           18.207818630791024
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_King_200.5446ee25.webp",
+        "sha256": "5446ee2539330ab2262806163a3de847ffe2e66153ef6a08bbbe12a1dbb19208",
+        "bytes": 3430,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_Punk_200",
@@ -4049,7 +4847,14 @@
           16.27374224272948
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_Punk_200.d07e1960.webp",
+        "sha256": "d07e19605ea4d2945ccad68f24ac7db3e3c6a8d41c3deca85a779f2993e728a5",
+        "bytes": 3252,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_SpaceSuit_200",
@@ -4075,7 +4880,14 @@
           16.19190458299679
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_SpaceSuit_200.477a369c.webp",
+        "sha256": "477a369c685d3b2a36565b08d24f5905e18f86fdb95765a4999c1ff7d648023b",
+        "bytes": 4378,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_Suit_200",
@@ -4101,7 +4913,14 @@
           16.75226294977164
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_Suit_200.616a40d7.webp",
+        "sha256": "616a40d7b9c3986d06f4efb220fd99c29c90eb75f536d0ccc11248f2c2d93ca2",
+        "bytes": 2554,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_Swat_200",
@@ -4127,7 +4946,14 @@
           17.393726270165132
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_Swat_200.666191ae.webp",
+        "sha256": "666191aee2c656d23fc7834cd11e38e161b6668cf98ffc6644185f7e1828b1c4",
+        "bytes": 3370,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "men/legs/Men_legs_Worker_0",
@@ -4153,7 +4979,14 @@
           15.557950637135958
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Men/Men_legs_Worker_0.33666333.webp",
+        "sha256": "33666333307f4108d49d1a18134cde717a2c09ebe081f156f95466988295a89b",
+        "bytes": 3560,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_Adventurer_300",
@@ -4179,7 +5012,14 @@
           19.30765851916603
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_Adventurer_300.4534e606.webp",
+        "sha256": "4534e606fafe9b588178f7e71ca070f3ade766767512952f62e0f9c8a2ff5c93",
+        "bytes": 5470,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_Casual_0",
@@ -4205,7 +5045,14 @@
           18.990361251475967
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_Casual_0.c35d88a1.webp",
+        "sha256": "c35d88a1641d2ab951dc6f602dd3d3754858698dc3a0d723ae91b1aaced91290",
+        "bytes": 6086,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_Formal_300",
@@ -4231,7 +5078,14 @@
           19.307660341967008
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_Formal_300.3c914f6d.webp",
+        "sha256": "3c914f6d15b5c661fdd6eeefb1888e16e3528f2622d0506d6bfd1fe7f529fed9",
+        "bytes": 6080,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_Medieval_300",
@@ -4257,7 +5111,14 @@
           20.54703986797537
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_Medieval_300.206ac0e2.webp",
+        "sha256": "206ac0e24100b22c744105b7678ba8730ef9ef8f25b11c564cfcb17d273e5347",
+        "bytes": 5766,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_Punk_300",
@@ -4283,7 +5144,14 @@
           19.3076586054874
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_Punk_300.959d8edb.webp",
+        "sha256": "959d8edbc0d1053fef38af69e133b3d556f8bc47e46d290656ee1e96de921b01",
+        "bytes": 6056,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_SciFi_300",
@@ -4309,7 +5177,14 @@
           18.988684372537627
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_SciFi_300.ec6196a1.webp",
+        "sha256": "ec6196a1188f5e3630950887e03fa9da2fc27b5821f9e7801db7c23f2415106b",
+        "bytes": 5260,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_Soldier_300",
@@ -4335,7 +5210,14 @@
           19.307660320323148
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_Soldier_300.d74e593f.webp",
+        "sha256": "d74e593f68288ddea703372c9061f2e8fe86a32ff328456587c8c9adf0b15d92",
+        "bytes": 5390,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_Suit_300",
@@ -4361,7 +5243,14 @@
           19.307658153464622
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_Suit_300.ac9f4582.webp",
+        "sha256": "ac9f4582bfdf1e38bdcf704e632168b3fd94badd3ce56ff0c7a09e9cb1b2ce57",
+        "bytes": 4808,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_Witch_300",
@@ -4387,7 +5276,14 @@
           19.1358142835817
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_Witch_300.0a810413.webp",
+        "sha256": "0a8104135f44d3fd5ab8ab137e452f65f638a5a9eab7d8fce03d2d3eedddf73d",
+        "bytes": 6034,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/body/Women_body_Worker_0",
@@ -4413,7 +5309,14 @@
           19.226634985631396
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_body_Worker_0.086e1cc2.webp",
+        "sha256": "086e1cc2ff8ddc50d0f30e0763a36d52c4d0cb23ad3ef5a147b5fa216e558734",
+        "bytes": 6506,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_Adventurer_100",
@@ -4439,7 +5342,14 @@
           25.92366503937637
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_Adventurer_100.049968c8.webp",
+        "sha256": "049968c8c00b2dce5132062c47b298c743d7bb535551d62d568cca6ca8bab7c0",
+        "bytes": 3226,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_Casual_0",
@@ -4465,7 +5375,14 @@
           27.08127962395897
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_Casual_0.54fedcdc.webp",
+        "sha256": "54fedcdc873de351905cf426cba434314f4d575f2d39ef22bec0e52303c852ce",
+        "bytes": 2114,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_Formal_100",
@@ -4491,7 +5408,14 @@
           25.54730301373847
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_Formal_100.d553b858.webp",
+        "sha256": "d553b858db43aad8ad8d9527a78071941a03e7e070d36be8913de636b418a6c2",
+        "bytes": 2484,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_Medieval_100",
@@ -4517,7 +5441,14 @@
           25.547303153054266
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_Medieval_100.4903f4fd.webp",
+        "sha256": "4903f4fd937e4252ab8376a08abf6a817eaf6e4e30280d62a6021b50d8f033b3",
+        "bytes": 2920,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_Punk_100",
@@ -4543,7 +5474,14 @@
           25.88972414585657
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_Punk_100.a2af79fb.webp",
+        "sha256": "a2af79fb8bf1a51bf36c2b282c00b61bac72101014ab45166d60fdde1f565a3f",
+        "bytes": 2124,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_SciFi_100",
@@ -4569,7 +5507,14 @@
           25.54730315305497
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_SciFi_100.4027a189.webp",
+        "sha256": "4027a189684644cb1ef7e1dcfeb0285216a1f8691e102764ca1c878306ff6a53",
+        "bytes": 3836,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_Soldier_100",
@@ -4595,7 +5540,14 @@
           25.92366503937637
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_Soldier_100.d9efc737.webp",
+        "sha256": "d9efc737d6fd6ad45ba4a54d762b80acfaa2fdeb25247b0aa4c8906a00ed1eec",
+        "bytes": 2680,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_Suit_100",
@@ -4621,7 +5573,14 @@
           27.146862442134868
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_Suit_100.7f10c800.webp",
+        "sha256": "7f10c80002dc517bf386bbe6384b6060ea72d6748e299aeac94f944bc006e43c",
+        "bytes": 2110,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_Witch_100",
@@ -4647,7 +5606,14 @@
           25.770534483349426
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_Witch_100.ed23dae4.webp",
+        "sha256": "ed23dae4b1d9c9a4db0c7386e34f9478403254c090a1b101e17380b30baabe2c",
+        "bytes": 3392,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/feet/Women_feet_Worker_0",
@@ -4673,7 +5639,14 @@
           27.146862442134868
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_feet_Worker_0.f7213807.webp",
+        "sha256": "f721380793e40c9a96f6566ecc24aee03b7dbfc44b03d599374cbf9cdff6ead9",
+        "bytes": 2070,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_Adventurer_150",
@@ -4699,7 +5672,14 @@
           17.733664852883457
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_Adventurer_150.0a948b05.webp",
+        "sha256": "0a948b051499e9ad55ad587154455f95afbd88153539915312afa15ee45bc047",
+        "bytes": 4484,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_Casual_0",
@@ -4725,7 +5705,14 @@
           19.25285493958407
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_Casual_0.aa87000c.webp",
+        "sha256": "aa87000c5ddfa84c65d2df83e657839cba5f45b0840156b1101c35c1818eae4a",
+        "bytes": 4948,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_Formal_150",
@@ -4751,7 +5738,14 @@
           20.068748048188233
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_Formal_150.5585a83b.webp",
+        "sha256": "5585a83b1d3b2c8131e0898ba362a39a7109ae4dc2e9e4075ce8cc4dd893251d",
+        "bytes": 4452,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_Medieval_150",
@@ -4777,7 +5771,14 @@
           19.251184559760393
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_Medieval_150.23c4fe82.webp",
+        "sha256": "23c4fe825f62ab24abc0cff0a98489274765cd137ff2071716234e5f6a0d843b",
+        "bytes": 4660,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_Punk_150",
@@ -4803,7 +5804,14 @@
           21.79889794185816
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_Punk_150.61f187f3.webp",
+        "sha256": "61f187f32f9ae5edd340d623babcba0bf5c5138bcd1df61f1a31daac7c4e9975",
+        "bytes": 3686,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_SciFi_150",
@@ -4829,7 +5837,14 @@
           19.23274287561284
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_SciFi_150.73388cc6.webp",
+        "sha256": "73388cc63106547849685a52daef7fce42c5a5c00cdee67d05ab60c57896705c",
+        "bytes": 3988,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_Soldier_150",
@@ -4855,7 +5870,14 @@
           17.733664852883457
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_Soldier_150.c1c29bb3.webp",
+        "sha256": "c1c29bb3b701bf5dc3310d4e0d782c34ba309c24bc2dc52f01162affa8e955e4",
+        "bytes": 4590,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_Suit_150",
@@ -4881,7 +5903,14 @@
           19.251184519490423
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_Suit_150.56812e69.webp",
+        "sha256": "56812e696dd304f45c604fe1f506abd720d2757e60083e9c203a897205307413",
+        "bytes": 4846,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_Witch_150",
@@ -4907,7 +5936,14 @@
           31.587984110052815
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_Witch_150.aec3a0ac.webp",
+        "sha256": "aec3a0acf442431f522003d832f65f723178353bdc9f15857f1bbd5de642b1f7",
+        "bytes": 3836,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/head/Women_head_Worker_0",
@@ -4933,7 +5969,14 @@
           23.725723741897983
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_head_Worker_0.1219853f.webp",
+        "sha256": "1219853fee55ef4f676c30cce1e144942649c3f0b62eab0ea1defe151d0b579c",
+        "bytes": 4442,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_Adventurer_200",
@@ -4959,7 +6002,14 @@
           17.259271291030444
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_Adventurer_200.1bc4ccf6.webp",
+        "sha256": "1bc4ccf69c7a79efe622bef85dd19584beb3b1cf823ca76d3b5eccdfd6f60378",
+        "bytes": 5078,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_Casual_0",
@@ -4985,7 +6035,14 @@
           17.26079775569949
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_Casual_0.5728bb82.webp",
+        "sha256": "5728bb82e8fdfc5c5080351146a60e2f2874d44771c18a3b4fb5a21afb47f511",
+        "bytes": 3946,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_Formal_200",
@@ -5011,7 +6068,14 @@
           21.870824528919965
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_Formal_200.d7ca60a9.webp",
+        "sha256": "d7ca60a98db3009188cb112d1dc99f831441d98a71453b7719ac177101665434",
+        "bytes": 4404,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_Medieval_200",
@@ -5037,7 +6101,14 @@
           18.594396750192356
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_Medieval_200.c18ffc13.webp",
+        "sha256": "c18ffc133b17270c7c6a5e95e7f6c0ff5a04223baebb828ca21757c33c978d22",
+        "bytes": 2528,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_Punk_200",
@@ -5063,7 +6134,14 @@
           17.259270588545665
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_Punk_200.dcc98767.webp",
+        "sha256": "dcc987671fcc2e05b9a5f545221c0ebf5139cc994255a5bd182f5fcf93661684",
+        "bytes": 3774,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_SciFi_200",
@@ -5089,7 +6167,14 @@
           17.259270711697283
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_SciFi_200.46e2b826.webp",
+        "sha256": "46e2b8263ab4cc25ea414676a8827d1f48d2f4a8457ce43fcb9473a4ef807b35",
+        "bytes": 4102,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_Soldier_200",
@@ -5115,7 +6200,14 @@
           17.80679743342642
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_Soldier_200.4e046a88.webp",
+        "sha256": "4e046a889e365808f229d798e83d209199a9c13764a8a080aa6c17ed7a7b686e",
+        "bytes": 3184,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_Suit_200",
@@ -5141,7 +6233,14 @@
           17.04564710193546
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_Suit_200.e5ffe0a1.webp",
+        "sha256": "e5ffe0a1f4605e1125faac2e33cd0e8b36f79fc9b6c9819ff07ebd4f9d2f2ca2",
+        "bytes": 2556,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_Witch_200",
@@ -5167,7 +6266,14 @@
           20.828874713200907
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_Witch_200.98204943.webp",
+        "sha256": "982049439a85a5ec08d60314f84ac5f113112aa466bf4ceac220d0141f188aaf",
+        "bytes": 3488,
+        "width": 192,
+        "height": 192
+      }
     },
     {
       "key": "women/legs/Women_legs_Worker_0",
@@ -5193,7 +6299,14 @@
           17.259275433591267
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "thumbnail": {
+        "url": "/models/glb/v1/thumbs/Women/Women_legs_Worker_0.3d2fc549.webp",
+        "sha256": "3d2fc549aa927facd549938a335b371485f7619608c4b208d8e357f23eee9c0c",
+        "bytes": 3518,
+        "width": 192,
+        "height": 192
+      }
     }
   ]
 }
