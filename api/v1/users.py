@@ -65,11 +65,12 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
         db.query(Skin).filter(Skin.id.in_(requested_ids)).all()
         if requested_ids else []
     )
-    unavailable = [skin.id for skin in chosen_skins if not skin.available]
+    unavailable = [skin for skin in chosen_skins if not skin.available]
     if unavailable:
+        labels = [display_name_for(skin.name, skin.category) for skin in unavailable]
         raise HTTPException(
             status_code=409,
-            detail=f"Article indisponible à l'inscription : {', '.join(unavailable)}",
+            detail=f"Article indisponible à l'inscription : {', '.join(labels)}",
         )
 
     # 3. Création de l'utilisateur avec son avatar JSON
@@ -343,7 +344,7 @@ def buy_item(
     if not skin.available:
         raise HTTPException(
             status_code=409,
-            detail=f"Article indisponible : '{skin.id}'. Il ne peut pas être acheté.",
+            detail=f"Article indisponible : '{display_name_for(skin.name, skin.category)}'. Il ne peut pas être acheté.",
         )
 
     # 2. Vérifier si l'utilisateur possède DÉJÀ cet objet
@@ -398,22 +399,26 @@ def equip_avatar(
         db.query(Skin).filter(Skin.id.in_(requested_ids)).all()
         if requested_ids else []
     )
-    unavailable = [skin.id for skin in known_skins if not skin.available]
+    unavailable = [skin for skin in known_skins if not skin.available]
     if unavailable:
+        labels = [display_name_for(skin.name, skin.category) for skin in unavailable]
         raise HTTPException(
             status_code=409,
-            detail=f"Article indisponible à l'équipement : {', '.join(unavailable)}",
+            detail=f"Article indisponible à l'équipement : {', '.join(labels)}",
         )
 
     # 3. On récupère la liste des IDs des skins que le joueur possède VRAIMENT
     owned_skin_ids = [skin.id for skin in current_user.skins]
 
     # 4. Vérification Anti-Triche !
+    skin_by_id = {skin.id: skin for skin in known_skins}
     for skin_id in requested_skins:
         if skin_id not in owned_skin_ids:
+            skin = skin_by_id.get(skin_id)
+            label = display_name_for(skin.name, skin.category) if skin else "cet article"
             raise HTTPException(
                 status_code=403,
-                detail=f"Triche détectée 🚨 : Tu ne possèdes pas l'objet '{skin_id}'. Va l'acheter dans la boutique d'abord !"
+                detail=f"Triche détectée 🚨 : Tu ne possèdes pas l'objet '{label}'. Va l'acheter dans la boutique d'abord !"
             )
 
     # 4. Si tout est bon, on met à jour le JSON de l'avatar en base de données
