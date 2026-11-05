@@ -207,7 +207,8 @@ def get_full_profile(
                 "category": skin.category,
                 "gender": skin.gender,
                 "price": 0,  # Tout est gratuit au Signup
-                "is_owned": True  # Il peut tout équiper
+                "is_owned": True,  # Il peut tout équiper
+                "source": skin.source,
             }
             for skin in all_skins
         ]
@@ -239,7 +240,8 @@ def get_full_profile(
             "category": skin.category,
             "gender": skin.gender,
             "price": skin.price_caps,
-            "is_owned": skin.id in owned_skin_ids
+            "is_owned": skin.id in owned_skin_ids,
+            "source": skin.source,
         }
         for skin in all_skins
     ]
@@ -299,7 +301,8 @@ def get_user_profile(
             "category": skin.category,
             "gender": skin.gender,
             "price": skin.price_caps,
-            "is_owned": skin.id in owned_skin_ids
+            "is_owned": skin.id in owned_skin_ids,
+            "source": skin.source,
         }
         for skin in all_skins
     ]

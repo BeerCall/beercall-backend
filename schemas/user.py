@@ -77,6 +77,7 @@ class ShopItem(BaseModel):
     gender: str
     price: int
     is_owned: bool
+    source: Optional[str] = None
 
 
 class FullProfileResponse(BaseModel):

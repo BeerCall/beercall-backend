@@ -2,7 +2,6 @@ import os
 import asyncio
 import mimetypes
 from contextlib import asynccontextmanager
-from pathlib import Path
 from dotenv import load_dotenv
 
 # Charger les variables d'environnement du fichier .env
@@ -22,6 +21,8 @@ from api.v1.games import router as games_router
 from db.database import Base
 from db.database import engine, SessionLocal
 from models import gamification
+from services.avatar_catalog import CatalogError, build_catalog
+from services.avatar_catalog_sync import source_file_exists, sync_catalog
 
 from api.v1.health import router as health_router
 
@@ -36,30 +37,17 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("🚀 Démarrage du serveur Beer Call et Seeding des modèles 3D...")
+    logger.info("🚀 Démarrage du serveur Beer Call et synchronisation du catalogue...")
     db = SessionLocal()
-    models_dir = Path("static/models")
 
-    if models_dir.exists():
-        for file in models_dir.glob("*.fbx"):
-            if file.stem in {'Bar', 'Floaty_Island', 'Swimming_pool', 'Animations'}:
-                continue
-            parts = file.stem.split('_')
-            if len(parts) == 4:
-                gender, category, name, price = parts
-                skin_id = file.stem
-
-                existing_skin = db.query(gamification.Skin).filter(gamification.Skin.id == skin_id).first()
-                if not existing_skin:
-                    new_skin = gamification.Skin(
-                        id=skin_id,
-                        name=name,
-                        category=category,
-                        gender=gender,
-                        price_caps=int(price)
-                    )
-                    db.add(new_skin)
+    try:
+        catalog = build_catalog()
+        report = sync_catalog(db, catalog, source_exists=source_file_exists)
         db.commit()
+        logger.info("catalogue synchronisé : %s", report.counts)
+    except CatalogError as error:
+        db.rollback()
+        logger.error("catalogue indisponible au démarrage : %s", error)
 
     BADGES = [
         # --- LES CLASSIQUES (Présence) ---
