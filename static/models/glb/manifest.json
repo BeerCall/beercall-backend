@@ -1,19 +1,19 @@
 {
   "version": 1,
   "pipelineVersion": 1,
-  "generatedAt": "2026-11-05T10:49:55.731Z",
+  "generatedAt": "2026-11-05T16:37:53.850Z",
   "items": [
     {
-      "key": "acc/men/Men_accessory_Alpine_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Alpine_5000.40303f92.glb",
+      "key": "acc/men/Men_accessory_Alpine_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Alpine_px68_py15_pz-30_s0d3_5000.40303f92.glb",
       "sha256": "40851bf57e65f1c098e863bc8f3276899d8d054fe47d23e0e2dac71ae1adb0e3",
       "bytes": 627788,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Alpine_5000.fbx",
-      "sourceId": "Men_accessory_Alpine_5000",
+      "source": "Men_accessory_Alpine_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_Alpine_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "40303f92c478a9f81c8e9e6c4600d76daa0eecd010395665b8ec4129fff92251",
       "sourceBBox": {
         "min": [
@@ -27,19 +27,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_AstonMartin_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_AstonMartin_5000.e7326ef5.glb",
+      "key": "acc/men/Men_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000.e7326ef5.glb",
       "sha256": "1cac77030800b7793a7ffe94ca7c97df37a616549121766400c9c72a07a3b9fe",
       "bytes": 627776,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_AstonMartin_5000.fbx",
-      "sourceId": "Men_accessory_AstonMartin_5000",
+      "source": "Men_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "e7326ef561d0bce63f94cb2e74cb49453dc43e54f0b38fa0fbaf8875ee15345a",
       "sourceBBox": {
         "min": [
@@ -53,19 +67,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Audi_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Audi_5000.66bcadba.glb",
+      "key": "acc/men/Men_accessory_Audi_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Audi_px68_py15_pz-30_s0d3_5000.66bcadba.glb",
       "sha256": "e5b993dea90581db4bc81a8510bb0f90439a3697dcc4becf9be8fe8c25a9cbc7",
       "bytes": 627868,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Audi_5000.fbx",
-      "sourceId": "Men_accessory_Audi_5000",
+      "source": "Men_accessory_Audi_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_Audi_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "66bcadba6a77cfb6b757846439ac1433f2eaa0416046456f566ed452ec5e9b9e",
       "sourceBBox": {
         "min": [
@@ -79,7 +107,21 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
       "key": "acc/men/Men_accessory_Backpack_0",
@@ -108,16 +150,16 @@
       "pipelineVersion": 1
     },
     {
-      "key": "acc/men/Men_accessory_Beer_500",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Beer_500.7ec58a4e.glb",
+      "key": "acc/men/Men_accessory_Beer_bWristR_s100_500",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Beer_bWristR_s100_500.7ec58a4e.glb",
       "sha256": "386bce50ab50bd9f95417f079f1fe011f536b3cae9f7f86f422c26ad7790b4b7",
       "bytes": 23536,
       "drawCalls": 7,
       "triangles": 358,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Beer_500.fbx",
-      "sourceId": "Men_accessory_Beer_500",
+      "source": "Men_accessory_Beer_bWristR_s100_500.fbx",
+      "sourceId": "Men_accessory_Beer_bWristR_s100_500",
       "sourceSha256": "7ec58a4e4cb3cf0aba3498aebc9da0a1ccfe48c94cea039f6d4d5adac107f7ae",
       "sourceBBox": {
         "min": [
@@ -131,19 +173,33 @@
           0.11867179721593857
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 100,
+        "bone": "WristR"
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Bellsprout_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Bellsprout_2000.38c6cb91.glb",
+      "key": "acc/men/Men_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000.38c6cb91.glb",
       "sha256": "c60fadfa9567af104265e4d77f5b86935408e7b5915f1746e711be091590d274",
       "bytes": 34220,
       "drawCalls": 8,
       "triangles": 1015,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Bellsprout_2000.fbx",
-      "sourceId": "Men_accessory_Bellsprout_2000",
+      "source": "Men_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000.fbx",
+      "sourceId": "Men_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000",
       "sourceSha256": "38c6cb91eb3964e67175d3e5519e2f89208b7d8675f658e418cbd85c58663b28",
       "sourceBBox": {
         "min": [
@@ -157,19 +213,33 @@
           118.87480397461252
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          50,
+          -20
+        ],
+        "rotation": [
+          238.311805,
+          169.862196,
+          329.577951
+        ],
+        "scale": 0.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Bulbasaur_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Bulbasaur_2000.8062dafe.glb",
+      "key": "acc/men/Men_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000.8062dafe.glb",
       "sha256": "1225c241a68986c2ac465064dbe814cc9659eba32767d0ab5404b35f3cf73ced",
       "bytes": 27256,
       "drawCalls": 6,
       "triangles": 778,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Bulbasaur_2000.fbx",
-      "sourceId": "Men_accessory_Bulbasaur_2000",
+      "source": "Men_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000.fbx",
+      "sourceId": "Men_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000",
       "sourceSha256": "8062dafea66d4f5b01ef787cd8b0b2454df7e33ee961bf0bd25917c6eea1c98d",
       "sourceBBox": {
         "min": [
@@ -183,19 +253,33 @@
           21.754215514941905
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          10,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          169.862196,
+          30.422049
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Cadillac_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Cadillac_5000.8f6d6f20.glb",
+      "key": "acc/men/Men_accessory_Cadillac_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Cadillac_px68_py15_pz-30_s0d3_5000.8f6d6f20.glb",
       "sha256": "e4bf5a8d7af34a3f14d83efafc707d676dedb10905074d0cc6e5efbf97f36214",
       "bytes": 627752,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Cadillac_5000.fbx",
-      "sourceId": "Men_accessory_Cadillac_5000",
+      "source": "Men_accessory_Cadillac_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_Cadillac_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "8f6d6f206f0c6a6b160017c0fd35d7b075b2c35e0a79e22d363eb3fbf7bbe10d",
       "sourceBBox": {
         "min": [
@@ -209,19 +293,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Charmander_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Charmander_2000.b3306b9f.glb",
+      "key": "acc/men/Men_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000.b3306b9f.glb",
       "sha256": "05ee9ddaa86d84cc769d8907bcad3000c2e96b4267a59b9202585aaedd38019e",
       "bytes": 23820,
       "drawCalls": 6,
       "triangles": 632,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Charmander_2000.fbx",
-      "sourceId": "Men_accessory_Charmander_2000",
+      "source": "Men_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000.fbx",
+      "sourceId": "Men_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000",
       "sourceSha256": "b3306b9f8646890f21916c41de2b0a653fae66ff500216a53601f069ea482a58",
       "sourceBBox": {
         "min": [
@@ -235,19 +333,33 @@
           29.7437328231985
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          25,
+          0
+        ],
+        "rotation": [
+          283.944878,
+          169.862196,
+          0
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Cubone_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Cubone_2000.833c03fa.glb",
+      "key": "acc/men/Men_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000.833c03fa.glb",
       "sha256": "c628b7dbf7e12f96f95fe4e8590bfb9fa02684d70bfd5981e93d482cbbb1ea07",
       "bytes": 33272,
       "drawCalls": 12,
       "triangles": 634,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Cubone_2000.fbx",
-      "sourceId": "Men_accessory_Cubone_2000",
+      "source": "Men_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000.fbx",
+      "sourceId": "Men_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000",
       "sourceSha256": "833c03fae8faa70a5224c11ce45baba495f071efaba1a16dce7c1e80e655a0e4",
       "sourceBBox": {
         "min": [
@@ -261,19 +373,33 @@
           43.12430034343541
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          50,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Eevee_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Eevee_2000.aeb74719.glb",
+      "key": "acc/men/Men_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.aeb74719.glb",
       "sha256": "4b722224bb8e262bbcd206748da68b6f6620b3759feaa6f9d94e0cfd5b33ce15",
       "bytes": 34520,
       "drawCalls": 11,
       "triangles": 774,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Eevee_2000.fbx",
-      "sourceId": "Men_accessory_Eevee_2000",
+      "source": "Men_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Men_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "aeb747199aaa0bc3f1397647adbd5e975202e953d3df3f7f9f6dd58369b9335f",
       "sourceBBox": {
         "min": [
@@ -287,19 +413,33 @@
           41.94957984299238
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Ferrari_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Ferrari_5000.00371a1a.glb",
+      "key": "acc/men/Men_accessory_Ferrari_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Ferrari_px68_py15_pz-30_s0d3_5000.00371a1a.glb",
       "sha256": "1382436096bc1e5168e4c1a7f2ca9d2cf1ffc096f400823aa2d1fca03a98f296",
       "bytes": 627792,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Ferrari_5000.fbx",
-      "sourceId": "Men_accessory_Ferrari_5000",
+      "source": "Men_accessory_Ferrari_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_Ferrari_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "00371a1a6db73291b1f8832f5f4bb820c95b7b86cd0533b7d77d6d5bebc93f57",
       "sourceBBox": {
         "min": [
@@ -313,19 +453,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Glalie_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Glalie_2000.13deafcd.glb",
+      "key": "acc/men/Men_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000.13deafcd.glb",
       "sha256": "cef85de2001f5462cd6e8028f2901e015f92dbfe7f89d917bc193c09a84699fe",
       "bytes": 60844,
       "drawCalls": 2,
       "triangles": 2272,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Glalie_2000.fbx",
-      "sourceId": "Men_accessory_Glalie_2000",
+      "source": "Men_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000.fbx",
+      "sourceId": "Men_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000",
       "sourceSha256": "13deafcd4adca4fde6ef4787c5b7b85b62527708d8966926d010aebbaa9abcd9",
       "sourceBBox": {
         "min": [
@@ -339,19 +493,33 @@
           101.24091348362026
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          100,
+          50,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 0.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Haas_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Haas_5000.d29fae70.glb",
+      "key": "acc/men/Men_accessory_Haas_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Haas_px68_py15_pz-30_s0d3_5000.d29fae70.glb",
       "sha256": "f038d34f79a03dd095dbe16ce74f14845be285650a2a00b95601cc1abb07475b",
       "bytes": 627616,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Haas_5000.fbx",
-      "sourceId": "Men_accessory_Haas_5000",
+      "source": "Men_accessory_Haas_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_Haas_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "d29fae7020b5f8db31b0228685d792f66b091ffba17e2b4a63560133e8cc317e",
       "sourceBBox": {
         "min": [
@@ -365,19 +533,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Haunter_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Haunter_2000.12318740.glb",
+      "key": "acc/men/Men_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000.12318740.glb",
       "sha256": "72edbe26f1f4eb3e13d9719e01cbc6b0357fc6acd4718f26803e6b312afbff6e",
       "bytes": 38108,
       "drawCalls": 18,
       "triangles": 420,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Haunter_2000.fbx",
-      "sourceId": "Men_accessory_Haunter_2000",
+      "source": "Men_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000.fbx",
+      "sourceId": "Men_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000",
       "sourceSha256": "1231874013cc309c6e461b95dd3aba7bf07f4affc5d965361d38185df7a7431a",
       "sourceBBox": {
         "min": [
@@ -391,19 +573,33 @@
           25.479851073343422
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          100,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          30.422049
+        ],
+        "scale": 1.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Jigglypuff_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Jigglypuff_2000.db73284d.glb",
+      "key": "acc/men/Men_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000.db73284d.glb",
       "sha256": "adb4fc84cb78e108c119bcabf2d0e6fa0eec43a816d6bd89d130a9d776fb3f49",
       "bytes": 34592,
       "drawCalls": 11,
       "triangles": 759,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Jigglypuff_2000.fbx",
-      "sourceId": "Men_accessory_Jigglypuff_2000",
+      "source": "Men_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000.fbx",
+      "sourceId": "Men_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000",
       "sourceSha256": "db73284ddb319a8b7211038b45c67bbd0e69755cd77a27b5ead49a79d371d810",
       "sourceBBox": {
         "min": [
@@ -417,19 +613,33 @@
           65.12927958130018
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          100,
+          40,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 0.8,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Kart_3000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Kart_3000.543d1fa1.glb",
+      "key": "acc/men/Men_accessory_Kart_ry50d704566_s2_3000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Kart_ry50d704566_s2_3000.543d1fa1.glb",
       "sha256": "469196d52d1b1d99ec620e2c01080b7efbe363de67778769f3800c01d3f66765",
       "bytes": 62100,
       "drawCalls": 4,
       "triangles": 3828,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Kart_3000.fbx",
-      "sourceId": "Men_accessory_Kart_3000",
+      "source": "Men_accessory_Kart_ry50d704566_s2_3000.fbx",
+      "sourceId": "Men_accessory_Kart_ry50d704566_s2_3000",
       "sourceSha256": "543d1fa1e9a098dd6bea74621b180b12d9dc996b299a6414a2fae65a2f7b97ad",
       "sourceBBox": {
         "min": [
@@ -443,19 +653,33 @@
           20.468900680541992
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          50.704566,
+          0
+        ],
+        "scale": 2,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Magikarp_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Magikarp_2000.0730f2b8.glb",
+      "key": "acc/men/Men_accessory_Magikarp_px75_py30_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Magikarp_px75_py30_rz329d577951_2000.0730f2b8.glb",
       "sha256": "17da1bb9a83632a28cd781c32c9fb37c9fa87cc124a19a141ae2c1967ce8da94",
       "bytes": 23032,
       "drawCalls": 6,
       "triangles": 606,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Magikarp_2000.fbx",
-      "sourceId": "Men_accessory_Magikarp_2000",
+      "source": "Men_accessory_Magikarp_px75_py30_rz329d577951_2000.fbx",
+      "sourceId": "Men_accessory_Magikarp_px75_py30_rz329d577951_2000",
       "sourceSha256": "0730f2b876f09698d85b11bb907ea7d3b46d6f3808f23b70aa1a926fd98b38c8",
       "sourceBBox": {
         "min": [
@@ -469,19 +693,33 @@
           29.74988447211977
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Magnemite_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Magnemite_2000.05896c66.glb",
+      "key": "acc/men/Men_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.05896c66.glb",
       "sha256": "5f6af72a9245dd926b34e12f6843c436f2be0e580c72b34d505166dabb8fae2b",
       "bytes": 28760,
       "drawCalls": 7,
       "triangles": 808,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Magnemite_2000.fbx",
-      "sourceId": "Men_accessory_Magnemite_2000",
+      "source": "Men_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Men_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "05896c6687c0f33bd87440df37a6f0704ae2a394d63617b60462795d755d0c69",
       "sourceBBox": {
         "min": [
@@ -495,19 +733,33 @@
           31.408911580056152
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Marill_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Marill_2000.c7ece8df.glb",
+      "key": "acc/men/Men_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.c7ece8df.glb",
       "sha256": "2b2a7996759f4f42a5f7f7cdf5b71d34684cf7ba5c98624c5b1a1a8eb19e5224",
       "bytes": 137708,
       "drawCalls": 25,
       "triangles": 4741,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Marill_2000.fbx",
-      "sourceId": "Men_accessory_Marill_2000",
+      "source": "Men_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Men_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "c7ece8dfeb0ace3bb06802de21d0df109c15ad7f520c1c3c5b3432643395b535",
       "sourceBBox": {
         "min": [
@@ -521,19 +773,33 @@
           27.53968065998369
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_McLaren_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_McLaren_5000.c84121ab.glb",
+      "key": "acc/men/Men_accessory_McLaren_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_McLaren_px68_py15_pz-30_s0d3_5000.c84121ab.glb",
       "sha256": "3bb76a41b0f23c55e7d339a4afc6c27a45a3bd02c1858a365f8de248b89b0339",
       "bytes": 627828,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_McLaren_5000.fbx",
-      "sourceId": "Men_accessory_McLaren_5000",
+      "source": "Men_accessory_McLaren_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_McLaren_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "c84121abaa89e19a67f650cd20d30eacaf51de08cf2e99a1d435110b6bdb742d",
       "sourceBBox": {
         "min": [
@@ -547,19 +813,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Mercedes_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Mercedes_5000.fee53cfa.glb",
+      "key": "acc/men/Men_accessory_Mercedes_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Mercedes_px68_py15_pz-30_s0d3_5000.fee53cfa.glb",
       "sha256": "97fb1c6a405bc892b82f70140e3c2b23a5bae21cd0d806f3caaada8a734a2054",
       "bytes": 627760,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Mercedes_5000.fbx",
-      "sourceId": "Men_accessory_Mercedes_5000",
+      "source": "Men_accessory_Mercedes_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_Mercedes_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "fee53cfad9a62fa305186910556a2f506254724f06f83030ede304ccc10ac1eb",
       "sourceBBox": {
         "min": [
@@ -573,19 +853,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Mew_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Mew_2000.c75e1472.glb",
+      "key": "acc/men/Men_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000.c75e1472.glb",
       "sha256": "4f08b63f7d2ed4eb2c7aa2a37067baadc4dcb05601cfed4d35c77fdfd269c4cd",
       "bytes": 21104,
       "drawCalls": 5,
       "triangles": 572,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Mew_2000.fbx",
-      "sourceId": "Men_accessory_Mew_2000",
+      "source": "Men_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000.fbx",
+      "sourceId": "Men_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000",
       "sourceSha256": "c75e1472c7f93de198dd5cdfae45dff0d2936086610d54ca970e79b98573361e",
       "sourceBBox": {
         "min": [
@@ -599,19 +893,33 @@
           38.47561031954935
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          80,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 2,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Oddish_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Oddish_2000.d4e300b3.glb",
+      "key": "acc/men/Men_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000.d4e300b3.glb",
       "sha256": "ba2c48152dfbbd312e25057de10505a5272d92d2a343a2e114a8402c7edb5ca8",
       "bytes": 33612,
       "drawCalls": 11,
       "triangles": 730,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Oddish_2000.fbx",
-      "sourceId": "Men_accessory_Oddish_2000",
+      "source": "Men_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Men_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "d4e300b3e7d60d7d342d5a123fcf17da7d322e7f78381487102cfc0792cb0ae2",
       "sourceBBox": {
         "min": [
@@ -625,19 +933,33 @@
           50.11873553869275
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          50,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Pikachu_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Pikachu_2000.671a4417.glb",
+      "key": "acc/men/Men_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000.671a4417.glb",
       "sha256": "83964df375c78c60e623b5883f7f334f2e21ef8bb43f2ed388693529ffed35ff",
       "bytes": 28772,
       "drawCalls": 5,
       "triangles": 714,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Pikachu_2000.fbx",
-      "sourceId": "Men_accessory_Pikachu_2000",
+      "source": "Men_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000.fbx",
+      "sourceId": "Men_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000",
       "sourceSha256": "671a4417ef00e9987a7e5c96fd9abca28bf6e0bb2bd01c09574a814f896463bc",
       "sourceBBox": {
         "min": [
@@ -651,7 +973,21 @@
           0.9869155287742615
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          0,
+          -60
+        ],
+        "rotation": [
+          0,
+          169.862196,
+          0
+        ],
+        "scale": 50,
+        "bone": null
+      }
     },
     {
       "key": "acc/men/Men_accessory_Pistol_500",
@@ -680,16 +1016,16 @@
       "pipelineVersion": 1
     },
     {
-      "key": "acc/men/Men_accessory_Poliwag_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Poliwag_2000.91e65f38.glb",
+      "key": "acc/men/Men_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.91e65f38.glb",
       "sha256": "d9061c7e87ff31ef224fb6d60b4eaf2652f377b5276ca88acf329c5fd3d71f3a",
       "bytes": 37704,
       "drawCalls": 13,
       "triangles": 746,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Poliwag_2000.fbx",
-      "sourceId": "Men_accessory_Poliwag_2000",
+      "source": "Men_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Men_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "91e65f3872129d41be91282b9838d7fb851c3b298fc502c7e2d9bf320075c8ec",
       "sourceBBox": {
         "min": [
@@ -703,19 +1039,33 @@
           21.26518377947683
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Porygon_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Porygon_2000.ca364434.glb",
+      "key": "acc/men/Men_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.ca364434.glb",
       "sha256": "44b7406b4ecae67870274933b9067a75c1a5e58e7dda178b15f04b1893babf06",
       "bytes": 19360,
       "drawCalls": 9,
       "triangles": 216,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Porygon_2000.fbx",
-      "sourceId": "Men_accessory_Porygon_2000",
+      "source": "Men_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Men_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "ca364434a18af7cb7a1874d8010534f1122f2a3b89b6e351158e309c99318f0a",
       "sourceBBox": {
         "min": [
@@ -729,19 +1079,33 @@
           39.31823071639785
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_RacingBulls_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_RacingBulls_5000.f2946881.glb",
+      "key": "acc/men/Men_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000.f2946881.glb",
       "sha256": "c5a65776f71f8dd679da449e0ef4bcd20f35ae3b8abc4f7d4b1576b74a60b01b",
       "bytes": 627644,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_RacingBulls_5000.fbx",
-      "sourceId": "Men_accessory_RacingBulls_5000",
+      "source": "Men_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "f2946881c7b0ce86ee946351857fc82188c96362526a0234fb698fae5e7f3304",
       "sourceBBox": {
         "min": [
@@ -755,19 +1119,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_RedBull_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_RedBull_5000.fcfa094a.glb",
+      "key": "acc/men/Men_accessory_RedBull_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_RedBull_px68_py15_pz-30_s0d3_5000.fcfa094a.glb",
       "sha256": "81c132e9074e75536926558efd9a8919241a3783cf35055f9246bed6c884c1ca",
       "bytes": 627868,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_RedBull_5000.fbx",
-      "sourceId": "Men_accessory_RedBull_5000",
+      "source": "Men_accessory_RedBull_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_RedBull_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "fcfa094a16b9a91ef22f149784a5b1d51d7afa238401c74aaed4e1de35d396aa",
       "sourceBBox": {
         "min": [
@@ -781,19 +1159,33 @@
           231.50290718891452
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Snorlax_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Snorlax_2000.f4e716b4.glb",
+      "key": "acc/men/Men_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000.f4e716b4.glb",
       "sha256": "b66bef7a33d9b8af6c335b1eee5d093067373af1aaf68f34f02d16a0851dacd4",
       "bytes": 44104,
       "drawCalls": 17,
       "triangles": 820,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Snorlax_2000.fbx",
-      "sourceId": "Men_accessory_Snorlax_2000",
+      "source": "Men_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000.fbx",
+      "sourceId": "Men_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000",
       "sourceSha256": "f4e716b402e95d793916c152e05e7fd2aa2e24449311af86686ec6183bb5b24f",
       "sourceBBox": {
         "min": [
@@ -807,19 +1199,33 @@
           28.336340728876035
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          150,
+          60,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          0
+        ],
+        "scale": 2.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Soccer_500",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Soccer_500.5cb9bc12.glb",
+      "key": "acc/men/Men_accessory_Soccer_px50_s0d5_500",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Soccer_px50_s0d5_500.5cb9bc12.glb",
       "sha256": "f03fdf127d9ee8b1c56b752a05839eae8e7cb973e9fb561be3930d2882648c9a",
       "bytes": 284848,
       "drawCalls": 2,
       "triangles": 13200,
       "joints": 0,
       "textures": 2,
-      "source": "Men_accessory_Soccer_500.fbx",
-      "sourceId": "Men_accessory_Soccer_500",
+      "source": "Men_accessory_Soccer_px50_s0d5_500.fbx",
+      "sourceId": "Men_accessory_Soccer_px50_s0d5_500",
       "sourceSha256": "5cb9bc125a68627203282909abf225ebf463fb38b6d9568c99465acfe9867f2c",
       "sourceBBox": {
         "min": [
@@ -833,19 +1239,33 @@
           73.27680520240595
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          50,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Squirtle_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Squirtle_2000.ebed7433.glb",
+      "key": "acc/men/Men_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000.ebed7433.glb",
       "sha256": "5a889d7acbc605aaf506c0eac52b82fd1d2cba003f4021a5033696c558da77bc",
       "bytes": 26992,
       "drawCalls": 7,
       "triangles": 694,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Squirtle_2000.fbx",
-      "sourceId": "Men_accessory_Squirtle_2000",
+      "source": "Men_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000.fbx",
+      "sourceId": "Men_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000",
       "sourceSha256": "ebed74337853e7bf9742c51e1f13ea8f748da101055af7c1b4d00ce91852b031",
       "sourceBBox": {
         "min": [
@@ -859,19 +1279,33 @@
           18.77954263924651
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 2,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Sudowoodo_600",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Sudowoodo_600.010bc89c.glb",
+      "key": "acc/men/Men_accessory_Sudowoodo_px75_py8_s0d21_600",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Sudowoodo_px75_py8_s0d21_600.010bc89c.glb",
       "sha256": "e1eb00d91d0ea202d8d70860bf37275eb94f92b2b4b1a0424ff89319ca44c076",
       "bytes": 115768,
       "drawCalls": 30,
       "triangles": 3306,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Sudowoodo_600.fbx",
-      "sourceId": "Men_accessory_Sudowoodo_600",
+      "source": "Men_accessory_Sudowoodo_px75_py8_s0d21_600.fbx",
+      "sourceId": "Men_accessory_Sudowoodo_px75_py8_s0d21_600",
       "sourceSha256": "010bc89ce062e314181c76a253445e06f817355ce81219911974741c23a09a8a",
       "sourceBBox": {
         "min": [
@@ -885,7 +1319,21 @@
           160.2872039252766
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          8,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.21,
+        "bone": null
+      }
     },
     {
       "key": "acc/men/Men_accessory_Sword_500",
@@ -914,16 +1362,16 @@
       "pipelineVersion": 1
     },
     {
-      "key": "acc/men/Men_accessory_Victreebel_2000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Victreebel_2000.60efa5a7.glb",
+      "key": "acc/men/Men_accessory_Victreebel_px50_py30_pz20_s0d1_2000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Victreebel_px50_py30_pz20_s0d1_2000.60efa5a7.glb",
       "sha256": "8dff9e58441ed09f19a72c05f6bb765e2b22b9dfd60aac8ee88c9d084671ce99",
       "bytes": 214508,
       "drawCalls": 7,
       "triangles": 9307,
       "joints": 0,
       "textures": 4,
-      "source": "Men_accessory_Victreebel_2000.fbx",
-      "sourceId": "Men_accessory_Victreebel_2000",
+      "source": "Men_accessory_Victreebel_px50_py30_pz20_s0d1_2000.fbx",
+      "sourceId": "Men_accessory_Victreebel_px50_py30_pz20_s0d1_2000",
       "sourceSha256": "60efa5a7b40b25338dfc7159bd44c675f4cd9e51905887684c5da0aecae66080",
       "sourceBBox": {
         "min": [
@@ -937,19 +1385,33 @@
           101.89871646737336
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          50,
+          30,
+          20
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/men/Men_accessory_Williams_5000",
-      "url": "/models/glb/v1/accessories/Men/Men_accessory_Williams_5000.b8a06829.glb",
+      "key": "acc/men/Men_accessory_Williams_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Men/Men_accessory_Williams_px68_py15_pz-30_s0d3_5000.b8a06829.glb",
       "sha256": "a0ff4f76e3c61a9edff27c3cc373aa2e4ddd2bf7038324d6f8240642ee231a47",
       "bytes": 627708,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Men_accessory_Williams_5000.fbx",
-      "sourceId": "Men_accessory_Williams_5000",
+      "source": "Men_accessory_Williams_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Men_accessory_Williams_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "b8a068298b524ef0dc0120b1682871fb2cbbcb1897ad429a5cf492654f3c0b92",
       "sourceBBox": {
         "min": [
@@ -963,19 +1425,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Alpine_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Alpine_5000.40303f92.glb",
+      "key": "acc/women/Women_accessory_Alpine_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Alpine_px68_py15_pz-30_s0d3_5000.40303f92.glb",
       "sha256": "40851bf57e65f1c098e863bc8f3276899d8d054fe47d23e0e2dac71ae1adb0e3",
       "bytes": 627788,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Alpine_5000.fbx",
-      "sourceId": "Women_accessory_Alpine_5000",
+      "source": "Women_accessory_Alpine_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_Alpine_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "40303f92c478a9f81c8e9e6c4600d76daa0eecd010395665b8ec4129fff92251",
       "sourceBBox": {
         "min": [
@@ -989,19 +1465,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_AstonMartin_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_AstonMartin_5000.e7326ef5.glb",
+      "key": "acc/women/Women_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000.e7326ef5.glb",
       "sha256": "1cac77030800b7793a7ffe94ca7c97df37a616549121766400c9c72a07a3b9fe",
       "bytes": 627776,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_AstonMartin_5000.fbx",
-      "sourceId": "Women_accessory_AstonMartin_5000",
+      "source": "Women_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_AstonMartin_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "e7326ef561d0bce63f94cb2e74cb49453dc43e54f0b38fa0fbaf8875ee15345a",
       "sourceBBox": {
         "min": [
@@ -1015,19 +1505,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Audi_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Audi_5000.66bcadba.glb",
+      "key": "acc/women/Women_accessory_Audi_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Audi_px68_py15_pz-30_s0d3_5000.66bcadba.glb",
       "sha256": "e5b993dea90581db4bc81a8510bb0f90439a3697dcc4becf9be8fe8c25a9cbc7",
       "bytes": 627868,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Audi_5000.fbx",
-      "sourceId": "Women_accessory_Audi_5000",
+      "source": "Women_accessory_Audi_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_Audi_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "66bcadba6a77cfb6b757846439ac1433f2eaa0416046456f566ed452ec5e9b9e",
       "sourceBBox": {
         "min": [
@@ -1041,7 +1545,21 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
       "key": "acc/women/Women_accessory_Backpack_0",
@@ -1070,16 +1588,16 @@
       "pipelineVersion": 1
     },
     {
-      "key": "acc/women/Women_accessory_Beer_500",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Beer_500.7ec58a4e.glb",
+      "key": "acc/women/Women_accessory_Beer_bWristR_s100_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Beer_bWristR_s100_500.7ec58a4e.glb",
       "sha256": "386bce50ab50bd9f95417f079f1fe011f536b3cae9f7f86f422c26ad7790b4b7",
       "bytes": 23536,
       "drawCalls": 7,
       "triangles": 358,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Beer_500.fbx",
-      "sourceId": "Women_accessory_Beer_500",
+      "source": "Women_accessory_Beer_bWristR_s100_500.fbx",
+      "sourceId": "Women_accessory_Beer_bWristR_s100_500",
       "sourceSha256": "7ec58a4e4cb3cf0aba3498aebc9da0a1ccfe48c94cea039f6d4d5adac107f7ae",
       "sourceBBox": {
         "min": [
@@ -1093,19 +1611,33 @@
           0.11867179721593857
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 100,
+        "bone": "WristR"
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Bellsprout_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Bellsprout_2000.38c6cb91.glb",
+      "key": "acc/women/Women_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000.38c6cb91.glb",
       "sha256": "c60fadfa9567af104265e4d77f5b86935408e7b5915f1746e711be091590d274",
       "bytes": 34220,
       "drawCalls": 8,
       "triangles": 1015,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Bellsprout_2000.fbx",
-      "sourceId": "Women_accessory_Bellsprout_2000",
+      "source": "Women_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000.fbx",
+      "sourceId": "Women_accessory_Bellsprout_px75_py50_pz-20_rx238d311805_ry169d862196_rz329d577951_s0d5_2000",
       "sourceSha256": "38c6cb91eb3964e67175d3e5519e2f89208b7d8675f658e418cbd85c58663b28",
       "sourceBBox": {
         "min": [
@@ -1119,19 +1651,33 @@
           118.87480397461252
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          50,
+          -20
+        ],
+        "rotation": [
+          238.311805,
+          169.862196,
+          329.577951
+        ],
+        "scale": 0.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Bulbasaur_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Bulbasaur_2000.8062dafe.glb",
+      "key": "acc/women/Women_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000.8062dafe.glb",
       "sha256": "1225c241a68986c2ac465064dbe814cc9659eba32767d0ab5404b35f3cf73ced",
       "bytes": 27256,
       "drawCalls": 6,
       "triangles": 778,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Bulbasaur_2000.fbx",
-      "sourceId": "Women_accessory_Bulbasaur_2000",
+      "source": "Women_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000.fbx",
+      "sourceId": "Women_accessory_Bulbasaur_px75_py10_rx268d733854_ry169d862196_rz30d422049_2000",
       "sourceSha256": "8062dafea66d4f5b01ef787cd8b0b2454df7e33ee961bf0bd25917c6eea1c98d",
       "sourceBBox": {
         "min": [
@@ -1145,19 +1691,33 @@
           21.754215514941905
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          10,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          169.862196,
+          30.422049
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Cadillac_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Cadillac_5000.eaeddf74.glb",
+      "key": "acc/women/Women_accessory_Cadillac_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Cadillac_px68_py15_pz-30_s0d3_5000.eaeddf74.glb",
       "sha256": "e4bf5a8d7af34a3f14d83efafc707d676dedb10905074d0cc6e5efbf97f36214",
       "bytes": 627752,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Cadillac_5000.fbx",
-      "sourceId": "Women_accessory_Cadillac_5000",
+      "source": "Women_accessory_Cadillac_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_Cadillac_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "eaeddf74c9c84f42a7cf9a5e22beb84b3aa0d60867600b8a3fb831afef75e515",
       "sourceBBox": {
         "min": [
@@ -1171,19 +1731,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Charmander_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Charmander_2000.b3306b9f.glb",
+      "key": "acc/women/Women_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000.b3306b9f.glb",
       "sha256": "05ee9ddaa86d84cc769d8907bcad3000c2e96b4267a59b9202585aaedd38019e",
       "bytes": 23820,
       "drawCalls": 6,
       "triangles": 632,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Charmander_2000.fbx",
-      "sourceId": "Women_accessory_Charmander_2000",
+      "source": "Women_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000.fbx",
+      "sourceId": "Women_accessory_Charmander_px75_py25_rx283d944878_ry169d862196_2000",
       "sourceSha256": "b3306b9f8646890f21916c41de2b0a653fae66ff500216a53601f069ea482a58",
       "sourceBBox": {
         "min": [
@@ -1197,19 +1771,33 @@
           29.7437328231985
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          25,
+          0
+        ],
+        "rotation": [
+          283.944878,
+          169.862196,
+          0
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Cubone_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Cubone_2000.833c03fa.glb",
+      "key": "acc/women/Women_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000.833c03fa.glb",
       "sha256": "c628b7dbf7e12f96f95fe4e8590bfb9fa02684d70bfd5981e93d482cbbb1ea07",
       "bytes": 33272,
       "drawCalls": 12,
       "triangles": 634,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Cubone_2000.fbx",
-      "sourceId": "Women_accessory_Cubone_2000",
+      "source": "Women_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000.fbx",
+      "sourceId": "Women_accessory_Cubone_px75_py50_rx268d733854_ry177d467708_rz329d577951_s1d5_2000",
       "sourceSha256": "833c03fae8faa70a5224c11ce45baba495f071efaba1a16dce7c1e80e655a0e4",
       "sourceBBox": {
         "min": [
@@ -1223,19 +1811,33 @@
           43.12430034343541
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          50,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Eevee_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Eevee_2000.aeb74719.glb",
+      "key": "acc/women/Women_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.aeb74719.glb",
       "sha256": "4b722224bb8e262bbcd206748da68b6f6620b3759feaa6f9d94e0cfd5b33ce15",
       "bytes": 34520,
       "drawCalls": 11,
       "triangles": 774,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Eevee_2000.fbx",
-      "sourceId": "Women_accessory_Eevee_2000",
+      "source": "Women_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Women_accessory_Eevee_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "aeb747199aaa0bc3f1397647adbd5e975202e953d3df3f7f9f6dd58369b9335f",
       "sourceBBox": {
         "min": [
@@ -1249,19 +1851,33 @@
           41.94957984299238
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Ferrari_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Ferrari_5000.00371a1a.glb",
+      "key": "acc/women/Women_accessory_Ferrari_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Ferrari_px68_py15_pz-30_s0d3_5000.00371a1a.glb",
       "sha256": "1382436096bc1e5168e4c1a7f2ca9d2cf1ffc096f400823aa2d1fca03a98f296",
       "bytes": 627792,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Ferrari_5000.fbx",
-      "sourceId": "Women_accessory_Ferrari_5000",
+      "source": "Women_accessory_Ferrari_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_Ferrari_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "00371a1a6db73291b1f8832f5f4bb820c95b7b86cd0533b7d77d6d5bebc93f57",
       "sourceBBox": {
         "min": [
@@ -1275,19 +1891,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Glalie_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Glalie_2000.13deafcd.glb",
+      "key": "acc/women/Women_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000.13deafcd.glb",
       "sha256": "cef85de2001f5462cd6e8028f2901e015f92dbfe7f89d917bc193c09a84699fe",
       "bytes": 60844,
       "drawCalls": 2,
       "triangles": 2272,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Glalie_2000.fbx",
-      "sourceId": "Women_accessory_Glalie_2000",
+      "source": "Women_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000.fbx",
+      "sourceId": "Women_accessory_Glalie_px100_py50_rx268d733854_ry177d467708_rz329d577951_s0d5_2000",
       "sourceSha256": "13deafcd4adca4fde6ef4787c5b7b85b62527708d8966926d010aebbaa9abcd9",
       "sourceBBox": {
         "min": [
@@ -1301,19 +1931,33 @@
           101.24091348362026
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          100,
+          50,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 0.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Gun_500",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Gun_500.b36721f3.glb",
+      "key": "acc/women/Women_accessory_Gun_py150_pz-133_s100_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Gun_py150_pz-133_s100_500.b36721f3.glb",
       "sha256": "0fe25060561cdd951fd2312b6c14a767129eb0e09be680f7cf7c7c0265a3f23e",
       "bytes": 80168,
       "drawCalls": 3,
       "triangles": 1040,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Gun_500.fbx",
-      "sourceId": "Women_accessory_Gun_500",
+      "source": "Women_accessory_Gun_py150_pz-133_s100_500.fbx",
+      "sourceId": "Women_accessory_Gun_py150_pz-133_s100_500",
       "sourceSha256": "b36721f38e3b53bae1a376bb617f87e73ec4d2f2450bedc08e4e3d99d65349e7",
       "sourceBBox": {
         "min": [
@@ -1327,19 +1971,33 @@
           22.32235487483743
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          0,
+          150,
+          -133
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 100,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Haas_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Haas_5000.d29fae70.glb",
+      "key": "acc/women/Women_accessory_Haas_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Haas_px68_py15_pz-30_s0d3_5000.d29fae70.glb",
       "sha256": "f038d34f79a03dd095dbe16ce74f14845be285650a2a00b95601cc1abb07475b",
       "bytes": 627616,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Haas_5000.fbx",
-      "sourceId": "Women_accessory_Haas_5000",
+      "source": "Women_accessory_Haas_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_Haas_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "d29fae7020b5f8db31b0228685d792f66b091ffba17e2b4a63560133e8cc317e",
       "sourceBBox": {
         "min": [
@@ -1353,19 +2011,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Haunter_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Haunter_2000.12318740.glb",
+      "key": "acc/women/Women_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000.12318740.glb",
       "sha256": "72edbe26f1f4eb3e13d9719e01cbc6b0357fc6acd4718f26803e6b312afbff6e",
       "bytes": 38108,
       "drawCalls": 18,
       "triangles": 420,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Haunter_2000.fbx",
-      "sourceId": "Women_accessory_Haunter_2000",
+      "source": "Women_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000.fbx",
+      "sourceId": "Women_accessory_Haunter_px100_py30_rx268d733854_ry177d467708_rz30d422049_s1d5_2000",
       "sourceSha256": "1231874013cc309c6e461b95dd3aba7bf07f4affc5d965361d38185df7a7431a",
       "sourceBBox": {
         "min": [
@@ -1379,19 +2051,33 @@
           25.479851073343422
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          100,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          30.422049
+        ],
+        "scale": 1.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Jigglypuff_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Jigglypuff_2000.db73284d.glb",
+      "key": "acc/women/Women_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000.db73284d.glb",
       "sha256": "adb4fc84cb78e108c119bcabf2d0e6fa0eec43a816d6bd89d130a9d776fb3f49",
       "bytes": 34592,
       "drawCalls": 11,
       "triangles": 759,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Jigglypuff_2000.fbx",
-      "sourceId": "Women_accessory_Jigglypuff_2000",
+      "source": "Women_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000.fbx",
+      "sourceId": "Women_accessory_Jigglypuff_px100_py40_rx268d733854_ry177d467708_rz329d577951_s0d8_2000",
       "sourceSha256": "db73284ddb319a8b7211038b45c67bbd0e69755cd77a27b5ead49a79d371d810",
       "sourceBBox": {
         "min": [
@@ -1405,19 +2091,33 @@
           65.12927958130018
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          100,
+          40,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 0.8,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Kart_3000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Kart_3000.543d1fa1.glb",
+      "key": "acc/women/Women_accessory_Kart_ry50d704566_s2_3000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Kart_ry50d704566_s2_3000.543d1fa1.glb",
       "sha256": "469196d52d1b1d99ec620e2c01080b7efbe363de67778769f3800c01d3f66765",
       "bytes": 62100,
       "drawCalls": 4,
       "triangles": 3828,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Kart_3000.fbx",
-      "sourceId": "Women_accessory_Kart_3000",
+      "source": "Women_accessory_Kart_ry50d704566_s2_3000.fbx",
+      "sourceId": "Women_accessory_Kart_ry50d704566_s2_3000",
       "sourceSha256": "543d1fa1e9a098dd6bea74621b180b12d9dc996b299a6414a2fae65a2f7b97ad",
       "sourceBBox": {
         "min": [
@@ -1431,19 +2131,33 @@
           20.468900680541992
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          50.704566,
+          0
+        ],
+        "scale": 2,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Magikarp_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Magikarp_2000.0730f2b8.glb",
+      "key": "acc/women/Women_accessory_Magikarp_px75_py30_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Magikarp_px75_py30_rz329d577951_2000.0730f2b8.glb",
       "sha256": "17da1bb9a83632a28cd781c32c9fb37c9fa87cc124a19a141ae2c1967ce8da94",
       "bytes": 23032,
       "drawCalls": 6,
       "triangles": 606,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Magikarp_2000.fbx",
-      "sourceId": "Women_accessory_Magikarp_2000",
+      "source": "Women_accessory_Magikarp_px75_py30_rz329d577951_2000.fbx",
+      "sourceId": "Women_accessory_Magikarp_px75_py30_rz329d577951_2000",
       "sourceSha256": "0730f2b876f09698d85b11bb907ea7d3b46d6f3808f23b70aa1a926fd98b38c8",
       "sourceBBox": {
         "min": [
@@ -1457,19 +2171,33 @@
           29.74988447211977
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Magnemite_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Magnemite_2000.05896c66.glb",
+      "key": "acc/women/Women_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.05896c66.glb",
       "sha256": "5f6af72a9245dd926b34e12f6843c436f2be0e580c72b34d505166dabb8fae2b",
       "bytes": 28760,
       "drawCalls": 7,
       "triangles": 808,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Magnemite_2000.fbx",
-      "sourceId": "Women_accessory_Magnemite_2000",
+      "source": "Women_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Women_accessory_Magnemite_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "05896c6687c0f33bd87440df37a6f0704ae2a394d63617b60462795d755d0c69",
       "sourceBBox": {
         "min": [
@@ -1483,19 +2211,33 @@
           31.408911580056152
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Marill_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Marill_2000.c7ece8df.glb",
+      "key": "acc/women/Women_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.c7ece8df.glb",
       "sha256": "2b2a7996759f4f42a5f7f7cdf5b71d34684cf7ba5c98624c5b1a1a8eb19e5224",
       "bytes": 137708,
       "drawCalls": 25,
       "triangles": 4741,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Marill_2000.fbx",
-      "sourceId": "Women_accessory_Marill_2000",
+      "source": "Women_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Women_accessory_Marill_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "c7ece8dfeb0ace3bb06802de21d0df109c15ad7f520c1c3c5b3432643395b535",
       "sourceBBox": {
         "min": [
@@ -1509,19 +2251,33 @@
           27.53968065998369
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_McLaren_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_McLaren_5000.c84121ab.glb",
+      "key": "acc/women/Women_accessory_McLaren_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_McLaren_px68_py15_pz-30_s0d3_5000.c84121ab.glb",
       "sha256": "3bb76a41b0f23c55e7d339a4afc6c27a45a3bd02c1858a365f8de248b89b0339",
       "bytes": 627828,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_McLaren_5000.fbx",
-      "sourceId": "Women_accessory_McLaren_5000",
+      "source": "Women_accessory_McLaren_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_McLaren_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "c84121abaa89e19a67f650cd20d30eacaf51de08cf2e99a1d435110b6bdb742d",
       "sourceBBox": {
         "min": [
@@ -1535,19 +2291,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Mercedes_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Mercedes_5000.fee53cfa.glb",
+      "key": "acc/women/Women_accessory_Mercedes_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Mercedes_px68_py15_pz-30_s0d3_5000.fee53cfa.glb",
       "sha256": "97fb1c6a405bc892b82f70140e3c2b23a5bae21cd0d806f3caaada8a734a2054",
       "bytes": 627760,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Mercedes_5000.fbx",
-      "sourceId": "Women_accessory_Mercedes_5000",
+      "source": "Women_accessory_Mercedes_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_Mercedes_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "fee53cfad9a62fa305186910556a2f506254724f06f83030ede304ccc10ac1eb",
       "sourceBBox": {
         "min": [
@@ -1561,19 +2331,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Mew_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Mew_2000.c75e1472.glb",
+      "key": "acc/women/Women_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000.c75e1472.glb",
       "sha256": "4f08b63f7d2ed4eb2c7aa2a37067baadc4dcb05601cfed4d35c77fdfd269c4cd",
       "bytes": 21104,
       "drawCalls": 5,
       "triangles": 572,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Mew_2000.fbx",
-      "sourceId": "Women_accessory_Mew_2000",
+      "source": "Women_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000.fbx",
+      "sourceId": "Women_accessory_Mew_px75_py80_rx268d733854_ry177d467708_rz329d577951_s2_2000",
       "sourceSha256": "c75e1472c7f93de198dd5cdfae45dff0d2936086610d54ca970e79b98573361e",
       "sourceBBox": {
         "min": [
@@ -1587,19 +2371,33 @@
           38.47561031954935
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          80,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 2,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Oddish_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Oddish_2000.d4e300b3.glb",
+      "key": "acc/women/Women_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000.d4e300b3.glb",
       "sha256": "ba2c48152dfbbd312e25057de10505a5272d92d2a343a2e114a8402c7edb5ca8",
       "bytes": 33612,
       "drawCalls": 11,
       "triangles": 730,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Oddish_2000.fbx",
-      "sourceId": "Women_accessory_Oddish_2000",
+      "source": "Women_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Women_accessory_Oddish_px75_py50_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "d4e300b3e7d60d7d342d5a123fcf17da7d322e7f78381487102cfc0792cb0ae2",
       "sourceBBox": {
         "min": [
@@ -1613,19 +2411,33 @@
           50.11873553869275
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          50,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Pikachu_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Pikachu_2000.671a4417.glb",
+      "key": "acc/women/Women_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000.671a4417.glb",
       "sha256": "83964df375c78c60e623b5883f7f334f2e21ef8bb43f2ed388693529ffed35ff",
       "bytes": 28772,
       "drawCalls": 5,
       "triangles": 714,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Pikachu_2000.fbx",
-      "sourceId": "Women_accessory_Pikachu_2000",
+      "source": "Women_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000.fbx",
+      "sourceId": "Women_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000",
       "sourceSha256": "671a4417ef00e9987a7e5c96fd9abca28bf6e0bb2bd01c09574a814f896463bc",
       "sourceBBox": {
         "min": [
@@ -1639,19 +2451,33 @@
           0.9869155287742615
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          0,
+          -60
+        ],
+        "rotation": [
+          0,
+          169.862196,
+          0
+        ],
+        "scale": 50,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Poliwag_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Poliwag_2000.91e65f38.glb",
+      "key": "acc/women/Women_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.91e65f38.glb",
       "sha256": "d9061c7e87ff31ef224fb6d60b4eaf2652f377b5276ca88acf329c5fd3d71f3a",
       "bytes": 37704,
       "drawCalls": 13,
       "triangles": 746,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Poliwag_2000.fbx",
-      "sourceId": "Women_accessory_Poliwag_2000",
+      "source": "Women_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Women_accessory_Poliwag_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "91e65f3872129d41be91282b9838d7fb851c3b298fc502c7e2d9bf320075c8ec",
       "sourceBBox": {
         "min": [
@@ -1665,19 +2491,33 @@
           21.26518377947683
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Porygon_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Porygon_2000.ca364434.glb",
+      "key": "acc/women/Women_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.ca364434.glb",
       "sha256": "44b7406b4ecae67870274933b9067a75c1a5e58e7dda178b15f04b1893babf06",
       "bytes": 19360,
       "drawCalls": 9,
       "triangles": 216,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Porygon_2000.fbx",
-      "sourceId": "Women_accessory_Porygon_2000",
+      "source": "Women_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000.fbx",
+      "sourceId": "Women_accessory_Porygon_px75_py30_rx268d733854_ry177d467708_rz329d577951_2000",
       "sourceSha256": "ca364434a18af7cb7a1874d8010534f1122f2a3b89b6e351158e309c99318f0a",
       "sourceBBox": {
         "min": [
@@ -1691,19 +2531,33 @@
           39.31823071639785
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_RacingBulls_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_RacingBulls_5000.f2946881.glb",
+      "key": "acc/women/Women_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000.f2946881.glb",
       "sha256": "c5a65776f71f8dd679da449e0ef4bcd20f35ae3b8abc4f7d4b1576b74a60b01b",
       "bytes": 627644,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_RacingBulls_5000.fbx",
-      "sourceId": "Women_accessory_RacingBulls_5000",
+      "source": "Women_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_RacingBulls_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "f2946881c7b0ce86ee946351857fc82188c96362526a0234fb698fae5e7f3304",
       "sourceBBox": {
         "min": [
@@ -1717,19 +2571,33 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_RedBull_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_RedBull_5000.fcfa094a.glb",
+      "key": "acc/women/Women_accessory_RedBull_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_RedBull_px68_py15_pz-30_s0d3_5000.fcfa094a.glb",
       "sha256": "81c132e9074e75536926558efd9a8919241a3783cf35055f9246bed6c884c1ca",
       "bytes": 627868,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_RedBull_5000.fbx",
-      "sourceId": "Women_accessory_RedBull_5000",
+      "source": "Women_accessory_RedBull_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_RedBull_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "fcfa094a16b9a91ef22f149784a5b1d51d7afa238401c74aaed4e1de35d396aa",
       "sourceBBox": {
         "min": [
@@ -1743,19 +2611,33 @@
           231.50290718891452
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Snorlax_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Snorlax_2000.f4e716b4.glb",
+      "key": "acc/women/Women_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000.f4e716b4.glb",
       "sha256": "b66bef7a33d9b8af6c335b1eee5d093067373af1aaf68f34f02d16a0851dacd4",
       "bytes": 44104,
       "drawCalls": 17,
       "triangles": 820,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Snorlax_2000.fbx",
-      "sourceId": "Women_accessory_Snorlax_2000",
+      "source": "Women_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000.fbx",
+      "sourceId": "Women_accessory_Snorlax_px150_py60_rx268d733854_ry177d467708_s2d5_2000",
       "sourceSha256": "f4e716b402e95d793916c152e05e7fd2aa2e24449311af86686ec6183bb5b24f",
       "sourceBBox": {
         "min": [
@@ -1769,19 +2651,33 @@
           28.336340728876035
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          150,
+          60,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          0
+        ],
+        "scale": 2.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Soccer_500",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Soccer_500.5cb9bc12.glb",
+      "key": "acc/women/Women_accessory_Soccer_px50_s0d5_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Soccer_px50_s0d5_500.5cb9bc12.glb",
       "sha256": "f03fdf127d9ee8b1c56b752a05839eae8e7cb973e9fb561be3930d2882648c9a",
       "bytes": 284848,
       "drawCalls": 2,
       "triangles": 13200,
       "joints": 0,
       "textures": 2,
-      "source": "Women_accessory_Soccer_500.fbx",
-      "sourceId": "Women_accessory_Soccer_500",
+      "source": "Women_accessory_Soccer_px50_s0d5_500.fbx",
+      "sourceId": "Women_accessory_Soccer_px50_s0d5_500",
       "sourceSha256": "5cb9bc125a68627203282909abf225ebf463fb38b6d9568c99465acfe9867f2c",
       "sourceBBox": {
         "min": [
@@ -1795,19 +2691,33 @@
           73.27680520240595
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          50,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.5,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Squirtle_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Squirtle_2000.ebed7433.glb",
+      "key": "acc/women/Women_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000.ebed7433.glb",
       "sha256": "5a889d7acbc605aaf506c0eac52b82fd1d2cba003f4021a5033696c558da77bc",
       "bytes": 26992,
       "drawCalls": 7,
       "triangles": 694,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Squirtle_2000.fbx",
-      "sourceId": "Women_accessory_Squirtle_2000",
+      "source": "Women_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000.fbx",
+      "sourceId": "Women_accessory_Squirtle_px75_py30_rx268d733854_ry177d467708_rz329d577951_s2_2000",
       "sourceSha256": "ebed74337853e7bf9742c51e1f13ea8f748da101055af7c1b4d00ce91852b031",
       "sourceBBox": {
         "min": [
@@ -1821,19 +2731,33 @@
           18.77954263924651
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          30,
+          0
+        ],
+        "rotation": [
+          268.733854,
+          177.467708,
+          329.577951
+        ],
+        "scale": 2,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Sudowoodo_600",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sudowoodo_600.010bc89c.glb",
+      "key": "acc/women/Women_accessory_Sudowoodo_px75_py8_s0d21_600",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sudowoodo_px75_py8_s0d21_600.010bc89c.glb",
       "sha256": "e1eb00d91d0ea202d8d70860bf37275eb94f92b2b4b1a0424ff89319ca44c076",
       "bytes": 115768,
       "drawCalls": 30,
       "triangles": 3306,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Sudowoodo_600.fbx",
-      "sourceId": "Women_accessory_Sudowoodo_600",
+      "source": "Women_accessory_Sudowoodo_px75_py8_s0d21_600.fbx",
+      "sourceId": "Women_accessory_Sudowoodo_px75_py8_s0d21_600",
       "sourceSha256": "010bc89ce062e314181c76a253445e06f817355ce81219911974741c23a09a8a",
       "sourceBBox": {
         "min": [
@@ -1847,19 +2771,33 @@
           160.2872039252766
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          75,
+          8,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.21,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Sword_500",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sword_500.9827eef8.glb",
+      "key": "acc/women/Women_accessory_Sword_py150_pz-133_s100_500",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Sword_py150_pz-133_s100_500.9827eef8.glb",
       "sha256": "fe7c425a9842ba35758dacc51f6e19c900ceef13943a9edf527024a2c10881ae",
       "bytes": 76436,
       "drawCalls": 3,
       "triangles": 872,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Sword_500.fbx",
-      "sourceId": "Women_accessory_Sword_500",
+      "source": "Women_accessory_Sword_py150_pz-133_s100_500.fbx",
+      "sourceId": "Women_accessory_Sword_py150_pz-133_s100_500",
       "sourceSha256": "9827eef8d3fdd90902032df1dc07f83cca89f5d70694663937bfe0226c6f5ade",
       "sourceBBox": {
         "min": [
@@ -1873,19 +2811,33 @@
           83.09554247111488
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          0,
+          150,
+          -133
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 100,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Victreebel_2000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Victreebel_2000.60efa5a7.glb",
+      "key": "acc/women/Women_accessory_Victreebel_px50_py30_pz20_s0d1_2000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Victreebel_px50_py30_pz20_s0d1_2000.60efa5a7.glb",
       "sha256": "8dff9e58441ed09f19a72c05f6bb765e2b22b9dfd60aac8ee88c9d084671ce99",
       "bytes": 214508,
       "drawCalls": 7,
       "triangles": 9307,
       "joints": 0,
       "textures": 4,
-      "source": "Women_accessory_Victreebel_2000.fbx",
-      "sourceId": "Women_accessory_Victreebel_2000",
+      "source": "Women_accessory_Victreebel_px50_py30_pz20_s0d1_2000.fbx",
+      "sourceId": "Women_accessory_Victreebel_px50_py30_pz20_s0d1_2000",
       "sourceSha256": "60efa5a7b40b25338dfc7159bd44c675f4cd9e51905887684c5da0aecae66080",
       "sourceBBox": {
         "min": [
@@ -1899,19 +2851,33 @@
           101.89871646737336
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          50,
+          30,
+          20
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.1,
+        "bone": null
+      }
     },
     {
-      "key": "acc/women/Women_accessory_Williams_5000",
-      "url": "/models/glb/v1/accessories/Women/Women_accessory_Williams_5000.b8a06829.glb",
+      "key": "acc/women/Women_accessory_Williams_px68_py15_pz-30_s0d3_5000",
+      "url": "/models/glb/v1/accessories/Women/Women_accessory_Williams_px68_py15_pz-30_s0d3_5000.b8a06829.glb",
       "sha256": "a0ff4f76e3c61a9edff27c3cc373aa2e4ddd2bf7038324d6f8240642ee231a47",
       "bytes": 627708,
       "drawCalls": 16,
       "triangles": 96205,
       "joints": 0,
       "textures": 0,
-      "source": "Women_accessory_Williams_5000.fbx",
-      "sourceId": "Women_accessory_Williams_5000",
+      "source": "Women_accessory_Williams_px68_py15_pz-30_s0d3_5000.fbx",
+      "sourceId": "Women_accessory_Williams_px68_py15_pz-30_s0d3_5000",
       "sourceSha256": "b8a068298b524ef0dc0120b1682871fb2cbbcb1897ad429a5cf492654f3c0b92",
       "sourceBBox": {
         "min": [
@@ -1925,7 +2891,21 @@
           231.50287227322156
         ]
       },
-      "pipelineVersion": 1
+      "pipelineVersion": 1,
+      "transform": {
+        "position": [
+          68,
+          15,
+          -30
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.3,
+        "bone": null
+      }
     },
     {
       "key": "decor/bar",
