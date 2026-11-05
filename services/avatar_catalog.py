@@ -124,6 +124,13 @@ def humanize(name_token: str) -> str:
     return value
 
 
+def display_name_for(name: str, category: str) -> str:
+    """Nom lisible pour la boutique, sans liste écrite par fichier."""
+
+    label = CATEGORY_LABELS.get(category, category.title())
+    return f"{label} {humanize(name)}".strip()
+
+
 def parse_source_name(source: str) -> ParsedSource | None:
     """Analyse ``Men_head_Casual2_0.fbx`` sans le prix dans la clé.
 
@@ -152,7 +159,6 @@ def parse_source_name(source: str) -> ParsedSource | None:
         return None
 
     key = f"{gender}_{category}_{name}"
-    label = CATEGORY_LABELS.get(category, category.title())
     return ParsedSource(
         source_id=stem,
         source=filename,
@@ -161,7 +167,7 @@ def parse_source_name(source: str) -> ParsedSource | None:
         name=name,
         key=key,
         price_caps=int(price) if price is not None else 0,
-        display_name=f"{label} {humanize(name)}".strip(),
+        display_name=display_name_for(name, category),
     )
 
 

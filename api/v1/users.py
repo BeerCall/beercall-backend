@@ -28,6 +28,7 @@ from schemas.user import (
 )
 from schemas.avatar_sprites import AvatarSprites
 from schemas.location import UserLocationUpdate
+from services.avatar_catalog import display_name_for
 from services.avatar_sprites import avatar_sprites_for, schedule_avatar_render
 from services.user_location import update_last_location
 from services.gamification import check_and_award_ghost_badges
@@ -47,7 +48,31 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
     if db.query(User).filter(User.username == user_data.username).first():
         raise HTTPException(status_code=400, detail="Ce nom d'avatar est déjà pris !")
 
-    # 2. Création de l'utilisateur avec son avatar JSON
+    # 2. Vérification du catalogue avant toute création de compte
+    chosen_skin_ids = [
+        user_data.avatar.head,
+        user_data.avatar.body,
+        user_data.avatar.legs,
+        user_data.avatar.feet,
+    ]
+    if user_data.avatar.accessory:
+        chosen_skin_ids.append(user_data.avatar.accessory)
+    requested_ids = list(dict.fromkeys(
+        skin_id for skin_id in chosen_skin_ids
+        if isinstance(skin_id, str) and skin_id and skin_id.lower() != "none"
+    ))
+    chosen_skins = (
+        db.query(Skin).filter(Skin.id.in_(requested_ids)).all()
+        if requested_ids else []
+    )
+    unavailable = [skin.id for skin in chosen_skins if not skin.available]
+    if unavailable:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Article indisponible à l'inscription : {', '.join(unavailable)}",
+        )
+
+    # 3. Création de l'utilisateur avec son avatar JSON
     new_user = User(
         username=user_data.username,
         hashed_password=get_password_hash(user_data.password),
@@ -59,29 +84,11 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
     db.add(new_user)
     db.flush()
     schedule_avatar_render(db, new_user)
+
+    # 4. Ajout des skins à l'inventaire
+    new_user.skins.extend(chosen_skins)
     db.commit()
     db.refresh(new_user)
-
-    # ==========================================
-    # 3. NOUVEAU : Ajout des skins à l'inventaire
-    # ==========================================
-    # On récupère tous les IDs des modèles choisis dans l'objet avatar
-    chosen_skin_ids = [
-        user_data.avatar.head,
-        user_data.avatar.body,
-        user_data.avatar.legs,
-        user_data.avatar.feet
-    ]
-    if user_data.avatar.accessory:
-        chosen_skin_ids.append(user_data.avatar.accessory)
-
-    # On va chercher les objets Skin correspondants dans la base de données
-    skins_to_grant = db.query(Skin).filter(Skin.id.in_(chosen_skin_ids)).all()
-
-    # On lie ces skins au nouvel utilisateur (remplit la table user_skins automatiquement)
-    new_user.skins.extend(skins_to_grant)
-    db.commit()  # On sauvegarde l'inventaire
-    # ==========================================
 
     # 4. Génération du token
     token = create_access_token(data={"sub": new_user.username})
@@ -195,7 +202,7 @@ def get_full_profile(
         db: Session = Depends(get_db)
 ):
     # Récupérer tout le catalogue depuis la DB (généré par le seed)
-    all_skins = db.query(Skin).all()
+    all_skins = db.query(Skin).filter(Skin.available.is_(True)).all()
 
     # --- CAS 1 : Utilisateur non connecté (Signup) ---
     if not current_user:
@@ -203,7 +210,7 @@ def get_full_profile(
         shop_items = [
             {
                 "id": skin.id,
-                "name": skin.name,
+                "name": display_name_for(skin.name, skin.category),
                 "category": skin.category,
                 "gender": skin.gender,
                 "price": 0,  # Tout est gratuit au Signup
@@ -236,7 +243,7 @@ def get_full_profile(
     shop_items = [
         {
             "id": skin.id,
-            "name": skin.name,
+            "name": display_name_for(skin.name, skin.category),
             "category": skin.category,
             "gender": skin.gender,
             "price": skin.price_caps,
@@ -288,7 +295,7 @@ def get_user_profile(
     aggregates = get_profile_aggregates(db, target_user)
 
     # 4. On récupère le catalogue de la boutique
-    all_skins = db.query(Skin).all()
+    all_skins = db.query(Skin).filter(Skin.available.is_(True)).all()
 
     # On regarde ce que le joueur ciblé possède
     owned_skin_ids = get_owned_skin_ids(db, target_user.id)
@@ -297,7 +304,7 @@ def get_user_profile(
     shop_items = [
         {
             "id": skin.id,
-            "name": skin.name,
+            "name": display_name_for(skin.name, skin.category),
             "category": skin.category,
             "gender": skin.gender,
             "price": skin.price_caps,
@@ -333,6 +340,11 @@ def buy_item(
     skin = db.query(Skin).filter(Skin.id == buy_request.item_id).first()
     if not skin:
         raise HTTPException(status_code=404, detail="Cet objet n'existe pas dans la boutique.")
+    if not skin.available:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Article indisponible : '{skin.id}'. Il ne peut pas être acheté.",
+        )
 
     # 2. Vérifier si l'utilisateur possède DÉJÀ cet objet
     # SQLAlchemy charge automatiquement la liste current_user.skins
@@ -377,10 +389,26 @@ def equip_avatar(
     if avatar_data.accessory and avatar_data.accessory.lower() != "none":
         requested_skins.append(avatar_data.accessory)
 
-    # 2. On récupère la liste des IDs des skins que le joueur possède VRAIMENT
+    # 2. Vérifier qu'aucun article demandé n'est masqué
+    requested_ids = [
+        skin_id for skin_id in requested_skins
+        if isinstance(skin_id, str) and skin_id.lower() != "none"
+    ]
+    known_skins = (
+        db.query(Skin).filter(Skin.id.in_(requested_ids)).all()
+        if requested_ids else []
+    )
+    unavailable = [skin.id for skin in known_skins if not skin.available]
+    if unavailable:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Article indisponible à l'équipement : {', '.join(unavailable)}",
+        )
+
+    # 3. On récupère la liste des IDs des skins que le joueur possède VRAIMENT
     owned_skin_ids = [skin.id for skin in current_user.skins]
 
-    # 3. Vérification Anti-Triche !
+    # 4. Vérification Anti-Triche !
     for skin_id in requested_skins:
         if skin_id not in owned_skin_ids:
             raise HTTPException(
