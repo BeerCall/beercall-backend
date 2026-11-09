@@ -6,3 +6,4 @@ import models.websocket_ticket
 import models.beer_call_job
 import models.realtime_event
 import models.avatar_render_job
+import models.photo_comment

@@ -30,6 +30,12 @@ from services.gamification import handle_ia_fraud, award_badge, check_and_award_
 from services.notifications import send_push_notifications, notify_scheduled_apero, notify_started_scheduled_apero
 from services.photo_validation import is_drink_detected, calculate_geodistance, validate_image_file
 from schemas.location import MemberLocationResponse
+from schemas.photo_comment import PhotoCommentCreate, PhotoCommentOut
+from services.photo_comments import (
+    create_photo_comment,
+    delete_photo_comment,
+    list_photo_comments,
+)
 from services.squad_reads import get_squad_details_summary
 from services.avatar_sprites import avatar_sprites_for
 from services.user_location import get_squad_member_locations
@@ -584,3 +590,77 @@ def get_member_locations(
         raise HTTPException(status_code=404, detail=str(exc))
     except PermissionError as exc:
         raise HTTPException(status_code=403, detail=str(exc))
+
+
+def _parse_entity_id(value: str, prefix: str, label: str) -> int:
+    try:
+        return int(value.replace(prefix, ""))
+    except (TypeError, ValueError) as exc:
+        raise HTTPException(status_code=400, detail=f"Identifiant {label} invalide") from exc
+
+
+def _comment_http_error(exc: Exception) -> HTTPException:
+    if isinstance(exc, PermissionError):
+        return HTTPException(status_code=403, detail=str(exc))
+    if isinstance(exc, LookupError):
+        return HTTPException(status_code=404, detail=str(exc))
+    return HTTPException(status_code=400, detail=str(exc))
+
+
+@router.get(
+    "/{squad_id}/beer-calls/{beer_call_id}/photos/{photo_owner_id}/comments",
+    response_model=list[PhotoCommentOut],
+)
+def get_photo_comments(
+        squad_id: int,
+        beer_call_id: str,
+        photo_owner_id: str,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user),
+):
+    apero_id = _parse_entity_id(beer_call_id, "bc_", "d'apéro")
+    owner_id = _parse_entity_id(photo_owner_id, "u_", "de propriétaire")
+    try:
+        return list_photo_comments(db, squad_id, apero_id, owner_id, current_user)
+    except (PermissionError, LookupError, ValueError) as exc:
+        raise _comment_http_error(exc) from exc
+
+
+@router.post(
+    "/{squad_id}/beer-calls/{beer_call_id}/photos/{photo_owner_id}/comments",
+    response_model=PhotoCommentOut,
+    status_code=201,
+)
+def post_photo_comment(
+        squad_id: int,
+        beer_call_id: str,
+        photo_owner_id: str,
+        payload: PhotoCommentCreate,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user),
+):
+    apero_id = _parse_entity_id(beer_call_id, "bc_", "d'apéro")
+    owner_id = _parse_entity_id(photo_owner_id, "u_", "de propriétaire")
+    try:
+        return create_photo_comment(db, squad_id, apero_id, owner_id, current_user, payload.content)
+    except (PermissionError, LookupError, ValueError) as exc:
+        raise _comment_http_error(exc) from exc
+
+
+@router.delete(
+    "/{squad_id}/beer-calls/{beer_call_id}/comments/{comment_id}",
+    status_code=204,
+)
+def remove_photo_comment(
+        squad_id: int,
+        beer_call_id: str,
+        comment_id: int,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user),
+):
+    apero_id = _parse_entity_id(beer_call_id, "bc_", "d'apéro")
+    try:
+        delete_photo_comment(db, squad_id, apero_id, comment_id, current_user)
+    except (PermissionError, LookupError, ValueError) as exc:
+        raise _comment_http_error(exc) from exc
+    return None
