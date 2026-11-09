@@ -1,8 +1,9 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, DateTime, Index, Integer, JSON, String, Text, func
+from sqlalchemy import Column, Index, Integer, JSON, String, Text, func
 
 from db.database import Base
+from db.types import UTCDateTime
 
 
 class AvatarRenderJob(Base):
@@ -17,19 +18,19 @@ class AvatarRenderJob(Base):
     attempts = Column(Integer, nullable=False, default=0, server_default="0")
     last_error = Column(Text, nullable=True)
     run_after = Column(
-        DateTime(timezone=True),
+        UTCDateTime,
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
         server_default=func.now(),
     )
     created_at = Column(
-        DateTime(timezone=True),
+        UTCDateTime,
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
         server_default=func.now(),
     )
     updated_at = Column(
-        DateTime(timezone=True),
+        UTCDateTime,
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
         onupdate=lambda: datetime.now(timezone.utc),
