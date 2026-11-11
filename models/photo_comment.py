@@ -1,8 +1,9 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Index, Integer, String
+from sqlalchemy import Column, ForeignKey, Index, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from db.database import Base
+from db.types import UTCDateTime
 
 
 class ProofPhotoComment(Base):
@@ -15,7 +16,7 @@ class ProofPhotoComment(Base):
     photo_owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     author_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     content = Column(String(500), nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    created_at = Column(UTCDateTime(), server_default=func.now(), nullable=False)
 
     author = relationship("User", foreign_keys=[author_id])
     photo_owner = relationship("User", foreign_keys=[photo_owner_id])

@@ -30,6 +30,21 @@ def test_empty_to_head_and_downgrade(alembic_config, postgres_engine):
         assert "aperos" in tables
         assert "squads" in tables
         assert "alembic_version" in tables
+        assert "proof_photo_comments" in tables
+        comment_indexes = conn.execute(text(
+            "SELECT indexname FROM pg_indexes WHERE tablename = 'proof_photo_comments'"
+        )).scalars().all()
+        assert "ix_proof_photo_comments_apero_owner" in comment_indexes
+        timestamp_type = conn.execute(text(
+            "SELECT data_type FROM information_schema.columns "
+            "WHERE table_name = 'proof_photo_comments' AND column_name = 'created_at'"
+        )).scalar_one()
+        assert timestamp_type == "timestamp with time zone"
+        cascading_keys = conn.execute(text(
+            "SELECT count(*) FROM pg_constraint WHERE conrelid = 'proof_photo_comments'::regclass "
+            "AND contype = 'f' AND confdeltype = 'c'"
+        )).scalar_one()
+        assert cascading_keys == 3
 
         # Vérifier l'unique participant
         constraints = conn.execute(text(
@@ -52,6 +67,7 @@ def test_empty_to_head_and_downgrade(alembic_config, postgres_engine):
         )).scalars().all()
         # Should only have alembic_version
         assert "users" not in tables
+        assert "proof_photo_comments" not in tables
         assert "alembic_version" in tables
         
     command.upgrade(alembic_config, "head")

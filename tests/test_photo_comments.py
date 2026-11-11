@@ -101,6 +101,8 @@ def test_create_comment_notifies_owner_and_creates_realtime_event(
     assert event.payload["type"] == "PHOTO_COMMENT"
     assert event.payload["action"] == "CREATE"
     assert event.payload["comment_id"] == comment.id
+    assert event.payload["author_id"] == photo_context.author.id
+    assert event.payload["author_username"] == "author"
 
     listed = list_photo_comments(
         db_session,
@@ -215,6 +217,7 @@ def test_comments_api_contract(
     body = created.json()
     assert body["author_username"] == "author"
     assert body["can_delete"] is True
+    assert body["created_at"].endswith(("Z", "+00:00"))
     comment_id = body["id"]
 
     listed = client.get(base, headers=_auth(photo_context.member))
@@ -240,3 +243,57 @@ def test_comments_api_contract(
     )
     assert missing.status_code == 404
     assert client.get(base, headers=_auth(photo_context.member)).json() == []
+
+
+def test_api_trims_before_enforcing_maximum_length(
+    client: TestClient,
+    photo_context: PhotoContext,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr("services.photo_comments.send_push_notifications", Mock())
+    base = f"/api/squads/{photo_context.squad.id}/beer-calls/{photo_context.apero.id}/photos/{photo_context.owner.id}/comments"
+    response = client.post(base, json={"content": "  " + "x" * 500 + "  "}, headers=_auth(photo_context.author))
+    assert response.status_code == 201, response.text
+    assert response.json()["content"] == "x" * 500
+
+
+def test_push_failure_does_not_rollback_comment(
+    db_session: Session,
+    photo_context: PhotoContext,
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    monkeypatch.setattr("services.photo_comments.send_push_notifications", Mock(side_effect=RuntimeError("offline")))
+    comment = create_photo_comment(db_session, photo_context.squad.id, photo_context.apero.id,
+                                   photo_context.owner.id, photo_context.author, "Persisté malgré Firebase")
+    assert db_session.get(ProofPhotoComment, comment.id).content == "Persisté malgré Firebase"
+    assert db_session.query(RealtimeEvent).count() == 1
+    assert "notification de commentaire" in caplog.text
+
+
+def test_comment_routes_reject_outsider_and_cross_squad_access(
+    client: TestClient,
+    db_session: Session,
+    photo_context: PhotoContext,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr("services.photo_comments.send_push_notifications", Mock())
+    squad = photo_context.squad.id
+    apero = photo_context.apero.id
+    owner = photo_context.owner.id
+    base = f"/api/squads/{squad}/beer-calls/{apero}/photos/{owner}/comments"
+    assert client.post(base, json={"content": "interdit"}, headers=_auth(photo_context.outsider)).status_code == 403
+    created = client.post(base, json={"content": "protégé"}, headers=_auth(photo_context.author))
+    assert created.status_code == 201
+    comment_id = created.json()["id"]
+    deletion = f"/api/squads/{squad}/beer-calls/{apero}/comments/{comment_id}"
+    assert client.delete(deletion, headers=_auth(photo_context.outsider)).status_code == 403
+    other_squad = Squad(name="Autre", invite_code="OTHERPHOTO", members=[photo_context.author])
+    db_session.add(other_squad)
+    db_session.commit()
+    other_base = f"/api/squads/{other_squad.id}/beer-calls/{apero}/photos/{owner}/comments"
+    assert client.get(other_base, headers=_auth(photo_context.author)).status_code == 404
+    assert client.post(other_base, json={"content": "mauvaise squad"}, headers=_auth(photo_context.author)).status_code == 404
+    assert client.delete(f"/api/squads/{other_squad.id}/beer-calls/{apero}/comments/{comment_id}",
+                         headers=_auth(photo_context.author)).status_code == 404
+    assert db_session.get(ProofPhotoComment, comment_id) is not None

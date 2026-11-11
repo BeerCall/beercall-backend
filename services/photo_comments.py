@@ -101,6 +101,8 @@ def create_photo_comment(
                 "beer_call_id": beer_call_id,
                 "photo_owner_id": photo_owner_id,
                 "comment_id": comment.id,
+                "author_id": current_user.id,
+                "author_username": current_user.username,
             },
         ))
         db.commit()
