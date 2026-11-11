@@ -80,6 +80,35 @@ def test_rename_updates_same_row_and_keeps_user_links(db_session):
     ] == before_links
 
 
+def test_legacy_row_without_source_is_adopted_on_rename(db_session):
+    user = _user(db_session)
+    legacy = _skin(db_session, "Men_head_X", price=0, source=None)
+    user.skins.append(legacy)
+    user.avatar_config = {"head": legacy.id, "body": "none", "legs": "none", "feet": "none", "accessory": "none"}
+    db_session.flush()
+
+    report = sync_catalog(
+        db_session,
+        CatalogResult(items=[_item("Men_head_X_500", "Men_head_X_500.fbx", 500)]),
+        now=NOW,
+    )
+
+    db_session.refresh(legacy)
+    db_session.refresh(user)
+    assert report.updated == ["Men_head_X"]
+    assert report.created == []
+    assert report.hidden == []
+    assert legacy.available is True
+    assert legacy.id == "Men_head_X"
+    assert legacy.price_caps == 500
+    assert legacy.source == "Men_head_X_500.fbx"
+    assert user.avatar_config["head"] == "Men_head_X"
+    assert [
+        link.skin_id
+        for link in db_session.query(user_skins).filter_by(user_id=user.id).all()
+    ] == ["Men_head_X"]
+
+
 def test_orphan_with_same_key_is_hidden_not_adopted(db_session):
     user = _user(db_session)
     orphan = _skin(db_session, "Men_head_X_600", price=0, source=None)

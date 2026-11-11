@@ -22,7 +22,7 @@ from db.database import Base
 from db.database import engine, SessionLocal
 from models import gamification
 from services.avatar_catalog import CatalogError, build_catalog
-from services.avatar_catalog_sync import source_file_exists, sync_catalog
+from services.avatar_catalog_sync import sync_catalog
 
 from api.v1.health import router as health_router
 
@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
 
     try:
         catalog = build_catalog()
-        report = sync_catalog(db, catalog, source_exists=source_file_exists)
+        report = sync_catalog(db, catalog)
         db.commit()
         logger.info("catalogue synchronisé : %s", report.counts)
     except CatalogError as error:

@@ -3,8 +3,10 @@
 Règles de correspondance, dans cet ordre :
 
 1. une ligne dont l'id est exactement le ``sourceId`` du fichier est mise à jour ;
-2. sinon, une ligne unique de même clé (genre + partie + nom, sans prix) et
-   déjà associée à un fichier (``source`` non nul) est mise à jour ;
+2. sinon, une ligne unique de même clé (genre + partie + nom, sans prix) est
+   mise à jour, même si son ``source`` est encore nul : c'est le cas des
+   renommages legacy (paramètres de transform ajoutés au fichier) et cela
+   préserve les achats et équipements existants ;
 3. sinon, une nouvelle ligne est créée avec l'id du fichier ;
 4. plusieurs lignes de même clé sans id exact : conflit, aucune modification ;
 5. toute ligne non réclamée passe à ``available = false`` (jamais supprimée).
@@ -15,14 +17,13 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from sqlalchemy.orm import Session
 
 from models.gamification import Skin
 from models.user import User
-from services.avatar_catalog import DEFAULT_MODELS_DIR, CatalogItem, CatalogResult
+from services.avatar_catalog import CatalogItem, CatalogResult
 from services.avatar_sprites import schedule_avatar_render
 
 logger = logging.getLogger("avatar_catalog")
@@ -66,16 +67,6 @@ class SyncReport:
                 for conflict in self.conflicts
             ],
         }
-
-
-def source_file_exists(
-    skin_id: str,
-    models_dir: str | Path = DEFAULT_MODELS_DIR,
-) -> bool:
-    """Vrai si un fichier source porte encore l'id legacy de la ligne."""
-
-    root = Path(models_dir)
-    return (root / f"{skin_id}.fbx").is_file() or (root / f"{skin_id}.glb").is_file()
 
 
 def _row_key(row: Skin) -> str:
@@ -166,7 +157,6 @@ def sync_catalog(
     *,
     dry_run: bool = False,
     now: datetime | None = None,
-    source_exists: Callable[[str], bool] | None = None,
 ) -> SyncReport:
     """Applique le catalogue à ``skins`` sans jamais changer les ids existants.
 
@@ -220,14 +210,9 @@ def sync_catalog(
 
         if len(candidates) == 1:
             candidate = candidates[0]
-            # Une ligne legacy sans source n'est adoptée que si son propre id
-            # correspond encore à un fichier présent (migration d'une ligne
-            # créée avant l'ajout de `source`). Un vrai orphelin, sans fichier,
-            # n'est jamais repris.
-            if candidate.source is None and not (
-                source_exists and source_exists(candidate.id)
-            ):
-                continue
+            # Une ligne legacy sans source est adoptée par clé : les renommages
+            # de fichiers (transform, prix) ne doivent retirer ni achat ni
+            # équipement à un joueur.
             report.updated.append(candidate.id)
             claimed.add(candidate.id)
             if not dry_run:
