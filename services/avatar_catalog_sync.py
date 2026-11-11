@@ -17,16 +17,23 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any
+from pathlib import Path
+from typing import Any, Callable
 
 from sqlalchemy.orm import Session
 
 from models.gamification import Skin
 from models.user import User
-from services.avatar_catalog import CatalogItem, CatalogResult
+from services.avatar_catalog import DEFAULT_MODELS_DIR, CatalogItem, CatalogResult
 from services.avatar_sprites import schedule_avatar_render
 
 logger = logging.getLogger("avatar_catalog")
+
+
+def source_file_exists(skin_id: str, models_dir: str | Path = DEFAULT_MODELS_DIR) -> bool:
+    """Compatibility for the catalogue inspection/cleanup CLI (not adoption policy)."""
+    root = Path(models_dir)
+    return (root / f"{skin_id}.fbx").is_file() or (root / f"{skin_id}.glb").is_file()
 
 
 @dataclass(frozen=True)
@@ -157,11 +164,14 @@ def sync_catalog(
     *,
     dry_run: bool = False,
     now: datetime | None = None,
+    source_exists: Callable[[str], bool] | None = None,
 ) -> SyncReport:
     """Applique le catalogue à ``skins`` sans jamais changer les ids existants.
 
     ``dry_run`` calcule exactement le même plan mais ne modifie pas la session.
     Le commit reste à la charge de l'appelant.
+    ``source_exists`` is retained for older CLI callers; legacy adoption is by
+    unique catalogue key, never conditional on a renamed file still existing.
     """
 
     timestamp = now or datetime.now(timezone.utc)

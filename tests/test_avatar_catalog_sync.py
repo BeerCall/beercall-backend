@@ -91,6 +91,7 @@ def test_legacy_row_without_source_is_adopted_on_rename(db_session):
         db_session,
         CatalogResult(items=[_item("Men_head_X_500", "Men_head_X_500.fbx", 500)]),
         now=NOW,
+        source_exists=lambda _skin_id: False,  # historical CLI argument must not undo adoption
     )
 
     db_session.refresh(legacy)
@@ -107,6 +108,18 @@ def test_legacy_row_without_source_is_adopted_on_rename(db_session):
         link.skin_id
         for link in db_session.query(user_skins).filter_by(user_id=user.id).all()
     ] == ["Men_head_X"]
+
+
+def test_catalogue_inspection_clis_still_import_and_show_help():
+    import os
+    import subprocess
+    import sys
+
+    env = {**os.environ, "DATABASE_URL": "sqlite:///:memory:", "BEERCALL_SECRET_KEY": "isolated-cli-test"}
+    for module in ("scripts.catalog_sync", "scripts.cleanup_catalog_orphans"):
+        result = subprocess.run([sys.executable, "-B", "-m", module, "--help"], env=env, capture_output=True, text=True)
+        assert result.returncode == 0, result.stderr
+        assert "--dry-run" in result.stdout
 
 
 def test_orphan_with_same_key_is_hidden_not_adopted(db_session):
