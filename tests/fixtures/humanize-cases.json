@@ -1,0 +1,13 @@
+[
+    { "input": "Casual2", "expected": "Casual 2" },
+    { "input": "AstonMartin", "expected": "Aston Martin" },
+    { "input": "RacingBulls", "expected": "Racing Bulls" },
+    { "input": "McLaren", "expected": "McLaren" },
+    { "input": "McDonald", "expected": "McDonald" },
+    { "input": "WaveHand", "expected": "Wave Hand" },
+    { "input": "Sitting_2", "expected": "Sitting 2" },
+    { "input": "ThumbsUp", "expected": "Thumbs Up" },
+    { "input": "BellyDance2", "expected": "Belly Dance 2" },
+    { "input": "  Idle  ", "expected": "Idle" },
+    { "input": "A_B C", "expected": "A B C" }
+]

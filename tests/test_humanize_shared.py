@@ -5,7 +5,9 @@ from services.avatar_catalog import humanize
 
 
 def test_humanize_matches_shared_fixture():
-    fixture = Path(__file__).resolve().parents[2] / "tests" / "fixtures" / "humanize-cases.json"
+    # Copie versionnée du contrat partagé avec beercall-frontend : le dépôt
+    # backend est le seul livré au runner CI, le dossier parent ne l'est pas.
+    fixture = Path(__file__).resolve().parent / "fixtures" / "humanize-cases.json"
     cases = json.loads(fixture.read_text(encoding="utf-8"))
     assert cases
     for case in cases:

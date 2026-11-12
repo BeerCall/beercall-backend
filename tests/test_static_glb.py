@@ -22,9 +22,22 @@ def test_manifest_is_served_as_json_with_every_catalog_item() -> None:
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("application/json")
     payload = response.json()
-    assert len(payload["items"]) == 162
+    disk = _manifest()
+
+    # Chaque entrée du manifeste doit correspondre à un GLB réellement publié :
+    # le compte est comparé au disque, pas à un chiffre figé qui dérive au fil
+    # des ajouts de catalogue.
+    published = {
+        path.relative_to(MODELS_DIR).as_posix()
+        for path in (MODELS_DIR / "glb" / "v1").rglob("*.glb")
+    }
+    served = {item["url"].removeprefix("/models/") for item in payload["items"]}
+
+    assert payload["items"]
+    assert len(payload["items"]) == len(disk["items"]) == len(served)
+    assert served == published
     assert {item["key"] for item in payload["items"]} == {
-        item["key"] for item in _manifest()["items"]
+        item["key"] for item in disk["items"]
     }
 
 

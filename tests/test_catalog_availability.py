@@ -69,7 +69,10 @@ def test_guest_shop_excludes_hidden_and_exposes_readable_name(client: TestClient
     items = response.json()["shop_items"]
     ids = {item["id"] for item in items}
     assert hidden.id not in ids
-    beer = next(item for item in items if item["id"] == "Men_accessory_Beer_500")
+    beer = next(
+        item for item in items
+        if item["id"].startswith("Men_accessory_Beer")
+    )
     assert beer["name"] == "Accessoire Beer"
 
 
