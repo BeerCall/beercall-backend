@@ -146,28 +146,53 @@ def reap_expired_jobs(db: Session, now: datetime) -> int:
 def claim_next_job(
     db: Session, now: datetime
 ) -> Optional[Tuple[int, str, dict, str, int]]:
-    """Réservation courte d'un job queued avec SKIP LOCKED sous PostgreSQL."""
+    """Réservation d'un job queued : SKIP LOCKED sous PostgreSQL, CAS partout.
+
+    La sélection seule ne suffit pas sur SQLite (aucun verrou de ligne) : deux
+    workers pouvaient lire le même job puis le marquer running. L'écriture
+    conditionnelle ``status = 'queued'`` garantit qu'un seul gagne ; le perdant
+    repart sur le job suivant.
+    """
     reap_expired_jobs(db, now)
 
-    query = db.query(AvatarRenderJob).filter(
-        AvatarRenderJob.status == "queued",
-        AvatarRenderJob.run_after <= now,
-    )
-    if db.bind.dialect.name == "postgresql":
-        query = query.with_for_update(skip_locked=True)
+    while True:
+        query = db.query(AvatarRenderJob).filter(
+            AvatarRenderJob.status == "queued",
+            AvatarRenderJob.run_after <= now,
+        )
+        if db.bind.dialect.name == "postgresql":
+            query = query.with_for_update(skip_locked=True)
 
-    job = query.order_by(AvatarRenderJob.created_at.asc()).first()
-    if not job:
-        return None
+        job = query.order_by(AvatarRenderJob.created_at.asc()).first()
+        if not job:
+            return None
 
-    owner_token = str(uuid.uuid4())
-    job.status = "running"
-    job.owner_token = owner_token
-    job.attempts += 1
-    job.updated_at = now
-    db.commit()
+        job_id = job.id
+        config_hash = job.config_hash
+        avatar_config = job.avatar_config
+        attempts = job.attempts + 1
+        owner_token = str(uuid.uuid4())
 
-    return (job.id, job.config_hash, job.avatar_config, owner_token, job.attempts)
+        claimed = (
+            db.query(AvatarRenderJob)
+            .filter(
+                AvatarRenderJob.id == job_id,
+                AvatarRenderJob.status == "queued",
+            )
+            .update(
+                {
+                    AvatarRenderJob.status: "running",
+                    AvatarRenderJob.owner_token: owner_token,
+                    AvatarRenderJob.attempts: AvatarRenderJob.attempts + 1,
+                    AvatarRenderJob.updated_at: now,
+                },
+                synchronize_session=False,
+            )
+        )
+        db.commit()
+
+        if claimed == 1:
+            return (job_id, config_hash, avatar_config, owner_token, attempts)
 
 
 def render_avatar_http(
