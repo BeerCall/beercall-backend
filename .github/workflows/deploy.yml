@@ -1,5 +1,8 @@
 name: CI
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
@@ -52,3 +55,19 @@ jobs:
         env:
           TEST_DATABASE_URL: "postgresql+psycopg://beercall:beercall@localhost:55432/beercall_test"
         run: python -m pytest tests/postgres --cov=. --cov-append --cov-report=term-missing --cov-fail-under=80
+
+  dispatch-submodule:
+    name: Dispatch submodule update
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Notify beercall-app
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.SUBMODULE_DISPATCH_TOKEN }}
+          repository: BeerCall/beercall-app
+          event-type: submodule-updated
+          client-payload: '{"repository":"beercall-backend","sha":"${{ github.sha }}","ref":"${{ github.ref_name }}"}'

@@ -31,3 +31,9 @@ E2E_GAME_IDS = frozenset({
 })
 if BEERCALL_E2E_GAME is not None and BEERCALL_E2E_GAME not in E2E_GAME_IDS:
     raise ValueError("BEERCALL_E2E_GAME must name a playable mini-game")
+
+AVATAR_SPRITES_ENABLED: bool = os.getenv("AVATAR_SPRITES_ENABLED", "true").lower() in {"true", "1", "yes"}
+AVATAR_RENDERER_URL: str = os.getenv("AVATAR_RENDERER_URL", "http://127.0.0.1:8787")
+AVATAR_UPLOADS_DIR: str = os.getenv("AVATAR_UPLOADS_DIR", "uploads")
+AVATAR_RENDERER_VERSION: int = int(os.getenv("AVATAR_RENDERER_VERSION", "1"))
+

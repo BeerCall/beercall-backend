@@ -103,7 +103,7 @@ def test_guest_profile_exact_contract(client: TestClient, db_session: Session):
     for item in shop_items:
         assert item["price"] == 0
         assert item["is_owned"] is True
-        assert set(item.keys()) == {"id", "name", "category", "gender", "price", "is_owned"}
+        assert set(item.keys()) == {"id", "name", "category", "gender", "price", "is_owned", "source"}
 
 
 def test_own_profile_exact_contract(client: TestClient, db_session: Session):

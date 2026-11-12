@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 echo "🚀 Exécution des migrations Alembic sur la DB de Prod..."
 alembic upgrade head

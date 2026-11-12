@@ -29,7 +29,16 @@ from services.beer_call_participation import decline_beer_call as decline_beer_c
 from services.gamification import handle_ia_fraud, award_badge, check_and_award_ghost_badges, apply_apero_start_rewards, apply_beer_call_creation_rewards, apply_beer_call_join_rewards
 from services.notifications import send_push_notifications, notify_scheduled_apero, notify_started_scheduled_apero
 from services.photo_validation import is_drink_detected, calculate_geodistance, validate_image_file
+from schemas.location import MemberLocationResponse
+from schemas.photo_comment import PhotoCommentCreate, PhotoCommentOut
+from services.photo_comments import (
+    create_photo_comment,
+    delete_photo_comment,
+    list_photo_comments,
+)
 from services.squad_reads import get_squad_details_summary
+from services.avatar_sprites import avatar_sprites_for
+from services.user_location import get_squad_member_locations
 
 import logging
 
@@ -498,6 +507,11 @@ def get_beer_call_worlds(
     if not squad or current_user not in squad.members:
         raise HTTPException(status_code=403, detail="Accès refusé.")
 
+    try:
+        get_apero_for_squad(db, squad_id, actual_apero_id)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
     # 2. Récupérer tous les participants avec l'User pré-chargé (Eager Loading)
     participants_db = db.query(AperoParticipant).options(
         joinedload(AperoParticipant.user)
@@ -517,6 +531,7 @@ def get_beer_call_worlds(
                 "user_id": f"u_{user.id}",
                 "username": user.username,
                 "avatar_config": user.avatar_config or {},
+                "avatar_sprites": avatar_sprites_for(user),
                 "proof_photo_url": ("/" + p.photo_path.lstrip("/")) if p.photo_path else None,
                 "joined_at": datetime.now(timezone.utc)
             })
@@ -525,6 +540,7 @@ def get_beer_call_worlds(
                 "user_id": f"u_{user.id}",
                 "username": user.username,
                 "avatar_config": user.avatar_config or {},
+                "avatar_sprites": avatar_sprites_for(user),
                 "excuse": p.excuse,
                 "declined_at": datetime.now(timezone.utc)
             })
@@ -536,7 +552,8 @@ def get_beer_call_worlds(
             dodo_participants.append({
                 "user_id": f"u_{member.id}",
                 "username": member.username,
-                "avatar_config": member.avatar_config or {}
+                "avatar_config": member.avatar_config or {},
+                "avatar_sprites": avatar_sprites_for(member),
             })
 
     # 5. Renvoyer le JSON parfaitement formaté pour la 3D
@@ -559,3 +576,91 @@ def get_beer_call_worlds(
             }
         }
     }
+
+
+@router.get("/{squad_id}/member-locations", response_model=List[MemberLocationResponse])
+def get_member_locations(
+        squad_id: int,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
+):
+    try:
+        return get_squad_member_locations(db, squad_id, current_user.id)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except PermissionError as exc:
+        raise HTTPException(status_code=403, detail=str(exc))
+
+
+def _parse_entity_id(value: str, prefix: str, label: str) -> int:
+    try:
+        return int(value.replace(prefix, ""))
+    except (TypeError, ValueError) as exc:
+        raise HTTPException(status_code=400, detail=f"Identifiant {label} invalide") from exc
+
+
+def _comment_http_error(exc: Exception) -> HTTPException:
+    if isinstance(exc, PermissionError):
+        return HTTPException(status_code=403, detail=str(exc))
+    if isinstance(exc, LookupError):
+        return HTTPException(status_code=404, detail=str(exc))
+    return HTTPException(status_code=400, detail=str(exc))
+
+
+@router.get(
+    "/{squad_id}/beer-calls/{beer_call_id}/photos/{photo_owner_id}/comments",
+    response_model=list[PhotoCommentOut],
+)
+def get_photo_comments(
+        squad_id: int,
+        beer_call_id: str,
+        photo_owner_id: str,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user),
+):
+    apero_id = _parse_entity_id(beer_call_id, "bc_", "d'apéro")
+    owner_id = _parse_entity_id(photo_owner_id, "u_", "de propriétaire")
+    try:
+        return list_photo_comments(db, squad_id, apero_id, owner_id, current_user)
+    except (PermissionError, LookupError, ValueError) as exc:
+        raise _comment_http_error(exc) from exc
+
+
+@router.post(
+    "/{squad_id}/beer-calls/{beer_call_id}/photos/{photo_owner_id}/comments",
+    response_model=PhotoCommentOut,
+    status_code=201,
+)
+def post_photo_comment(
+        squad_id: int,
+        beer_call_id: str,
+        photo_owner_id: str,
+        payload: PhotoCommentCreate,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user),
+):
+    apero_id = _parse_entity_id(beer_call_id, "bc_", "d'apéro")
+    owner_id = _parse_entity_id(photo_owner_id, "u_", "de propriétaire")
+    try:
+        return create_photo_comment(db, squad_id, apero_id, owner_id, current_user, payload.content)
+    except (PermissionError, LookupError, ValueError) as exc:
+        raise _comment_http_error(exc) from exc
+
+
+@router.delete(
+    "/{squad_id}/beer-calls/{beer_call_id}/comments/{comment_id}",
+    status_code=204,
+)
+def remove_photo_comment(
+        squad_id: int,
+        beer_call_id: str,
+        comment_id: int,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user),
+):
+    apero_id = _parse_entity_id(beer_call_id, "bc_", "d'apéro")
+    try:
+        delete_photo_comment(db, squad_id, apero_id, comment_id, current_user)
+    except (PermissionError, LookupError, ValueError) as exc:
+        raise _comment_http_error(exc) from exc
+    return None

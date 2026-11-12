@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List, Optional, Dict, Any
 
 from pydantic import BaseModel, Field, validator
+from schemas.avatar_sprites import AvatarSprites
 
 
 class AperoDecline(BaseModel):
@@ -50,6 +51,7 @@ class WorldParticipant(BaseModel):
     user_id: str
     username: str
     avatar_config: Dict[str, Any]
+    avatar_sprites: AvatarSprites = Field(default_factory=AvatarSprites)
     proof_photo_url: Optional[str] = None
     joined_at: Optional[datetime] = None
     excuse: Optional[str] = None

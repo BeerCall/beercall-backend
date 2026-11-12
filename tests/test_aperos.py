@@ -1,7 +1,22 @@
 import pytest
 import uuid
 from fastapi.testclient import TestClient
-from unittest.mock import patch, AsyncMock
+from unittest.mock import call, patch, AsyncMock
+
+
+def broadcast_calls(broadcast: AsyncMock, action: str) -> list:
+    """Appels du routeur pour une action donnée.
+
+    Le relais durable peut diffuser d'autres événements (CREATE, job mis à
+    jour) pendant la fenêtre du test ; on isole l'action attendue sans
+    relâcher l'assertion d'exactitude.
+    """
+    return [
+        item for item in broadcast.await_args_list
+        if len(item.args) > 1
+        and isinstance(item.args[1], dict)
+        and item.args[1].get("action") == action
+    ]
 
 def get_auth_token(client: TestClient, username="squadtestuser"):
     payload = {
@@ -60,7 +75,9 @@ def test_create_and_decline_beer_call(mock_push, mock_is_drink, client: TestClie
     mock_push.reset_mock()
     with patch("api.v1.squads.manager.broadcast_to_squad", new_callable=AsyncMock) as broadcast:
         response = client.post(f"/api/squads/{squad_id}/beer-calls/bc_{apero_id}/decline/", json=decline_data, headers=headers2)
-        broadcast.assert_awaited_once_with(squad_id, {"type": "REFRESH_SQUAD", "action": "DECLINE"})
+        assert broadcast_calls(broadcast, "DECLINE") == [
+            call(squad_id, {"type": "REFRESH_SQUAD", "action": "DECLINE"})
+        ]
     assert response.status_code == 200
     assert response.json() == {"message": "Plouf ! Direction la piscine. 🌊", "bonus": 15}
     mock_push.assert_called_once_with(tokens=["creator-token"], title="🤡 ALERTE FRAGILE !", body="user_decliner s'est dégonflé pour Paris Bar... Tu paieras le triple la prochaine fois !")
@@ -120,7 +137,9 @@ def test_create_and_join_beer_call(mock_push, mock_is_drink, client: TestClient,
     mock_push.reset_mock()
     with patch("api.v1.squads.manager.broadcast_to_squad", new_callable=AsyncMock) as broadcast:
         response = client.post(f"/api/squads/{squad_id}/beer-calls/bc_{apero_id}/join/", data=join_data, files=files, headers=headers2)
-        broadcast.assert_awaited_once_with(squad_id, {"type": "REFRESH_SQUAD", "action": "JOIN"})
+        assert broadcast_calls(broadcast, "JOIN") == [
+            call(squad_id, {"type": "REFRESH_SQUAD", "action": "JOIN"})
+        ]
     assert response.status_code == 200
     assert set(response.json()) == {"message", "bonus"}
     assert response.json()["message"] == "Tu es au Bar ! 🍻"

@@ -73,20 +73,27 @@ def get_optional_current_user(
         token: Optional[str] = Depends(oauth2_scheme_optional),
         db: Session = Depends(get_db)
 ):
-    # S'il n'y a pas de token du tout (ex: page Signup)
+    # S'il n'y a pas de token du tout (ex: page Signup), l'accès est public.
     if not token:
         return None
 
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
     try:
-        # On essaie de lire le token
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         token_type: str = payload.get("type", "access")
         if username is None or token_type != "access":
-            return None
+            raise credentials_exception
     except JWTError:
-        # Le token est expiré ou invalide
-        return None
+        # Le token est expiré ou invalide : 401 pour que le front déclenche
+        # le refresh au lieu de retomber silencieusement sur le profil Guest.
+        raise credentials_exception
 
-    # On cherche l'utilisateur en base
-    return db.query(User).filter(User.username == username).first()
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise credentials_exception
+    return user

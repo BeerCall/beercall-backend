@@ -1,5 +1,5 @@
 # Fichier : models/gamification.py
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Table
+from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, DateTime, Table
 from sqlalchemy.sql import func
 from db.database import Base
 
@@ -41,3 +41,11 @@ class Skin(Base):
     gender = Column(String, nullable=False)  # ex: "Tête de Cheval"
     category = Column(String, nullable=False)  # ex: "head", "body", "accessory"
     price_caps = Column(Integer, default=0)  # Prix en capsules
+    available = Column(Boolean, nullable=False, default=True, server_default="true")
+    source = Column(String, nullable=True)  # nom de fichier courant, ex: "Men_head_Casual_0.fbx"
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+        onupdate=func.now(),
+    )

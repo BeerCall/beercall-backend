@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
+from schemas.avatar_sprites import AvatarSprites
 
 
 class UserStats(BaseModel):
@@ -46,6 +47,7 @@ class UserProfileResponse(BaseModel):
     title: str
     avatar: AvatarSchema
     stats: UserStats
+    avatar_sprites: AvatarSprites = Field(default_factory=AvatarSprites)
 
 
 class BadgeResponse(BaseModel):
@@ -75,6 +77,7 @@ class ShopItem(BaseModel):
     gender: str
     price: int
     is_owned: bool
+    source: Optional[str] = None
 
 
 class FullProfileResponse(BaseModel):
@@ -88,6 +91,7 @@ class FullProfileResponse(BaseModel):
     squads: List[SquadBasicInfo] = []
     shop_items: List[ShopItem] = []
     stats: UserStats
+    avatar_sprites: AvatarSprites = Field(default_factory=AvatarSprites)
 
 
 class BuyItemRequest(BaseModel):
@@ -101,6 +105,7 @@ class ConnectionItem(BaseModel):
     score: int
     title: str
     avatar: dict
+    avatar_sprites: AvatarSprites = Field(default_factory=AvatarSprites)
 
 
 class PushTokenUpdate(BaseModel):
