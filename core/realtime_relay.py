@@ -151,12 +151,15 @@ def dispatch_pushes(event_id: object) -> bool:
                     exc.category,
                 )
                 continue
-            except Exception:
+            except Exception as exc:
                 pending += 1
-                logger.exception(
-                    "Unexpected push failure for event %s recipient %s; kept pending",
+                # SDK/transport exception messages can contain recipient tokens.
+                # Keep only the error type, never its text or chained traceback.
+                logger.error(
+                    "Unexpected push failure for event %s recipient %s (%s); kept pending",
                     event_id,
                     user_id,
+                    type(exc).__name__,
                 )
                 continue
             if outcome.status == "accepted":

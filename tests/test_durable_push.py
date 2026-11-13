@@ -3,7 +3,8 @@ from unittest.mock import Mock
 
 import pytest
 from firebase_admin import exceptions, messaging
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import OperationalError
+from sqlalchemy.orm import Session, sessionmaker
 
 from core import realtime_relay
 from models.realtime_event import RealtimeEvent
@@ -241,6 +242,118 @@ def test_historical_push_completed_is_never_resent(db_session, monkeypatch):
         users["second"].id,
         users["third"].id,
     ]
+
+
+def test_unexpected_failure_does_not_log_token_or_stop_other_recipients(db_session, monkeypatch, caplog):
+    _bind_relay(db_session, monkeypatch)
+    squad, users = _squad_with_members(
+        db_session, {"creator": "token_creator", "first": "private-token-never-log", "second": "token_second"},
+    )
+    event = _create_event(db_session, squad, users["creator"], [users["first"], users["second"]])
+    monkeypatch.setattr(notifications, "FIREBASE_ENABLED", True)
+    sender = Mock(side_effect=[ValueError("Invalid token private-token-never-log"), "accepted-message"])
+    monkeypatch.setattr(notifications.messaging, "send", sender)
+
+    assert realtime_relay.dispatch_pushes(event.id) is False
+
+    db_session.refresh(event)
+    assert event.payload["push_completed"] == [users["second"].id]
+    assert sender.call_count == 2
+    assert "ValueError" in caplog.text
+    assert "private-token-never-log" not in caplog.text
+
+
+def test_departed_member_is_rejected_and_terminal_results_are_not_resent(db_session, monkeypatch):
+    _bind_relay(db_session, monkeypatch)
+    squad, users = _squad_with_members(
+        db_session, {"creator": "token_creator", "left": "token_left", "second": "token_second"},
+    )
+    event = _create_event(db_session, squad, users["creator"], [users["left"], users["second"]])
+    squad.members.remove(users["left"])
+    db_session.commit()
+    monkeypatch.setattr(notifications, "FIREBASE_ENABLED", True)
+    sender = Mock(return_value="accepted-message")
+    monkeypatch.setattr(notifications.messaging, "send", sender)
+
+    assert realtime_relay.dispatch_pushes(event.id) is True
+    db_session.refresh(event)
+    assert event.payload["push_rejected"] == {str(users["left"].id): "not_member"}
+    assert event.payload["push_completed"] == [users["second"].id]
+    assert realtime_relay.dispatch_pushes(event.id) is True
+    assert [call.args[0].token for call in sender.call_args_list] == ["token_second"]
+
+
+def test_commit_failure_preserves_prior_results_and_does_not_acknowledge(db_session, monkeypatch):
+    squad, users = _squad_with_members(
+        db_session, {"creator": "token_creator", "first": "token_first", "second": "token_second"},
+    )
+    event = _create_event(db_session, squad, users["creator"], [users["first"], users["second"]])
+
+    class FailSecondCommit(Session):
+        commits = 0
+
+        def commit(self) -> None:
+            self.commits += 1
+            if self.commits == 2:
+                raise OperationalError("synthetic commit failure", None, RuntimeError("offline"))
+            super().commit()
+
+    monkeypatch.setattr(
+        realtime_relay, "SessionLocal", sessionmaker(bind=db_session.get_bind(), class_=FailSecondCommit),
+    )
+    monkeypatch.setattr(notifications, "FIREBASE_ENABLED", True)
+    sender = Mock(return_value="accepted-message")
+    monkeypatch.setattr(notifications.messaging, "send", sender)
+
+    with pytest.raises(OperationalError):
+        realtime_relay.dispatch_pushes(event.id)
+
+    db_session.refresh(event)
+    assert event.dispatched_at is None
+    assert event.payload["push_completed"] == [users["first"].id]
+    _bind_relay(db_session, monkeypatch)
+    assert realtime_relay.dispatch_pushes(event.id) is True
+    # The second acceptance was not persisted: its retry is the documented
+    # external-send/commit crash window, not a promise of exactly-once delivery.
+    assert [call.args[0].token for call in sender.call_args_list] == ["token_first", "token_second", "token_second"]
+
+
+@pytest.mark.asyncio
+async def test_real_relay_retries_pending_then_acknowledges_without_private_fields(db_session, monkeypatch):
+    _bind_relay(db_session, monkeypatch)
+    squad, users = _squad_with_members(
+        db_session, {"creator": "token_creator", "first": "token_first", "second": "token_second"},
+    )
+    event = _create_event(db_session, squad, users["creator"], [users["first"], users["second"]])
+    event.payload = {**event.payload, "push_rejected": {"999": "not_member"}}
+    db_session.commit()
+    monkeypatch.setattr(notifications, "FIREBASE_ENABLED", True)
+    sender = Mock(side_effect=[exceptions.InternalError("transient"), "accepted-message", "accepted-message"])
+    monkeypatch.setattr(notifications.messaging, "send", sender)
+    broadcasts = []
+    quarantine = realtime_relay.QuarantineRegistry()
+
+    for pass_index in range(2):
+        stop = asyncio.Event()
+
+        async def record_broadcast(squad_id, payload):
+            broadcasts.append(dict(payload))
+            stop.set()
+
+        monkeypatch.setattr(realtime_relay.manager, "broadcast_to_squad", record_broadcast)
+        await realtime_relay.realtime_relay_loop(stop, quarantine=quarantine)
+        db_session.refresh(event)
+        if pass_index == 0:
+            assert event.dispatched_at is None
+            assert event.payload["push_completed"] == [users["second"].id]
+            assert quarantine._entries[event.id]["failures"] == 1
+        else:
+            assert event.dispatched_at is not None
+            assert event.id not in quarantine._entries
+
+    assert [call.args[0].token for call in sender.call_args_list] == ["token_first", "token_second", "token_first"]
+    assert len(broadcasts) == 2
+    assert all(not key.startswith("push_") for payload in broadcasts for key in payload)
 
 
 @pytest.mark.asyncio
