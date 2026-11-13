@@ -4,6 +4,7 @@ import pytest
 
 from scripts.seed_fluidite_demo import (
     assert_safe_environment,
+    canonicalize_config,
     ensure_skin_exists,
     generate_distinct_configs,
     seed_fluidite_demo,
@@ -109,6 +110,65 @@ def test_ensure_skin_exists_refuses_a_hidden_article(db_session):
         ensure_skin_exists(db_session, "Men_head_Hidden_999", "head", "Men")
 
     assert db_session.query(Skin).filter_by(id="Men_head_Hidden_999").count() == 1
+
+
+def test_ensure_skin_exists_resolves_a_published_transform_token(db_session):
+    published = Skin(
+        id="Men_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000",
+        name="Pikachu",
+        category="accessory",
+        gender="Men",
+        price_caps=2000,
+        available=True,
+    )
+    db_session.add(published)
+    db_session.commit()
+
+    skin = ensure_skin_exists(db_session, "Men_accessory_Pikachu_2000", "accessory", "Men")
+
+    assert skin.id == published.id
+
+
+def test_ensure_skin_exists_refuses_an_ambiguous_published_id(db_session):
+    for suffix in ("px75_2000", "px80_2000"):
+        db_session.add(Skin(
+            id=f"Men_accessory_Pikachu_{suffix}",
+            name="Pikachu",
+            category="accessory",
+            gender="Men",
+            price_caps=2000,
+            available=True,
+        ))
+    db_session.commit()
+
+    with pytest.raises(ValueError, match="Plusieurs articles"):
+        ensure_skin_exists(db_session, "Men_accessory_Pikachu_2000", "accessory", "Men")
+
+
+def test_canonicalize_config_replaces_logical_ids_before_persistence(db_session):
+    db_session.add(Skin(
+        id="Men_head_Casual_0", name="Casual", category="head", gender="Men",
+        price_caps=0, available=True,
+    ))
+    db_session.add(Skin(
+        id="Men_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000",
+        name="Pikachu", category="accessory", gender="Men", price_caps=2000, available=True,
+    ))
+    db_session.commit()
+
+    resolved = canonicalize_config(db_session, {
+        "gender": "Men",
+        "head": "Men_head_Casual_0",
+        "body": "none",
+        "legs": "none",
+        "feet": "none",
+        "accessory": "Men_accessory_Pikachu_2000",
+        "animation": "Idle",
+    })
+
+    assert resolved["head"] == "Men_head_Casual_0"
+    assert resolved["accessory"] == "Men_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000"
+    assert resolved["body"] == "none"
 
 
 def test_seed_fluidite_demo_creates_squads_users_aperos_and_jobs(db_session, monkeypatch, tmp_path):
