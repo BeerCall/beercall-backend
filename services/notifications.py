@@ -1,8 +1,9 @@
 import logging
-from typing import List, Optional
+from dataclasses import dataclass
+from typing import List, Literal, Optional
 
 import firebase_admin
-from firebase_admin import credentials, messaging
+from firebase_admin import credentials, exceptions, messaging
 
 logger = logging.getLogger("beercall_notifications")
 logger.setLevel(logging.INFO)
@@ -29,10 +30,43 @@ def initialize_firebase():
 FIREBASE_ENABLED = initialize_firebase()
 
 
-def send_durable_push(token: str, event_id: str) -> None:
-    """Raise on transient delivery failures so the persisted outbox can retry."""
+PushStatus = Literal["accepted", "rejected"]
+
+
+@dataclass(frozen=True)
+class PushOutcome:
+    """Result for one durable push recipient.
+
+    - accepted: Firebase accepted the message.
+    - rejected: terminal for this message/recipient; the same request must not be
+      retried, without concluding that the token is permanently invalid.
+    """
+
+    status: PushStatus
+    reason: Optional[str] = None
+
+
+class PushRetryableError(RuntimeError):
+    """Delivery may succeed later (transient, quota, authorization/config).
+
+    The event must stay pending so the relay can retry only the recipients that
+    are still open. The token is never classified or purged here.
+    """
+
+    def __init__(self, category: str, message: str):
+        super().__init__(message)
+        self.category = category
+
+
+def send_durable_push(token: str, event_id: str) -> PushOutcome:
+    """Send one durable push and classify the Firebase result per recipient.
+
+    Raises PushRetryableError for errors that may resolve later. Permanent
+    request rejections are returned as PushOutcome(rejected) without touching
+    the stored token.
+    """
     if not FIREBASE_ENABLED:
-        raise RuntimeError("Firebase is disabled; notification remains queued")
+        raise PushRetryableError("firebase_disabled", "Firebase is disabled; notification remains queued")
     try:
         messaging.send(messaging.Message(
             notification=messaging.Notification(
@@ -41,8 +75,23 @@ def send_durable_push(token: str, event_id: str) -> None:
             data={"event_id": event_id},
             token=token,
         ))
-    except (messaging.UnregisteredError, messaging.SenderIdMismatchError):
-        logger.warning("Skipping permanently invalid push recipient")
+    except messaging.UnregisteredError:
+        logger.warning("Push rejected: token no longer registered (recipient kept in place, not purged)")
+        return PushOutcome("rejected", "unregistered")
+    except messaging.SenderIdMismatchError:
+        logger.warning("Push rejected: token belongs to another sender (recipient kept in place, not purged)")
+        return PushOutcome("rejected", "sender_mismatch")
+    except exceptions.InvalidArgumentError:
+        # Payload or parameters can trigger this; it is not proof that the token is invalid.
+        logger.warning("Push rejected as invalid request; token validity is not concluded")
+        return PushOutcome("rejected", "invalid_request")
+    except exceptions.PermissionDeniedError:
+        logger.warning("Push authorization refused; recipient kept pending for retry")
+        raise PushRetryableError("authorization", "Permission denied by the push service")
+    except exceptions.FirebaseError as exc:
+        logger.warning("Push delivery failed (retryable Firebase error): %s", type(exc).__name__)
+        raise PushRetryableError("firebase_error", type(exc).__name__) from exc
+    return PushOutcome("accepted")
 
 
 def send_push_notifications(tokens: List[str], title: str, body: str, data: Optional[dict] = None):
