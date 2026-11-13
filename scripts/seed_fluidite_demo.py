@@ -209,7 +209,9 @@ def ensure_skin_exists(db: Session, piece_id: str, category: str, gender: str) -
     """Retourne un article du catalogue disponible, sans jamais en créer.
 
     Le seed de démonstration ne doit pas inventer d'articles : un fichier
-    manquant ou masqué doit faire échouer explicitement le seed.
+    manquant ou masqué doit faire échouer explicitement le seed. Les IDs
+    logiques du seed restent stables quand le catalogue publié ajoute des
+    jetons de transform entre le nom et le prix.
     """
 
     skin = (
@@ -221,6 +223,8 @@ def ensure_skin_exists(db: Session, piece_id: str, category: str, gender: str) -
         .first()
     )
     if skin is None:
+        skin = resolve_catalog_skin(db, piece_id, category, gender)
+    if skin is None:
         raise ValueError(
             f"Article absent ou indisponible dans le catalogue : '{piece_id}' "
             f"({gender}/{category}). Lance catalog:sync après avoir préparé le fichier."
@@ -231,6 +235,54 @@ def ensure_skin_exists(db: Session, piece_id: str, category: str, gender: str) -
             f"attendu {gender}/{category}."
         )
     return skin
+
+
+def resolve_catalog_skin(db: Session, piece_id: str, category: str, gender: str) -> Skin | None:
+    """Résout un ID logique vers le sourceId publié, s'il est unique.
+
+    Exemple : ``Men_accessory_Pikachu_2000`` correspond au sourceId publié
+    ``Men_accessory_Pikachu_px75_pz-60_ry169d862196_s50_2000``. Un identifiant
+    ambigu est refusé plutôt que choisi arbitrairement.
+    """
+
+    parts = piece_id.split("_")
+    if len(parts) < 4:
+        return None
+    prefix = "_".join(parts[:3])
+    price = parts[-1]
+    escaped_prefix = prefix.replace("_", "\\_")
+    candidates = (
+        db.query(Skin)
+        .filter(
+            Skin.gender == gender,
+            Skin.category == category,
+            Skin.available.is_(True),
+            Skin.id.like(f"{escaped_prefix}\\_%", escape="\\"),
+            Skin.id.like(f"%\\_{price}", escape="\\"),
+        )
+        .all()
+    )
+    if len(candidates) > 1:
+        names = ", ".join(sorted(skin.id for skin in candidates))
+        raise ValueError(
+            f"Plusieurs articles correspondent à '{piece_id}' ({gender}/{category}) : {names}"
+        )
+    return candidates[0] if candidates else None
+
+
+def canonicalize_config(db: Session, config: Dict[str, Any]) -> Dict[str, Any]:
+    """Remplace les IDs logiques d'une configuration par les IDs publiés."""
+
+    gender = config["gender"]
+    resolved = dict(config)
+    for category in ("head", "body", "legs", "feet"):
+        piece_id = config.get(category)
+        if piece_id and piece_id != "none":
+            resolved[category] = ensure_skin_exists(db, piece_id, category, gender).id
+    accessory = config.get("accessory")
+    if accessory and accessory != "none":
+        resolved["accessory"] = ensure_skin_exists(db, accessory, "accessory", gender).id
+    return resolved
 
 
 def create_synthetic_proof_photo(uploads_dir: Path, user_id: int, apero_id: int) -> str:
@@ -257,8 +309,11 @@ def seed_fluidite_demo(db: Session, uploads_dir: Path = Path("uploads")) -> Dict
 
     print("[seed] Environnement sécurisé vérifié (APP_ENV=test, DB=beercall_fluidite_demo).")
 
-    configs = generate_distinct_configs(50)
-    print(f"[seed] 50 configurations distinctes générées (50 hashes uniques).")
+    generated = generate_distinct_configs(50)
+    configs = [canonicalize_config(db, cfg) for cfg in generated]
+    hashes = {compute_config_hash(normalize_avatar_payload(cfg)) for cfg in configs}
+    assert len(hashes) == len(configs), "Les configurations canoniques doivent rester distinctes"
+    print(f"[seed] {len(configs)} configurations distinctes générées ({len(hashes)} hashes uniques).")
 
     # 1. Squads
     squad50 = db.query(Squad).filter_by(invite_code="FLUID50").first()
