@@ -1,4 +1,2 @@
-pytest==9.0.2
-pytest-asyncio==1.4.0
-pytest-cov==7.1.0
+# HTTP client used by end-to-end tooling. Unit-test runners intentionally removed.
 httpx==0.28.1
