@@ -9,7 +9,7 @@ from core.websocket import manager
 from db.database import DATABASE_URL, SessionLocal
 from models.realtime_event import RealtimeEvent
 from models.squad import Squad
-from services.notifications import send_durable_push
+from services.notifications import PushRetryableError, send_durable_push
 
 logger = logging.getLogger(__name__)
 
@@ -96,16 +96,25 @@ class QuarantineRegistry:
         self._entries.clear()
 
 
-def dispatch_pushes(event_id: object) -> None:
-    """Persist each confirmed recipient independently of WebSocket delivery."""
+def dispatch_pushes(event_id: object) -> bool:
+    """Deliver the push event to each recipient independently.
+
+    Every recipient gets a persisted outcome: accepted, terminally rejected, or
+    still pending. A failure (including a transient one) never stops the loop:
+    the remaining recipients are attempted in the same pass. Rejected recipients
+    are never resent; only pending ones are retried on the next pass.
+
+    Returns True when every recipient is terminal (accepted or rejected). The
+    caller must not acknowledge the event otherwise.
+    """
     with SessionLocal() as db:
         event = db.query(RealtimeEvent).filter(RealtimeEvent.id == event_id).first()
         if not event:
-            return
+            return True
         payload = dict(event.payload)
         squad = db.query(Squad).filter(Squad.id == event.squad_id).first()
         if not squad:
-            return
+            return True
         recipients = payload.get("push_recipients")
         if recipients is None:
             recipients = [
@@ -116,18 +125,58 @@ def dispatch_pushes(event_id: object) -> None:
             payload["push_recipients"] = recipients
             event.payload = dict(payload)
             db.commit()
-        completed = list(payload.get("push_completed", []))
+        completed = list(payload.get("push_completed") or [])
+        # Historical push_completed means "processed" and must never be resent.
+        rejected = dict(payload.get("push_rejected") or {})
         members = {member.id: member for member in squad.members}
+        pending = 0
         for user_id in recipients:
-            if user_id in completed:
+            if user_id in completed or str(user_id) in rejected:
                 continue
             member = members.get(user_id)
-            if member and member.push_token:
-                send_durable_push(member.push_token, str(event_id))
-            completed.append(user_id)
-            payload["push_completed"] = list(completed)
+            if not member or not member.push_token:
+                rejected[str(user_id)] = "not_member" if not member else "no_token"
+                payload["push_rejected"] = dict(rejected)
+                event.payload = dict(payload)
+                db.commit()
+                continue
+            try:
+                outcome = send_durable_push(member.push_token, str(event_id))
+            except PushRetryableError as exc:
+                pending += 1
+                logger.warning(
+                    "Push pending for event %s recipient %s (%s); continuing with the next recipient",
+                    event_id,
+                    user_id,
+                    exc.category,
+                )
+                continue
+            except Exception as exc:
+                pending += 1
+                # SDK/transport exception messages can contain recipient tokens.
+                # Keep only the error type, never its text or chained traceback.
+                logger.error(
+                    "Unexpected push failure for event %s recipient %s (%s); kept pending",
+                    event_id,
+                    user_id,
+                    type(exc).__name__,
+                )
+                continue
+            if outcome.status == "accepted":
+                completed.append(user_id)
+                payload["push_completed"] = list(completed)
+            else:
+                rejected[str(user_id)] = outcome.reason or "rejected"
+                payload["push_rejected"] = dict(rejected)
             event.payload = dict(payload)
             db.commit()
+        if pending:
+            logger.warning(
+                "Event %s has %d recipient(s) still pending after this pass",
+                event_id,
+                pending,
+            )
+        return pending == 0
 
 
 def fetch_events_to_dispatch(excluded_ids: Optional[List[object]] = None) -> list[dict]:
@@ -269,11 +318,17 @@ async def realtime_relay_loop(
                             if not key.startswith("push_")
                         }
                         await manager.broadcast_to_squad(e["squad_id"], public_payload)
+                        all_terminal = True
                         if (
                             payload.get("type") == "REFRESH_SQUAD"
                             and payload.get("action") == "CREATE"
                         ):
-                            await asyncio.to_thread(dispatch_pushes, event_id)
+                            all_terminal = await asyncio.to_thread(dispatch_pushes, event_id)
+                        if not all_terminal:
+                            # Some recipients are still pending: keep the event
+                            # undispatched and retry only those, with backoff.
+                            quarantine.record_failure(event_id, get_clock())
+                            continue
 
                         marked = await asyncio.to_thread(mark_events_dispatched, [event_id])
                         if marked:

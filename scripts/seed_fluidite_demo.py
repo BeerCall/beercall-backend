@@ -303,17 +303,23 @@ def create_synthetic_proof_photo(uploads_dir: Path, user_id: int, apero_id: int)
     return f"/uploads/proofs/{filename}"
 
 
-def seed_fluidite_demo(db: Session, uploads_dir: Path = Path("uploads")) -> Dict[str, Any]:
+def seed_fluidite_demo(db: Session, uploads_dir: Path = Path("uploads"), *, compact: bool = False) -> Dict[str, Any]:
     """Exécute le seed complet et idempotent de la base de démonstration."""
     assert_safe_environment(db)
 
     print("[seed] Environnement sécurisé vérifié (APP_ENV=test, DB=beercall_fluidite_demo).")
 
-    generated = generate_distinct_configs(50)
+    # Same members/permissions/participations, without a 50-outfit GPU workload
+    # for ordinary release checks. The distinct-outfit fixture remains opt-in
+    # through the historical default for dedicated avatar measurements.
+    generated = generate_distinct_configs(1 if compact else 50)
+    if compact:
+        generated = generated * 50
     configs = [canonicalize_config(db, cfg) for cfg in generated]
     hashes = {compute_config_hash(normalize_avatar_payload(cfg)) for cfg in configs}
-    assert len(hashes) == len(configs), "Les configurations canoniques doivent rester distinctes"
-    print(f"[seed] {len(configs)} configurations distinctes générées ({len(hashes)} hashes uniques).")
+    if not compact:
+        assert len(hashes) == len(configs), "Les configurations canoniques doivent rester distinctes"
+    print(f"[seed] {len(configs)} configurations attribuées ({len(hashes)} hashes uniques, compact={compact}).")
 
     # 1. Squads
     squad50 = db.query(Squad).filter_by(invite_code="FLUID50").first()
@@ -563,8 +569,12 @@ def seed_fluidite_demo(db: Session, uploads_dir: Path = Path("uploads")) -> Dict
 
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--compact", action="store_true", help="Shared outfit, same 50/40 members; no bulk distinct-avatar rendering")
+    args = parser.parse_args()
     db = SessionLocal()
     try:
-        seed_fluidite_demo(db)
+        seed_fluidite_demo(db, compact=args.compact)
     finally:
         db.close()

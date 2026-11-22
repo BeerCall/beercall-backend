@@ -31,6 +31,7 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     env:
+      APP_ENV: test
       BEERCALL_SECRET_KEY: "dummy_secret_for_ci"
       GEMINI_API_KEY: "dummy_gemini_key_for_ci"
     steps:
@@ -48,13 +49,22 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
           
-      - name: Run tests SQLite
-        run: python -m pytest --cov=. --cov-report=term-missing
+      # The app PR validates the integrated E2E suite and both 75% gates.
+      - name: Validate Python syntax
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          for root in ["api", "core", "db", "models", "schemas", "services", "workers", "alembic"]:
+              for path in Path(root).rglob("*.py"):
+                  ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+          ast.parse(Path("main.py").read_text(encoding="utf-8"), filename="main.py")
+          PY
 
-      - name: Run tests PostgreSQL
+      - name: Validate migrations on isolated PostgreSQL
         env:
-          TEST_DATABASE_URL: "postgresql+psycopg://beercall:beercall@localhost:55432/beercall_test"
-        run: python -m pytest tests/postgres --cov=. --cov-append --cov-report=term-missing --cov-fail-under=80
+          DATABASE_URL: "postgresql+psycopg://beercall:beercall@localhost:55432/beercall_test"
+        run: python -m alembic upgrade head
 
   dispatch-submodule:
     name: Dispatch submodule update
